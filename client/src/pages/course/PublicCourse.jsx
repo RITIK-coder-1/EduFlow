@@ -114,10 +114,10 @@ function PublicCourse() {
                           key={video?._id}
                           className="group border-b border-white/5 last:border-0"
                         >
-                          <a
-                            href={`/app/courses/${courseId}/watch/${slugify(video?.title)}-${
-                              video?._id
-                            }`}
+                          <Link
+                            to={`/app/courses/${courseId}/watch/${slugify(
+                              video?.title
+                            )}-${video?._id}`}
                             className="flex items-center justify-between px-6 py-4 transition-all duration-200 hover:bg-white/5 active:bg-white/10"
                           >
                             <div className="flex items-center gap-4">
@@ -139,7 +139,7 @@ function PublicCourse() {
                               </span>
                               <ChevronRightIcon className="size-4" />
                             </div>
-                          </a>
+                          </Link>
                         </li>
                       ))
                     ) : (
