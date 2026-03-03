@@ -5,7 +5,7 @@ The page for displaying a course publicly
 
 import { Link, useParams } from "react-router-dom";
 import { useGetCourseQuery } from "@/api/index.api";
-import { Tag } from "@/components/index.components";
+import { Tag, EnrollCourse } from "@/components/index.components";
 import {
   Accordion,
   AccordionContent,
@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/accordion";
 import { ChevronDownIcon, PlayCircle, ChevronRightIcon } from "lucide-react";
 import slugify from "@/utils/slugify";
-import enrollCourse from "@/utils/enrollCourse";
 
 function PublicCourse() {
   // the data
@@ -52,7 +51,7 @@ function PublicCourse() {
           </span>
 
           {/* Enroll now */}
-          {enrollCourse(courseId)}
+          <EnrollCourse courseId={courseId} />
 
           {/* Course specifics */}
           <span className="text-xl">What is in the course?</span>

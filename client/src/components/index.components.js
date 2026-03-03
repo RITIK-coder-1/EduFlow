@@ -24,6 +24,7 @@ import Tag from "./shared/Tag";
 import FieldTextarea from "./shared/FieldTextarea";
 import DisplayCourses from "./shared/DisplayCourses";
 import EnrollmentStats from "./shared/EnrollmentStats";
+import EnrollCourse from "./shared/EnrollCourse";
 
 export {
   Logout,
@@ -47,4 +48,5 @@ export {
   FieldTextarea,
   DisplayCourses,
   EnrollmentStats,
+  EnrollCourse
 };

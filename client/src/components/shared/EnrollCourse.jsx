@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------------------------
-enrollCourse.jsx
+EnrollCourse.jsx
 The enrollment logic 
 ------------------------------------------------------------------------------------------------- */
 
@@ -12,7 +12,7 @@ import { CommonButton } from "@/components/index.components";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const enrollCourse = (courseId) => {
+const EnrollCourse = ({courseId}) => {
   const navigate = useNavigate();
 
   // the authentication status of the user
@@ -84,4 +84,4 @@ const enrollCourse = (courseId) => {
   }
 };
 
-export default enrollCourse;
+export default EnrollCourse;

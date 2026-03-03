@@ -9,8 +9,12 @@ import { useParams, Link } from "react-router-dom";
 function VideoPlayer() {
   const { courseId } = useParams();
 
+  // the course
   const { data } = useGetCourseQuery({ courseId });
   const course = data?.data;
+
+  console.log(course);
+  
 
   return (
     <div className="h-auto bg-[#0a0a0c] text-white font-sans rounded-lg">
