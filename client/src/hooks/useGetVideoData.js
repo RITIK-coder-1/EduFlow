@@ -16,6 +16,7 @@ function useGetVideoData(courseId, videoId) {
     courseTitle: course?.title,
     sectionTitle: "",
     videoTitle: "",
+    videoUrl: "",
   });
 
   useEffect(() => {
@@ -29,6 +30,7 @@ function useGetVideoData(courseId, videoId) {
             courseTitle: course?.title,
             sectionTitle: section?.title,
             videoTitle: video?.title,
+            videoUrl: video?.videoUrl,
           };
         }
       });

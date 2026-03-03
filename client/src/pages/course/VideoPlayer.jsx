@@ -4,13 +4,14 @@ The page for playing a course video
 ------------------------------------------------------------------------------------------------- */
 
 import { useParams, Link } from "react-router-dom";
-import useGetVideoData from "@/custom_hooks/useGetVideoData";
+import useGetVideoData from "@/hooks/useGetVideoData";
+import { ReactVideoPlayer } from "@/components/index.components";
 
 function VideoPlayer() {
   const { courseId, videoId } = useParams();
 
   // the video details
-  const { courseTitle, sectionTitle, videoTitle } = useGetVideoData(
+  const { courseTitle, sectionTitle, videoTitle, videoUrl } = useGetVideoData(
     courseId,
     videoId
   );
@@ -36,7 +37,7 @@ function VideoPlayer() {
         <main className="flex-1 p-6 overflow-y-auto">
           {/* [Video Player Component] */}
           <div className="aspect-video w-full bg-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
-            <video src={""} controls className="w-full h-full" />
+            <ReactVideoPlayer src={videoUrl}/>
           </div>
 
           <div className="mt-6 flex justify-between items-start">
