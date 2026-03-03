@@ -28,6 +28,7 @@ import {
   InstructorCourse,
   PublicCourse,
   InstructorPage,
+  VideoPlayer,
 } from "./pages/index.pages.js";
 import ExploreCourses from "./pages/common/ExploreCourses.jsx";
 
@@ -86,6 +87,12 @@ const myRouter = createBrowserRouter([
               {
                 element: <InstructorPage />,
                 path: "instructor/:slug",
+              },
+
+              // The course video
+              {
+                element: <VideoPlayer />,
+                path: "watch/:videoName-:videoId",
               },
             ],
           },
