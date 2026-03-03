@@ -92,7 +92,7 @@ const myRouter = createBrowserRouter([
               // The course video
               {
                 element: <VideoPlayer />,
-                path: "watch/:slug",
+                path: "watch/:videoId/:slug",
               },
             ],
           },
