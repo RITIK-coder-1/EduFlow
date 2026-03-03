@@ -5,7 +5,6 @@ The page for playing a course video
 
 import { useParams, Link } from "react-router-dom";
 import useGetVideoData from "@/hooks/useGetVideoData";
-import { ReactVideoPlayer } from "@/components/index.components";
 import { useGetCourseQuery } from "@/api/index.api";
 import {
   Accordion,
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/accordion";
 import { ChevronDownIcon, PlayCircle, ChevronRightIcon } from "lucide-react";
 import slugify from "@/utils/slugify";
+import ReactPlayer from "react-player";
 
 function VideoPlayer() {
   const { courseId, videoId } = useParams();
@@ -47,10 +47,16 @@ function VideoPlayer() {
 
       <div className="flex flex-col lg:flex-row h-auto">
         {/* Video & Info */}
-        <main className="flex-1 p-6 overflow-y-auto">
+        <section className="flex-1 p-6 overflow-y-auto">
           {/* [Video Player Component] */}
           <div className="aspect-video w-full bg-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
-            <ReactVideoPlayer src={videoUrl} />
+            <ReactPlayer
+              width="100%"
+              height="100%"
+              src={videoUrl}
+              controls
+              playing={true}
+            />
           </div>
 
           <div className="mt-6 flex justify-between items-start">
@@ -58,7 +64,7 @@ function VideoPlayer() {
               Mark as Completed
             </button>
           </div>
-        </main>
+        </section>
 
         <aside className="w-full lg:w-80 bg-[#121214] border-l border-gray-800 p-4 overflow-y-auto rounded-b-lg lg:rounded-bl-none">
           <div className="mb-6">

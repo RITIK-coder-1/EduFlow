@@ -25,7 +25,6 @@ import FieldTextarea from "./shared/FieldTextarea";
 import DisplayCourses from "./shared/DisplayCourses";
 import EnrollmentStats from "./shared/EnrollmentStats";
 import EnrollCourse from "./shared/EnrollCourse";
-import ReactVideoPlayer from "./shared/ReactVideoPlayer";
 
 export {
   Logout,
@@ -50,5 +49,5 @@ export {
   DisplayCourses,
   EnrollmentStats,
   EnrollCourse,
-  ReactVideoPlayer,
+  
 };
