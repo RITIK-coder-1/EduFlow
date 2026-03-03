@@ -30,7 +30,7 @@ function VideoPlayer() {
   );
 
   return (
-    <div className="h-auto bg-[#0a0a0c] text-white font-sans rounded-lg w-[80%]">
+    <div className="h-auto bg-[#0a0a0c] text-white font-sans rounded-lg w-full md:w-[80%]">
       {/* Header/Navigation Bar */}
       <nav className="p-4 border-b border-gray-800 flex justify-between items-center">
         <div className="flex items-center gap-4">
