@@ -9,8 +9,6 @@ import { DisplayCourses } from "@/components/index.components";
 function EnrolledCourses() {
   const { data } = useGetEnrolledCoursesQuery();
   const courses = data?.data;
-  console.log(courses);
-  
 
   return (
     <DisplayCourses
