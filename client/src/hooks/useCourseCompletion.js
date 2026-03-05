@@ -20,19 +20,26 @@ function useCourseCompletion(courseId, videoId) {
   const completedVideos = courseProgressData?.data?.completedVideos;
 
   // the state to hold the course videos
-  const [numberOfCourseVideos, setNumberOfCourseVideos] = useState([]);
+  const [courseVideos, setCourseVideos] = useState([]);
 
   // adding each video to the numberOfCourseVideos array
   sections?.forEach((section) => {
     section?.courseVideos.forEach((video) => {
       // add only if the video isn't present already
-      if (!numberOfCourseVideos.includes(video?._id)) {
-        setNumberOfCourseVideos([...numberOfCourseVideos, video?._id]);
+      if (!courseVideos.includes(video?._id)) {
+        setCourseVideos([...courseVideos, video?._id]);
       }
     });
   });
 
-  console.log(numberOfCourseVideos);
+  // the total number of videos in the course
+  const totalCourseVideos = courseVideos.length;
+  // the total number of videos completed by the user
+  const totalCompleteVideos = completedVideos.length;
+  // the progress percentage
+  const courseProgress = (totalCompleteVideos / totalCourseVideos) * 100;
+
+  return courseProgress;
 }
 
 export default useCourseCompletion;
