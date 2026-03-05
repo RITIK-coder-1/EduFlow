@@ -235,6 +235,8 @@ const completeCourseVideoController = async (req, res) => {
     }
   );
 
+  console.log("Video completed!")
+
   return res.status(200).json(new ApiResponse(200, "The video is completed!"));
 };
 
@@ -258,10 +260,7 @@ const getCourseProgressController = async (req, res) => {
     user: userId,
   }).select("completedVideos");
 
-  console.log(courseProgress);
-  
-
-  
+  console.log("Course progress fetched!");
 
   return res.status(200).json(new ApiResponse(200, "", courseProgress));
 };

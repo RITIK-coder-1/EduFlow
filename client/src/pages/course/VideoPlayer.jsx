@@ -5,23 +5,38 @@ The page for playing a course video
 
 import { useParams, Link } from "react-router-dom";
 import useGetVideoData from "@/hooks/useGetVideoData";
-import { useGetCourseQuery, useGetCourseProgressQuery } from "@/api/index.api";
+import {
+  useGetCourseQuery,
+  useCompleteCourseVideoMutation,
+} from "@/api/index.api";
 import ReactPlayer from "react-player";
-import { StudentAccordion } from "@/components/index.components";
+import { StudentAccordion, CommonButton } from "@/components/index.components";
+import useCourseCompletion from "@/hooks/useCourseCompletion";
 
 function VideoPlayer() {
   // the data
   const { courseId, videoId } = useParams();
-  const { data } = useGetCourseQuery({ courseId });
-  const course = data?.data; // course
+  const [completeVideo] = useCompleteCourseVideoMutation();
+  const { data: courseData } = useGetCourseQuery({ courseId });
+  const course = courseData?.data; // course
   const sections = course?.sections; // sections
-  const courseProgress = useGetCourseProgressQuery({ courseId, videoId });  
 
   // the video details
   const { courseTitle, sectionTitle, videoTitle, videoUrl } = useGetVideoData(
     courseId,
     videoId
   );
+
+  useCourseCompletion(courseId, videoId)
+
+  // the API call to complete the video
+  const completeVideoApiCall = async () => {
+    try {
+      await completeVideo({ courseId, videoId }).unwrap();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="h-auto bg-[#0a0a0c] text-white font-sans rounded-lg w-full md:w-[80%]">
@@ -47,16 +62,17 @@ function VideoPlayer() {
             <ReactPlayer
               width="100%"
               height="100%"
-              src={videoUrl}
+              src={videoUrl || null}
               controls
               playing={true}
             />
           </div>
 
           <div className="mt-6 flex justify-between items-start">
-            <button className="text-xs px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded font-medium transition md:text-sm md:px-6">
-              Mark as Completed
-            </button>
+            <CommonButton
+              label="Mark as completed"
+              onClick={completeVideoApiCall}
+            />
           </div>
         </section>
 
