@@ -44,9 +44,11 @@ export function CourseAccordionTrigger({ children, onClick }) {
 }
 
 // The accordion content
-export function CourseAccordionContent({ children }) {
+export function CourseAccordionContent({ children, className }) {
   return (
-    <AccordionContent className="w-full p-3 flex flex-col gap-7 justify-between items-center">
+    <AccordionContent
+      className={`w-full flex flex-col gap-7 justify-between items-center ${className}`}
+    >
       {/* The videos */}
       <ol className="w-full list-decimal flex flex-col justify-center items-start gap-2 text-lg">
         {children}

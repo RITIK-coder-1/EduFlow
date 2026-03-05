@@ -355,30 +355,25 @@ function InstructorCourse() {
                     onChange={updateSectionData(section._id)}
                   />
                 </CourseAccordionTrigger>
-                <CourseAccordionContent>
+                <CourseAccordionContent className="p-7">
                   {section?.courseVideos?.length > 0 ? (
                     section.courseVideos.map((video) => (
                       <li
                         key={video?._id}
-                        className="w-full flex items-center justify-center gap-3"
+                        className="w-full p-3 pr-0"
                       >
-                        <input
-                          defaultValue={video?.title}
-                          className="w-full border p-1 border-white/10"
-                          onChange={setVideoDataForUpdate(video?._id)}
-                        />
-                        <span className="flex justify-center items-center w-auto h-full gap-3">
-                          <MdOutlineSystemUpdateAlt
-                            className="text-blue-500 w-7 h-7 cursor-pointer"
-                            title="Update Title"
-                            onClick={updateVideoApiCall(section._id)}
+                        {/* The container inside handles the layout, the LI handles the number */}
+                        <div className="flex items-center justify-center gap-3 w-full">
+                          <input
+                            defaultValue={video?.title}
+                            className="w-full border p-1 border-white/10"
+                            onChange={setVideoDataForUpdate(video?._id)}
                           />
-                          <MdDelete
-                            className="text-red-900 w-7 h-7 cursor-pointer"
-                            title="Delete Video"
-                            onClick={deleteVideoApiCall(section._id, video._id)}
-                          />
-                        </span>
+                          <span className="flex justify-center items-center w-auto h-full gap-3">
+                            <MdOutlineSystemUpdateAlt className="text-blue-500 w-7 h-7 cursor-pointer" />
+                            <MdDelete className="text-red-900 w-7 h-7 cursor-pointer" />
+                          </span>
+                        </div>
                       </li>
                     ))
                   ) : (
