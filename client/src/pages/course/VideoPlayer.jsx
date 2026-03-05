@@ -8,6 +8,7 @@ import useGetVideoData from "@/hooks/useGetVideoData";
 import {
   useGetCourseQuery,
   useCompleteCourseVideoMutation,
+  useGetCourseProgressQuery,
 } from "@/api/index.api";
 import ReactPlayer from "react-player";
 import { StudentAccordion, CommonButton } from "@/components/index.components";
@@ -27,7 +28,13 @@ function VideoPlayer() {
     videoId
   );
 
-  const courseProgress = Math.ceil(useCourseCompletion(courseId, videoId))
+  // the course progress data
+  const { data: courseProgressData } = useGetCourseProgressQuery({
+    courseId,
+    videoId,
+  });
+  const completedVideos = courseProgressData?.data?.completedVideos;
+  const courseProgress = useCourseCompletion(courseId, videoId);
 
   // the API call to complete the video
   const completeVideoApiCall = async () => {
@@ -69,10 +76,22 @@ function VideoPlayer() {
           </div>
 
           <div className="mt-6 flex justify-between items-start">
-            <CommonButton
-              label="Mark as completed"
-              onClick={completeVideoApiCall}
+            {completedVideos?.includes(videoId) ? (
+              <CommonButton 
+              label={
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                  COMPLETED
+                </span>
+              } 
+              className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/50 px-8 py-2.5 rounded-xl font-bold tracking-widest text-xs shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all cursor-default" 
             />
+            ) : (
+              <CommonButton
+                label="Mark as completed"
+                onClick={completeVideoApiCall}
+              />
+            )}
           </div>
         </section>
 
@@ -81,9 +100,13 @@ function VideoPlayer() {
             <h3 className="text-lg font-semibold mb-2">Course Content</h3>
             {/* Progress Bar Component */}
             <div className="w-full bg-gray-700 h-2 rounded-full">
-              <div className={`bg-purple-500 h-2 rounded-full w-[${courseProgress}%]`}></div>
+              <div
+                className={`bg-purple-500 h-2 rounded-full w-[${courseProgress}%]`}
+              ></div>
             </div>
-            <p className="text-xs text-gray-400 mt-2">{courseProgress}% Completed</p>
+            <p className="text-xs text-gray-400 mt-2">
+              {courseProgress}% Completed
+            </p>
           </div>
 
           <div className="space-y-4">

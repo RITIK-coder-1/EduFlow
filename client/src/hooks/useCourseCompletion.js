@@ -39,7 +39,7 @@ function useCourseCompletion(courseId, videoId) {
   // the progress percentage
   const courseProgress = (totalCompleteVideos / totalCourseVideos) * 100;
 
-  return courseProgress;
+  return Math.ceil(courseProgress);
 }
 
 export default useCourseCompletion;
