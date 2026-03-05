@@ -11,6 +11,8 @@ import {
   enrollCourse,
   showAllCategories,
   getEnrollCourses,
+  getCourseProgress,
+  completeCourseVideo,
 } from "../controllers/course.controllers.js";
 
 const router = Router();
@@ -21,6 +23,7 @@ SPECIFIC ROUTES:
 - Get all the courses 
 - Get a particular course, or enroll into it
 - Show all categories
+- Get a course's progress or add the video to the course 
 ------------------------------------------------------------------------------------------ */
 
 router.route("/enroll-courses").get(verifyJwt, getEnrollCourses); // get enroll courses
@@ -30,6 +33,9 @@ router
   .route("/:courseId")
   .get(getCourse) // get a particular course
   .post(verifyJwt, enrollCourse); // enroll into a course
+router
+  .route("/:courseId/videos/:videoId/progress")
+  .get(verifyJwt, getCourseProgress) // get the course progress
+  .patch(verifyJwt, completeCourseVideo); // complete the video
 
-  
 export { router as courseRouter };
