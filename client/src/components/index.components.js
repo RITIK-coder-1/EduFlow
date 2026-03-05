@@ -29,8 +29,9 @@ import {
   CourseCommonAccordion,
   CourseAccordionContent,
   CourseAccordionTrigger,
-  CourseCommonAccordionItem
+  CourseCommonAccordionItem,
 } from "./shared/Accordion";
+import StudentAccordion from "./layout/StudentAccordion";
 
 export {
   Logout,
@@ -58,5 +59,6 @@ export {
   CourseCommonAccordion,
   CourseAccordionContent,
   CourseAccordionTrigger,
-  CourseCommonAccordionItem
+  CourseCommonAccordionItem,
+  StudentAccordion,
 };
