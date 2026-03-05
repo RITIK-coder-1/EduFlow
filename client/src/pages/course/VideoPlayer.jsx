@@ -5,7 +5,7 @@ The page for playing a course video
 
 import { useParams, Link } from "react-router-dom";
 import useGetVideoData from "@/hooks/useGetVideoData";
-import { useGetCourseQuery } from "@/api/index.api";
+import { useGetCourseQuery, useGetCourseProgressQuery } from "@/api/index.api";
 import ReactPlayer from "react-player";
 import { StudentAccordion } from "@/components/index.components";
 
@@ -15,6 +15,7 @@ function VideoPlayer() {
   const { data } = useGetCourseQuery({ courseId });
   const course = data?.data; // course
   const sections = course?.sections; // sections
+  const courseProgress = useGetCourseProgressQuery({ courseId, videoId });  
 
   // the video details
   const { courseTitle, sectionTitle, videoTitle, videoUrl } = useGetVideoData(

@@ -27,6 +27,8 @@ import {
   useGetCourseQuery,
   useEnrollCourseMutation,
   useGetAllCategoriesQuery,
+  useGetCourseProgressQuery,
+  useCompleteCourseVideoMutation,
 } from "./courses/courseApi.js";
 
 import {
@@ -95,4 +97,6 @@ export {
   useGetCourseAdminQuery,
   useDeleteCourseAdminMutation,
   useGetSystemStatsQuery,
+  useGetCourseProgressQuery,
+  useCompleteCourseVideoMutation,
 };

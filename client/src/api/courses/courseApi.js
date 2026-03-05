@@ -39,6 +39,22 @@ const courseApi = apiSlice.injectEndpoints({
       query: () => "/courses/enroll-courses",
       providesTags: ["Course"],
     }),
+
+    // GET COURSE PROGRESS
+    getCourseProgress: builder.query({
+      query: ({ courseId, videoId }) =>
+        `/courses/${courseId}/videos/${videoId}/progress`,
+      providesTags: ["Course"],
+    }),
+
+    // COMPLETE A VIDEO
+    completeCourseVideo: builder.mutation({
+      query: ({ courseId, videoId }) => ({
+        url: `/courses/${courseId}/videos/${videoId}/progress`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["Course"],
+    }),
   }),
 });
 
@@ -48,4 +64,6 @@ export const {
   useEnrollCourseMutation,
   useGetAllCategoriesQuery,
   useGetEnrolledCoursesQuery,
+  useGetCourseProgressQuery,
+  useCompleteCourseVideoMutation
 } = courseApi;
