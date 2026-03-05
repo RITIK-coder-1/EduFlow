@@ -12,8 +12,12 @@ import {
 import { Link } from "react-router-dom";
 import slugify from "@/utils/slugify";
 import { PlayCircle, ChevronRightIcon } from "lucide-react";
+import useUserStatus from "@/hooks/useUserStatus";
 
 function StudentAccordion({ sections, courseId, videoLabel = "WATCH NOW" }) {
+  // the user stats
+  const { isOwner, isEnrolled } = useUserStatus(courseId);
+
   return (
     <CourseCommonAccordion>
       {/* The sections */}
@@ -31,9 +35,14 @@ function StudentAccordion({ sections, courseId, videoLabel = "WATCH NOW" }) {
                 >
                   {/* The link to each video */}
                   <Link
-                    to={`/app/courses/${courseId}/watch/${video?._id}/${slugify(
-                      video?.title
-                    )}`}
+                    to={
+                      // link only if the student is enrolled or don't
+                      !isOwner && !isEnrolled
+                        ? ""
+                        : `/app/courses/${courseId}/watch/${
+                            video?._id
+                          }/${slugify(video?.title)}`
+                    }
                     className="flex items-center justify-between px-6 py-4 transition-all duration-200 hover:bg-white/5 active:bg-white/10"
                   >
                     <div className="flex items-center gap-4">
@@ -51,7 +60,10 @@ function StudentAccordion({ sections, courseId, videoLabel = "WATCH NOW" }) {
                     {/* Link/Action Label */}
                     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground group-hover:text-primary transition-colors">
                       <span className="opacity-0 group-hover:opacity-100 transition-opacity">
-                        {videoLabel}
+                        {/* If the student isn't enrolled, ask them to enroll */}
+                        {!isOwner && !isEnrolled
+                          ? "Enroll To Watch"
+                          : videoLabel}
                       </span>
                       <ChevronRightIcon className="size-4" />
                     </div>
