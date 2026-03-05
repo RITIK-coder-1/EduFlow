@@ -9,6 +9,7 @@ import {
   User,
   CourseCategory,
   CourseProgress,
+  CourseVideo
 } from "../models/index.model.js";
 
 /* ---------------------------------------------------------------------------------------
@@ -228,7 +229,7 @@ const completeCourseVideoController = async (req, res) => {
 
   // if the video exists, add it to the course progress model
   await CourseProgress.findOneAndUpdate(
-    { courseId, userId },
+    { course: courseId, user: userId },
     {
       $addToSet: { completedVideos: videoId },
     }
@@ -253,9 +254,14 @@ const getCourseProgressController = async (req, res) => {
 
   // get the progress report
   const courseProgress = await CourseProgress.findOne({
-    courseId,
-    userId,
+    course: courseId,
+    user: userId,
   }).select("completedVideos");
+
+  console.log(courseProgress);
+  
+
+  
 
   return res.status(200).json(new ApiResponse(200, "", courseProgress));
 };
