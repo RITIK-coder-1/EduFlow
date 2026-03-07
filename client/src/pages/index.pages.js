@@ -13,7 +13,7 @@ import DeleteAccount from "./account/DeleteAccount.jsx";
 import CreateCourse from "./course/CreateCourse.jsx";
 import UpdateCourse from "./course/UpdateCourse.jsx";
 import Home from "./common/Home.jsx";
-import Dashboard from "./common/Dashboard.jsx";
+import Dashboard from "./dashboard/Dashboard.jsx";
 import EnrolledCourses from "./common/EnrolledCourses.jsx";
 import CreatedCourses from "./course/CreatedCourses.jsx";
 import InstructorCourse from "./course/InstructorCourse.jsx";

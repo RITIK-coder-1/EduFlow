@@ -1,11 +1,10 @@
 /* ----------------------------------------------------------------------------------------------
-Dashboard.jsx
-The user dashboard
+InstructorDashboard.jsx
 ------------------------------------------------------------------------------------------------- */
 import React from "react";
 
-function Dashboard() {
+function InstructorDashboard() {
   return <div>Dashboard</div>;
 }
 
-export default Dashboard;
+export default InstructorDashboard;
