@@ -34,7 +34,7 @@ function VideoPlayer() {
     videoId,
   });
   const completedVideos = courseProgressData?.data?.completedVideos; // the completed videos
-  const courseProgress = useCourseCompletion(courseId, videoId); // course progress %
+  const courseProgress = useCourseCompletion(courseId); // course progress %
 
   // the API call to complete the video
   const completeVideoApiCall = async () => {
@@ -72,7 +72,7 @@ function VideoPlayer() {
               src={videoUrl || null}
               controls
               playing={true}
-              onEnded={completeVideoApiCall} // autocomplete the video when the video ends 
+              onEnded={completeVideoApiCall} // autocomplete the video when the video ends
             />
           </div>
 

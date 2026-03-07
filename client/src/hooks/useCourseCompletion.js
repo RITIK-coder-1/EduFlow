@@ -6,7 +6,7 @@ The hook for getting the course completion data
 import { useGetCourseProgressQuery, useGetCourseQuery } from "@/api/index.api";
 import { useState } from "react";
 
-function useCourseCompletion(courseId, videoId) {
+function useCourseCompletion(courseId) {
   // the course data
   const { data: courseData } = useGetCourseQuery({ courseId });
   const course = courseData?.data;
@@ -15,7 +15,6 @@ function useCourseCompletion(courseId, videoId) {
   // the course progress data
   const { data: courseProgressData } = useGetCourseProgressQuery({
     courseId,
-    videoId,
   });
   const completedVideos = courseProgressData?.data?.completedVideos;
 
