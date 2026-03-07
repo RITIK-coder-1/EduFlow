@@ -32,6 +32,7 @@ import {
   CourseCommonAccordionItem,
 } from "./shared/Accordion";
 import StudentAccordion from "./layout/StudentAccordion";
+import ProgressBar from "./shared/ProgressBar";
 
 export {
   Logout,
@@ -61,4 +62,5 @@ export {
   CourseAccordionTrigger,
   CourseCommonAccordionItem,
   StudentAccordion,
+  ProgressBar,
 };
