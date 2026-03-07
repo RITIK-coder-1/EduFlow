@@ -14,7 +14,7 @@ function StudentDashboard() {
     title: "Software Engineering Crash Course",
     instructor: "Ritik Mahapatra",
     progress: 60,
-    thumbnail: "https://via.placeholder.com/150", 
+    thumbnail: "https://via.placeholder.com/150",
   };
 
   return (
