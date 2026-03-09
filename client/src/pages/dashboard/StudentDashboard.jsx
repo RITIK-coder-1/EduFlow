@@ -2,7 +2,7 @@
 StudentDashboard.jsx
 ------------------------------------------------------------------------------------------------- */
 
-import { useGetUserQuery } from "@/api/index.api";
+import { useGetCourseQuery, useGetUserQuery } from "@/api/index.api";
 
 function StudentDashboard() {
   // Dummy data for my current development phase
@@ -19,24 +19,29 @@ function StudentDashboard() {
     thumbnail: "https://via.placeholder.com/150",
   };
 
-  const { data } = useGetUserQuery();
-  const user = data?.data;
+  // the user
+  const { data: userData } = useGetUserQuery();
+  const user = userData?.data;
 
-  console.log(user);
-  
+  // the last course visited
+  const lastCourseId = user?.lastCourseVisited;
+  const { data: courseData } = useGetCourseQuery({ courseId: lastCourseId });
+  const lastCourse = courseData?.data;
 
   return (
     <div className="min-h-screen bg-[#020617] text-white p-6 font-sans">
       {/* Header Section */}
       <header className="mb-8">
-        <h1 className="text-3xl font-bold">Welcome back, {user?.firstName}!!</h1>
+        <h1 className="text-3xl font-bold">
+          Welcome back, {user?.firstName}!!
+        </h1>
         <p className="text-gray-400">Keep moving in meaningful directions.</p>
       </header>
 
       {/* Hero: Last Visited */}
       <section className="bg-[#0f172a] border border-gray-800 rounded-xl p-6 mb-8 flex flex-col md:flex-row items-center gap-6">
         <img
-          src={recentCourse.thumbnail}
+          src={lastCourse?.thumbnail}
           alt="Course"
           className="w-full md:w-48 rounded-lg object-cover"
         />
@@ -45,10 +50,11 @@ function StudentDashboard() {
             Continue Learning
           </span>
           <h2 className="text-2xl font-bold mt-2 text-[#fbbf24]">
-            {recentCourse.title}
+            {lastCourse?.title}
           </h2>
           <p className="text-gray-400 mb-4">
-            Instructor: {recentCourse.instructor}
+            Instructor: {lastCourse?.owner?.firstName}{" "}
+            {lastCourse?.owner?.lastName}
           </p>
 
           <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
