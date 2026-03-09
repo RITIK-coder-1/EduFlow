@@ -11,13 +11,15 @@ import {
   StudentAccordion,
 } from "@/components/index.components";
 import slugify from "@/utils/slugify";
+import { useLastCourseVisitedMutation } from "@/api/users/userApi";
+import { useEffect } from "react";
 
 function PublicCourse() {
   // the data
   const { courseId } = useParams();
   const { data } = useGetCourseQuery({ courseId });
-  const course = data?.data;
-  const sections = course?.sections;
+  const course = data?.data; // course
+  const sections = course?.sections; // sections
 
   // the instructor name
   const instructorFirstName = course?.owner?.firstName;
@@ -27,6 +29,16 @@ function PublicCourse() {
   const instructorSlug = slugify(
     `${instructorFirstName} ${instructorLastName}`
   );
+
+  // add this as the last course visited
+  const [lastCourseVisited] = useLastCourseVisitedMutation();
+  useEffect(async () => {
+    try {
+      await lastCourseVisited({ courseId }).unwrap();
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   return (
     <div className="w-full h-full flex flex-col justify-start items-center gap-3 p-5 md:flex-row sm:items-start">

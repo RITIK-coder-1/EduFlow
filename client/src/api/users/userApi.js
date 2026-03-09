@@ -109,4 +109,5 @@ export const {
   useUpdateUserEmailMutation,
   useUpdateUserEmailOtpMutation,
   useUpdateUserPasswordMutation,
+  useLastCourseVisitedMutation
 } = userApi;
