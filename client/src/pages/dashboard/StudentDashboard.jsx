@@ -12,10 +12,13 @@ function StudentDashboard() {
   const { data: userData } = useGetUserQuery();
   const user = userData?.data;
 
+  // the average progress of the user across all the courses
   const enrolledCoursesIds = user?.enrolledCourses?.map(
     (course) => course?._id
   );
-  useGetAverageCourseProgressQuery(enrolledCoursesIds);
+  const { data: userProgressData } =
+    useGetAverageCourseProgressQuery(enrolledCoursesIds);
+  const averageProgress = userProgressData?.average;
 
   // the last course visited
   const lastCourseId = user?.lastCourseVisited;
@@ -25,7 +28,7 @@ function StudentDashboard() {
   // user stats
   const stats = [
     { label: "Enrolled Courses", value: user?.enrolledCourses?.length },
-    { label: "Average Progress", value: "x" }, // the average progress of the user across all the courses
+    { label: "Average Progress", value: averageProgress },
     { label: "Hours Learned", value: 12 },
   ];
 
