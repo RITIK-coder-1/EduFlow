@@ -43,28 +43,36 @@ function StudentDashboard() {
       </header>
 
       {/* Hero: Last Visited */}
-      <section className="bg-[#0f172a] border border-gray-800 rounded-xl p-6 mb-8 flex flex-col md:flex-row items-center gap-6">
-        <img
-          src={lastCourse?.thumbnail}
-          alt="Course"
-          className="w-full md:w-48 rounded-lg object-cover"
-        />
-        <div className="flex-1 w-full">
-          <h2 className="text-2xl font-bold mt-2 text-[#fbbf24]">
-            {lastCourse?.title}
-          </h2>
-          <p className="text-gray-400 mb-4">
-            Instructor: {lastCourse?.owner?.firstName}{" "}
-            {lastCourse?.owner?.lastName}
-          </p>
-          <ProgressBar courseId={lastCourseId} />
-        </div>
-        <Link to={`/app/courses/${lastCourseId}`}>
-          <CommonButton
-            label="Resume Lesson"
-            className="bg-transparent border-2 border-purple-500 hover:bg-purple-500 text-white"
-          />
-        </Link>
+      <section className="bg-[#0f172a] border border-gray-800 rounded-xl p-6 mb-8 ">
+        {!lastCourseId ? (
+          <span className="flex justify-center items-center w-full text-foreground italic">
+            You have not visited any enrolled courses yet.
+          </span>
+        ) : (
+          <div className="w-full flex flex-col md:flex-row items-center gap-6">
+            <img
+              src={lastCourse?.thumbnail}
+              alt="Course"
+              className="w-full md:w-48 rounded-lg object-cover"
+            />
+            <div className="flex-1 w-full">
+              <h2 className="text-2xl font-bold mt-2 text-[#fbbf24]">
+                {lastCourse?.title}
+              </h2>
+              <p className="text-gray-400 mb-4">
+                Instructor: {lastCourse?.owner?.firstName}{" "}
+                {lastCourse?.owner?.lastName}
+              </p>
+              <ProgressBar courseId={lastCourseId} />
+            </div>
+            <Link to={`/app/courses/${lastCourseId}`}>
+              <CommonButton
+                label="Resume Lesson"
+                className="bg-transparent border-2 border-purple-500 hover:bg-purple-500 text-white"
+              />
+            </Link>
+          </div>
+        )}
       </section>
 
       {/* Stats Grid */}
@@ -83,43 +91,58 @@ function StudentDashboard() {
       </div>
 
       {/* Course List Section */}
-      <section>
+      <section className="w-full">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold">Your Enrolled Courses</h3>
-          <Link
-            className="text-purple-400 hover:text-purple-300 text-sm"
-            to="/app/enrolled-courses"
-          >
-            View All
-          </Link>
+          {user?.enrolledCourses?.length > 0 ? (
+            <Link
+              className="text-purple-400 hover:text-purple-300 text-sm"
+              to="/app/enrolled-courses"
+            >
+              View All
+            </Link>
+          ) : (
+            <Link
+              className="text-purple-400 hover:text-purple-300 text-sm"
+              to="/app/courses"
+            >
+              Visit Courses
+            </Link>
+          )}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* the enrolled courses */}
-          {user?.enrolledCourses?.map((course) => (
-            <Link to={`/app/courses/${course?._id}`} key={course?._id}>
-              <div className="bg-[#1e293b] rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500 transition-colors cursor-pointer">
-                <div className="h-32 bg-gray-800">
-                  <img
-                    src={course?.thumbnail || null}
-                    className="w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-bold mb-1 truncate">{course?.title}</h4>
-                  <p className="text-xs text-gray-400 mb-3">
-                    By {course?.owner?.firstName} {course?.owner?.lastName}
-                  </p>
-                  <div className="w-full bg-gray-700 h-1 rounded-full">
-                    <div
-                      className="bg-[#fbbf24] h-1 rounded-full"
-                      style={{ width: "20%" }}
-                    ></div>
+        {/* the enrolled courses */}
+        {user?.enrolledCourses?.length > 0 ? (
+          user?.enrolledCourses?.map((course) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+              <Link to={`/app/courses/${course?._id}`} key={course?._id}>
+                <div className="bg-[#1e293b] rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500 transition-colors cursor-pointer">
+                  <div className="h-32 bg-gray-800">
+                    <img
+                      src={course?.thumbnail || null}
+                      className="w-full h-full"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h4 className="font-bold mb-1 truncate">{course?.title}</h4>
+                    <p className="text-xs text-gray-400 mb-3">
+                      By {course?.owner?.firstName} {course?.owner?.lastName}
+                    </p>
+                    <div className="w-full bg-gray-700 h-1 rounded-full">
+                      <div
+                        className="bg-[#fbbf24] h-1 rounded-full"
+                        style={{ width: "20%" }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+              </Link>
+            </div>
+          ))
+        ) : (
+          <div className="flex justify-center items-center">
+            You have not enrolled to any courses yet.
+          </div>
+        )}
       </section>
     </div>
   );
