@@ -482,14 +482,16 @@ const lastCourseVisitedController = async (req, res) => {
 
   const user = await User.findById(userId);
 
-  // add the course as last visited only if the user has enrolled
-  if (user.enrolledCourses.includes(courseId)) {
+  // add the course as last visited only if the user has enrolled and if it's not the last visited course
+  if (
+    user.enrolledCourses.includes(courseId) &&
+    user.lastCourseVisited !== courseId
+  ) {
     user.lastCourseVisited = courseId;
     await user.save();
+    console.log("course added to last visited");
   }
-
-  console.log("course added to last visited");
-
+  
   return res.status(200).json(new ApiResponse(200, ""));
 };
 
