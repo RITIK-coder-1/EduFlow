@@ -10,7 +10,6 @@ import {
   getAllCourses,
   enrollCourse,
   showAllCategories,
-  getEnrollCourses,
   getCourseProgress,
   completeCourseVideo,
 } from "../controllers/course.controllers.js";
@@ -27,7 +26,6 @@ SPECIFIC ROUTES:
 - Get a course's progress
 ------------------------------------------------------------------------------------------ */
 
-router.route("/enroll-courses").get(verifyJwt, getEnrollCourses); // get enroll courses
 router.route("/").get(getAllCourses); // get all the courses
 router.route("/categories").get(showAllCategories); // get all the categories
 router

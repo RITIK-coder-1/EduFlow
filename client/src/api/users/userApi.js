@@ -88,10 +88,16 @@ const userApi = apiSlice.injectEndpoints({
       transformErrorResponse,
     }),
 
+    // GET ENROLLED COURSES
+    getEnrolledCourses: builder.query({
+      query: () => "/users/enrolled-courses",
+      providesTags: ["Course"],
+    }),
+
     // LAST COURSE VISITED
     lastCourseVisited: builder.mutation({
       query: ({ courseId }) => ({
-        url: "/users/last-visited",
+        url: "/users/enrolled-courses/last-visited",
         method: "PATCH",
         body: { courseId },
       }),
@@ -109,5 +115,6 @@ export const {
   useUpdateUserEmailMutation,
   useUpdateUserEmailOtpMutation,
   useUpdateUserPasswordMutation,
-  useLastCourseVisitedMutation
+  useLastCourseVisitedMutation,
+  useGetEnrolledCoursesQuery
 } = userApi;

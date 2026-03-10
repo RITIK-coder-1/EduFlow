@@ -28,8 +28,8 @@ const getUserFunction = async (req, res) => {
       path: "enrolledCourses",
       populate: {
         path: "owner",
-        select: "firstName lastName username"
-      }
+        select: "firstName lastName username",
+      },
     });
 
   if (!user) {
@@ -489,6 +489,39 @@ const lastCourseVisitedController = async (req, res) => {
 };
 
 /* ---------------------------------------------------------------------------------------
+GET ALL ENROLLED COURSES
+------------------------------------------------------------------------------------------ */
+const getEnrolledCoursesFunction = async (req, res) => {
+  const userId = req.user?._id;
+
+  if (!userId) {
+    console.error("ENROLL COURSES ERROR: user id invalid");
+    throw new ApiError(400, "Invalid User ID");
+  }
+
+  // the user
+  const user = await User.findById(userId).populate({
+    path: "enrolledCourses",
+    select: "-enrolledBy",
+    populate: {
+      path: "owner",
+      select: "-password -refreshTokenString -__v -enrolledCourses",
+    },
+  });
+
+  if (!user) {
+    console.error("ENROLL COURSES ERROR: user not fetched");
+    throw new ApiError(500, "The user doesn't exist!");
+  }
+
+  const enrolledCourses = user?.enrolledCourses;
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Enrolled Courses Fetched!", enrolledCourses));
+};
+
+/* ---------------------------------------------------------------------------------------
 Error Handling
 ------------------------------------------------------------------------------------------ */
 
@@ -500,6 +533,8 @@ const updateEmail = asyncHandler(updateEmailFunction);
 const deleteProfilePic = asyncHandler(deleteProfilePicFunction);
 const deleteUserAccount = asyncHandler(deleteUserAccountFunction);
 const lastCourseVisited = asyncHandler(lastCourseVisitedController);
+const getEnrollCourses = asyncHandler(getEnrolledCoursesFunction);
+
 
 export {
   getUser,
@@ -510,4 +545,6 @@ export {
   deleteProfilePic,
   deleteUserAccount,
   lastCourseVisited,
+  getEnrollCourses,
+
 };
