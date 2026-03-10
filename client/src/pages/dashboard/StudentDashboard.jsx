@@ -85,29 +85,31 @@ function StudentDashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* the enrolled courses */}
           {user?.enrolledCourses?.map((course) => (
-            <div
-              key={course?._id}
-              className="bg-[#1e293b] rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500 transition-colors cursor-pointer"
-            >
-              <div className="h-32 bg-gray-800">
-                <img
-                  src={course?.thumbnail || null}
-                  className="w-full h-full"
-                />
-              </div>
-              <div className="p-4">
-                <h4 className="font-bold mb-1 truncate">{course?.title}</h4>
-                <p className="text-xs text-gray-400 mb-3">
-                  By {course?.owner?.firstName} {course?.owner?.lastName}
-                </p>
-                <div className="w-full bg-gray-700 h-1 rounded-full">
-                  <div
-                    className="bg-[#fbbf24] h-1 rounded-full"
-                    style={{ width: "20%" }}
-                  ></div>
+            <Link to={`/app/courses/${course?._id}`}>
+              <div
+                key={course?._id}
+                className="bg-[#1e293b] rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500 transition-colors cursor-pointer"
+              >
+                <div className="h-32 bg-gray-800">
+                  <img
+                    src={course?.thumbnail || null}
+                    className="w-full h-full"
+                  />
+                </div>
+                <div className="p-4">
+                  <h4 className="font-bold mb-1 truncate">{course?.title}</h4>
+                  <p className="text-xs text-gray-400 mb-3">
+                    By {course?.owner?.firstName} {course?.owner?.lastName}
+                  </p>
+                  <div className="w-full bg-gray-700 h-1 rounded-full">
+                    <div
+                      className="bg-[#fbbf24] h-1 rounded-full"
+                      style={{ width: "20%" }}
+                    ></div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
