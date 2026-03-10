@@ -3,7 +3,7 @@ EnrolledCourses.jsx
 The page for displaying all the enrolled courses of a user 
 ------------------------------------------------------------------------------------------------- */
 
-import { useGetEnrolledCoursesQuery } from "@/api/users/userApi";
+import { useGetEnrolledCoursesQuery } from "@/api/index.api";
 import { DisplayCourses } from "@/components/index.components";
 
 function EnrolledCourses() {

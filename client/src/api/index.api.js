@@ -20,6 +20,9 @@ import {
   useUpdateUserEmailMutation,
   useUpdateUserEmailOtpMutation,
   useUpdateUserPasswordMutation,
+  useGetCourseProgressQuery,
+  useCompleteCourseVideoMutation,
+  useGetEnrolledCoursesQuery
 } from "./users/userApi.js";
 
 import {
@@ -27,8 +30,6 @@ import {
   useGetCourseQuery,
   useEnrollCourseMutation,
   useGetAllCategoriesQuery,
-  useGetCourseProgressQuery,
-  useCompleteCourseVideoMutation,
 } from "./courses/courseApi.js";
 
 import {
@@ -96,6 +97,7 @@ export {
   useGetAllCoursesAdminQuery,
   useGetCourseAdminQuery,
   useDeleteCourseAdminMutation,
+  useGetEnrolledCoursesQuery,
   useGetSystemStatsQuery,
   useGetCourseProgressQuery,
   useCompleteCourseVideoMutation,
