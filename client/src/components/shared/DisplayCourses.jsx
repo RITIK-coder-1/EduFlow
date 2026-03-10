@@ -28,7 +28,7 @@ function DisplayCourses({
         <div className="w-full flex flex-col-reverse p-2 gap-5 justify-center items-center sm:flex-row-reverse">
           {courses?.map((course) => {
             return (
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-5" key={course.courseId}>
                 <CourseCard
                   image={course.img}
                   title={course.title}

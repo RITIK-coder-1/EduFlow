@@ -3,10 +3,11 @@ ProgressBar.jsx
 The UI of the course progress 
 ------------------------------------------------------------------------------------------------- */
 
-import useCourseCompletion from "@/hooks/useCourseCompletion";
+import { useGetCourseProgressQuery } from "@/api/index.api";
 
-function ProgressBar({courseId}) {
-  const courseProgress = useCourseCompletion(courseId); // course progress %
+function ProgressBar({ courseId }) {
+  const { data } = useGetCourseProgressQuery({ courseId });
+  const courseProgress = data?.data?.progress;
   return (
     <div>
       <div className="w-full bg-gray-700 h-2 rounded-full">

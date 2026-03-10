@@ -2,9 +2,9 @@
 StudentDashboard.jsx
 ------------------------------------------------------------------------------------------------- */
 
-import { useGetCourseQuery, useGetUserQuery, useGetCourseProgressQuery } from "@/api/index.api";
+import { useGetCourseQuery, useGetUserQuery } from "@/api/index.api";
+import { useGetAverageCourseProgressQuery } from "@/api/users/userApi";
 import { CommonButton, ProgressBar } from "@/components/index.components";
-import useAverageProgress from "@/hooks/useAverageProgress";
 import { Link } from "react-router-dom";
 
 function StudentDashboard() {
@@ -12,16 +12,15 @@ function StudentDashboard() {
   const { data: userData } = useGetUserQuery();
   const user = userData?.data;
 
-  useAverageProgress()
+  const enrolledCoursesIds = user?.enrolledCourses?.map(
+    (course) => course?._id
+  );
+  useGetAverageCourseProgressQuery(enrolledCoursesIds);
 
   // the last course visited
   const lastCourseId = user?.lastCourseVisited;
   const { data: courseData } = useGetCourseQuery({ courseId: lastCourseId });
   const lastCourse = courseData?.data;
-
-  const {data} = useGetCourseProgressQuery({courseId: lastCourseId})
-  console.log(data?.data);
-  
 
   // user stats
   const stats = [
