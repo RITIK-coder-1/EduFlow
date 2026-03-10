@@ -17,13 +17,10 @@ function StudentDashboard() {
   const { data: courseData } = useGetCourseQuery({ courseId: lastCourseId });
   const lastCourse = courseData?.data;
 
-  // // all the enrolledCourses of the student
-  // const studentEnrolledCourses = user?.enrolledCourses?.map(courseId => useGetCourseQuery({courseId}))
-
   // user stats
   const stats = [
     { label: "Enrolled Courses", value: user?.enrolledCourses?.length },
-    { label: "Average Progress", value: useAverageProgress() }, // the average progress of the user across all the courses
+    { label: "Average Progress", value: "x" }, // the average progress of the user across all the courses
     { label: "Hours Learned", value: 12 },
   ];
 
@@ -87,17 +84,22 @@ function StudentDashboard() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* the enrolled courses */}
-          {user?.enrolledCourses?.map((i) => (
+          {user?.enrolledCourses?.map((course) => (
             <div
-              key={i}
+              key={course?._id}
               className="bg-[#1e293b] rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500 transition-colors cursor-pointer"
             >
-              <div className="h-32 bg-gray-800"></div>
+              <div className="h-32 bg-gray-800">
+                <img
+                  src={course?.thumbnail || null}
+                  className="w-full h-full"
+                />
+              </div>
               <div className="p-4">
-                <h4 className="font-bold mb-1 truncate">
-                  MERN Stack Mastery - Volume {i}
-                </h4>
-                <p className="text-xs text-gray-400 mb-3">By Ritik Mahapatra</p>
+                <h4 className="font-bold mb-1 truncate">{course?.title}</h4>
+                <p className="text-xs text-gray-400 mb-3">
+                  By {course?.owner?.firstName} {course?.owner?.lastName}
+                </p>
                 <div className="w-full bg-gray-700 h-1 rounded-full">
                   <div
                     className="bg-[#fbbf24] h-1 rounded-full"

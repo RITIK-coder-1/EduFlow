@@ -3,6 +3,7 @@ user.controllers.js
 All the controllers for users including authentication 
 ------------------------------------------------------------------------------------------ */
 
+import path from "path";
 import { User, OTP, CourseVideo } from "../models/index.model.js";
 import {
   ApiError,
@@ -23,7 +24,13 @@ This is a function to fetch a single user's details
 const getUserFunction = async (req, res) => {
   const user = await User.findById(req.user._id)
     .select("-password -refreshTokenString")
-    .populate("enrolledCourses");
+    .populate({
+      path: "enrolledCourses",
+      populate: {
+        path: "owner",
+        select: "firstName lastName username"
+      }
+    });
 
   if (!user) {
     console.error("FETCHING USER ERROR: Invalid user");
