@@ -9,6 +9,7 @@ import {
   DollarSign,
   MoreVertical,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function InstructorDashboard() {
   // Dummy Data for MVP
@@ -70,10 +71,12 @@ function InstructorDashboard() {
             Empowering students through meaningful content.
           </p>
         </div>
-        <button className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 transition-colors px-6 py-2.5 rounded-lg font-semibold shadow-lg shadow-purple-900/20">
-          <PlusCircle size={20} />
-          Create New Course
-        </button>
+        <Link to={"/app/created-courses/create"}>
+          <button className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 transition-colors px-6 py-2.5 rounded-lg font-semibold shadow-lg shadow-purple-900/20">
+            <PlusCircle size={20} />
+            Create New Course
+          </button>
+        </Link>
       </div>
 
       {/* Stats Grid */}
