@@ -25,6 +25,9 @@ function StudentDashboard() {
   const { data: courseData } = useGetCourseQuery({ courseId: lastCourseId });
   const lastCourse = courseData?.data;
 
+  console.log(user);
+  
+
   // user stats
   const stats = [
     { label: "Enrolled Courses", value: user?.enrolledCourses?.length },

@@ -103,6 +103,7 @@ const userApi = apiSlice.injectEndpoints({
       }),
       transformResponse,
       transformErrorResponse,
+      invalidatesTags: ["User"],
     }),
 
     // GET COURSE PROGRESS
