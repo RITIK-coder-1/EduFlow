@@ -71,7 +71,7 @@ function VideoPlayer() {
         {/* Video & Info */}
         <section className="flex-1 p-3 overflow-y-auto">
           {/* Video Player Component */}
-          <div className="aspect-video w-full bg-black rounded-lg overflow-hidden shadow-2xl border border-gray-800 h-full">
+          <div className={`aspect-video w-full bg-black rounded-lg overflow-hidden shadow-2xl border border-gray-800 ${isOwner && "h-full"}`}>
             <ReactPlayer
               width="100%"
               height="100%"
