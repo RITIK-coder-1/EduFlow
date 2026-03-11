@@ -13,7 +13,7 @@ function useGetInstructorData() {
 
   // the total number of students enrolled
   const { data: studentData } = useGetTotalStudentsQuery();
-  const totalNumberOfStudents = studentData?.data?.totalStudents;
+  const totalNumberOfStudents = studentData?.totalStudents;
 
   return {
     createdCourses,
