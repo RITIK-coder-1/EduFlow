@@ -594,6 +594,10 @@ const getCourseProgressController = async (req, res) => {
     throw new ApiError(400, "The course is invalid!");
   }
 
+  /* ---------------------------------------------------------------------------------------
+  Calculating the average course progress
+  ------------------------------------------------------------------------------------------ */
+
   // get the total number of videos in the course
   let totalCourseVideos = [];
   course?.sections?.forEach((section) => {
@@ -609,7 +613,9 @@ const getCourseProgressController = async (req, res) => {
   const courseProgressData = await CourseProgress.findOne({
     course: courseId,
     user: userId,
-  }).select("completedVideos");
+  })
+    .select("completedVideos")
+    .populate("completedVideos");
   const courseCompletedVideos = courseProgressData?.completedVideos;
 
   // the total number of videos in the course
@@ -619,7 +625,14 @@ const getCourseProgressController = async (req, res) => {
   // the progress percentage
   const courseProgress = (totalCompleteVideos / totalCourseVideosNumber) * 100;
 
-  const progress = Math.ceil(courseProgress);
+  const progress = Math.ceil(courseProgress); // the average
+
+  /* ---------------------------------------------------------------------------------------
+  Calculating the total credits earned 
+  ------------------------------------------------------------------------------------------ */
+  const CREDITS_PER_LESSON = 4;
+  const totalLearningCredits =
+    (courseCompletedVideos?.length || 0) * CREDITS_PER_LESSON;
 
   console.log("Course progress fetched!");
 
@@ -627,6 +640,7 @@ const getCourseProgressController = async (req, res) => {
     new ApiResponse(200, "", {
       completedVideos: courseCompletedVideos,
       progress,
+      totalLearningCredits,
     })
   );
 };
