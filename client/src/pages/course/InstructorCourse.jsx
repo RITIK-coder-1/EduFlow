@@ -370,8 +370,8 @@ function InstructorCourse() {
                             onChange={setVideoDataForUpdate(video?._id)}
                           />
                           <span className="flex justify-center items-center w-auto h-full gap-3">
-                            <MdOutlineSystemUpdateAlt className="text-blue-500 w-7 h-7 cursor-pointer" />
-                            <MdDelete className="text-red-900 w-7 h-7 cursor-pointer" />
+                            <MdOutlineSystemUpdateAlt className="text-blue-500 w-7 h-7 cursor-pointer" onClick={updateVideoApiCall(section?._id)}/>
+                            <MdDelete className="text-red-900 w-7 h-7 cursor-pointer" onClick={deleteVideoApiCall(section?._id, video?._id)}/>
                           </span>
                         </div>
                       </li>
