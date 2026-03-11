@@ -3,7 +3,7 @@ CreatedCourses.jsx
 The page for displaying all the created courses of an instructor
 ------------------------------------------------------------------------------------------------- */
 
-import { useGetAllCoursesInstructorQuery } from "@/api/index.api";
+import { useGetInstructorDataQuery } from "@/api/index.api";
 import {
   Navlink,
   CommonButton,
@@ -11,8 +11,8 @@ import {
 } from "../../components/index.components";
 
 function CreatedCourses() {
-  const { data } = useGetAllCoursesInstructorQuery();
-  const courses = data?.data;
+  const { data } = useGetInstructorDataQuery();
+  const courses = data?.createdCourses;
 
   return (
     <>

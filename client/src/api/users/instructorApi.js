@@ -11,14 +11,6 @@ import {
 
 const instructorApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // GET ALL THE COURSES
-    getAllCoursesInstructor: builder.query({
-      query: () => "/instructor/courses",
-      transformErrorResponse,
-      transformResponse,
-      providesTags: ["Course"],
-    }),
-
     // CREATE A COURSE
     createCourse: builder.mutation({
       query: (courseData) => ({
@@ -145,7 +137,7 @@ const instructorApi = apiSlice.injectEndpoints({
     }),
 
     // GET TOTAL STUDENTS ACROSS ALL THE CREATED COURSES
-    getTotalStudents: builder.query({
+    getInstructorData: builder.query({
       async queryFn(_, _queryApi, _extraOptions, baseQuery) {
         try {
           const result = await baseQuery("/instructor/courses");
@@ -167,7 +159,7 @@ const instructorApi = apiSlice.injectEndpoints({
           );
 
           return {
-            data: { totalStudents },
+            data: { totalStudents, createdCourses },
           };
         } catch (error) {
           console.log("there is an error");
@@ -180,7 +172,6 @@ const instructorApi = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetAllCoursesInstructorQuery,
   useGetCourseInstructorQuery,
   useUpdateCourseMutation,
   useUpdateSectionMutation,
@@ -192,5 +183,5 @@ export const {
   useDeleteVideoMutation,
   useCreateCourseMutation,
   usePublishCourseMutation,
-  useGetTotalStudentsQuery,
+  useGetInstructorDataQuery
 } = instructorApi;

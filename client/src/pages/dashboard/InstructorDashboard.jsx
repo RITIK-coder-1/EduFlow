@@ -10,19 +10,19 @@ import {
   MoreVertical,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import useGetInstructorData from "@/hooks/useGetInstructorData";
-import { useGetTotalStudentsQuery } from "@/api/index.api";
+import { useGetInstructorDataQuery } from "@/api/index.api";
 
 function InstructorDashboard() {
   // instructor data
-  const {createdCourses, totalNumberOfStudents} = useGetInstructorData()
+  const { data } = useGetInstructorDataQuery();
+  const createdCourses = data?.createdCourses;
+  const totalStudents = data?.totalStudents;
 
-  useGetTotalStudentsQuery()
   // Dummy Data for MVP
   const stats = [
     {
       label: "Total Students",
-      value: totalNumberOfStudents,
+      value: totalStudents,
       icon: Users,
       color: "text-blue-400",
     },
