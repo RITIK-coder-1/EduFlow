@@ -127,12 +127,7 @@ function StudentDashboard() {
                     <p className="text-xs text-gray-400 mb-3">
                       By {course?.owner?.firstName} {course?.owner?.lastName}
                     </p>
-                    <div className="w-full bg-gray-700 h-1 rounded-full">
-                      <div
-                        className="bg-[#fbbf24] h-1 rounded-full"
-                        style={{ width: "20%" }}
-                      ></div>
-                    </div>
+                    <ProgressBar courseId={course?._id}/>
                   </div>
                 </div>
               </Link>
