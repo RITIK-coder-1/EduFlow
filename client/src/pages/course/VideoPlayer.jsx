@@ -52,7 +52,7 @@ function VideoPlayer() {
   const { isOwner } = useUserStatus(courseId);
 
   return (
-    <div className="h-auto bg-[#0a0a0c] text-white font-sans rounded-lg w-full md:w-[80%]">
+    <div className="h-auto bg-[#0a0a0c] text-white font-sans rounded-lg w-full shadow-black shadow-2xl lg:w-[80%]">
       {/* Header/Navigation Bar */}
       <nav className="p-4 border-b border-gray-800 flex justify-between items-center">
         <div className="flex items-center gap-4">
@@ -67,11 +67,15 @@ function VideoPlayer() {
         </div>
       </nav>
 
-      <div className="flex flex-col lg:flex-row h-auto">
+      <div className="flex flex-col md:flex-row h-[120vh] md:h-[80vh]">
         {/* Video & Info */}
-        <section className="flex-1 p-3 overflow-y-auto">
+        <section className="p-3 overflow-y-auto h-[150%] w-full md:h-full md:w-[120%]">
           {/* Video Player Component */}
-          <div className={`aspect-video w-full bg-black rounded-lg overflow-hidden shadow-2xl border border-gray-800 ${isOwner && "h-full"}`}>
+          <div
+            className={`aspect-video w-full bg-black rounded-lg overflow-hidden shadow-2xl border border-gray-800 ${
+              isOwner && "h-full"
+            }`}
+          >
             <ReactPlayer
               width="100%"
               height="100%"
@@ -119,7 +123,7 @@ function VideoPlayer() {
           )}
         </section>
 
-        <aside className="w-full lg:w-80 bg-[#121214] border-l border-gray-800 p-4 overflow-y-auto rounded-b-lg lg:rounded-bl-none">
+        <aside className="w-full bg-[#121214] border-l border-gray-800 p-4 overflow-y-auto rounded-b-lg md:rounded-bl-none h-full">
           <div className="mb-6">
             <h3 className="text-lg font-semibold mb-2">Course Content</h3>
             {/* Progress Bar Component */}
