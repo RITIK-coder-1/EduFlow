@@ -53,7 +53,7 @@ const getCourseFunction = async (req, res) => {
 
   // Getting the course along with the nested sub-documents
   const course = await Course.findById(courseId)
-    .select("-enrolledBy -status -__v")
+    .select("-enrolledBy -status -__v -revenue")
     .populate({
       path: "sections",
       populate: {
