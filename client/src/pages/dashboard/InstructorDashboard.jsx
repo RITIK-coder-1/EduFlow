@@ -10,14 +10,16 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useGetInstructorDataQuery } from "@/api/index.api";
+import { useGetInstructorDataQuery, useGetUserQuery } from "@/api/index.api";
 
 function InstructorDashboard() {
   // instructor data
-  const { data } = useGetInstructorDataQuery();
-  const createdCourses = data?.createdCourses; // created courses
-  const totalStudents = data?.totalStudents; // total students
-  const totalRevenue = data?.totalRevenue; // the total revenue
+  const { data: instructorData } = useGetInstructorDataQuery();
+  const { data: userData } = useGetUserQuery();
+
+  const createdCourses = instructorData?.createdCourses; // created courses
+  const totalStudents = instructorData?.totalStudents; // total students
+  const totalRevenue = userData?.data?.totalRevenue; // the total revenue
 
   // stats
   const stats = [

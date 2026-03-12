@@ -148,12 +148,14 @@ const enrollCourseFunction = async (req, res) => {
 
   // once the enrollment is successfull, update the revenue of the course and the instructor (only if the course is not free)
   if (course?.price) {
+    // update the course revenue
     const currentCourseRevenue = course?.revenue;
     const currentCoursePrice = course?.price;
     const newCourseRevenue = currentCourseRevenue + currentCoursePrice;
     course.revenue = newCourseRevenue;
     await course.save();
 
+    // update the instructor revenue
     const currentInstructorRevenue = courseOwner.totalRevenue;
     courseOwner.totalRevenue = currentInstructorRevenue + currentCoursePrice;
     await courseOwner.save();

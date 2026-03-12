@@ -158,19 +158,8 @@ const instructorApi = apiSlice.injectEndpoints({
             0
           );
 
-          // the revenue of each course
-          const revenueMadeByEachCourse = createdCourses
-            ?.filter((course) => course?.price > 0) // filter out the free courses
-            .map((course) => course?.revenue);
-
-          // the total revenue of the instructor
-          const totalRevenue = revenueMadeByEachCourse?.reduce(
-            (acc, val) => acc + val,
-            0
-          );
-
           return {
-            data: { totalStudents, createdCourses, totalRevenue },
+            data: { totalStudents, createdCourses },
           };
         } catch (error) {
           console.log("there is an error");
