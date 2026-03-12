@@ -10,9 +10,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
-function OtpInput({ setterFunction, name, required }) {
-  const [value, setValue] = React.useState("");
-
+function OtpInput({ setterFunction, name, required, value }) {
   return (
     <div className="space-y-2 w-full">
       <InputOTP

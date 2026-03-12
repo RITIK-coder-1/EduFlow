@@ -204,6 +204,7 @@ function Register() {
           setterFunction={otpCodeFunction}
           name="userOTP"
           required={isOtp}
+          value={userOTP}
         />
       </div>
 
