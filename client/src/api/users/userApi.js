@@ -148,7 +148,7 @@ const userApi = apiSlice.injectEndpoints({
           );
 
           return {
-            data: { average, totalLearningCredits, details: progressValues },
+            data: { average: Math.ceil(average), totalLearningCredits, details: progressValues },
           };
         } catch (error) {
           return { error };
