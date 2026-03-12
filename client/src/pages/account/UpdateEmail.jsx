@@ -78,6 +78,7 @@ function UpdateEmail() {
         placeholder="New Email"
         onChange={setValue}
         disabled={isOtp}
+        value={userData?.newEmail}
       />
 
       {/* Password */}
@@ -88,6 +89,7 @@ function UpdateEmail() {
         placeholder="Password"
         onChange={setValue}
         disabled={isOtp}
+        value={userData?.password}
       />
 
       {/* OTP */}
@@ -96,6 +98,7 @@ function UpdateEmail() {
           name="userOtp"
           required={isOtp}
           setterFunction={setOtpFunction}
+          value={userOtp}
         />
       )}
       <CommonButton type="submit" label="Update Email">
