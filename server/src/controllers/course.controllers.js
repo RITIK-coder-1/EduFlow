@@ -144,7 +144,7 @@ const enrollCourseFunction = async (req, res) => {
   console.log(`${user.firstName} enrolled the course: ${course.title}`);
 
   // once the enrollment is successfull, update the revenue of the course (only if the course is not free)
-  if (!course?.price) {
+  if (course?.price) {
     const currentCourseRevenue = course?.revenue;
     const currentCoursePrice = course?.price;
     const newRevenue = currentCourseRevenue + currentCoursePrice;
