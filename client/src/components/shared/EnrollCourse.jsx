@@ -51,7 +51,7 @@ const EnrollCourse = ({ courseId }) => {
           />
         );
       case false:
-        return !isEnrolled ? (
+        return isEnrolled ? (
           // if the user has already enrolled, forward them to the enrolled course page
           <CommonButton
             label="ENROLLED"
