@@ -283,7 +283,7 @@ function InstructorCourse() {
             )}
           </div>
         </div>
-        <EnrollmentStats />
+        <EnrollmentStats courseId={courseId}/>
       </div>
 
       <div className="w-full h-auto flex flex-col gap-2">
