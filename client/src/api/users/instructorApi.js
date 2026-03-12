@@ -136,7 +136,7 @@ const instructorApi = apiSlice.injectEndpoints({
       invalidatesTags: ["Course"],
     }),
 
-    // GET TOTAL STUDENTS ACROSS ALL THE CREATED COURSES
+    // GET INSTRUCTOR IMPORTANT INFORMATION
     getInstructorData: builder.query({
       async queryFn(_, _queryApi, _extraOptions, baseQuery) {
         try {
@@ -158,8 +158,18 @@ const instructorApi = apiSlice.injectEndpoints({
             0
           );
 
+          // the revenue of each course
+          const revenueMadeByEachCourse = createdCourses
+            ?.filter((course) => course?.price > 0) // filter out the free courses
+            .map((course) => course?.revenue);
+
+          const totalRevenue = revenueMadeByEachCourse?.reduce(
+            (acc, val) => acc + val,
+            0
+          );
+
           return {
-            data: { totalStudents, createdCourses },
+            data: { totalStudents, createdCourses, totalRevenue },
           };
         } catch (error) {
           console.log("there is an error");
@@ -183,5 +193,5 @@ export const {
   useDeleteVideoMutation,
   useCreateCourseMutation,
   usePublishCourseMutation,
-  useGetInstructorDataQuery
+  useGetInstructorDataQuery,
 } = instructorApi;

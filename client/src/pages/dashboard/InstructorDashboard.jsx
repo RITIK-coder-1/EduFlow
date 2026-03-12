@@ -15,8 +15,9 @@ import { useGetInstructorDataQuery } from "@/api/index.api";
 function InstructorDashboard() {
   // instructor data
   const { data } = useGetInstructorDataQuery();
-  const createdCourses = data?.createdCourses; // created courses 
+  const createdCourses = data?.createdCourses; // created courses
   const totalStudents = data?.totalStudents; // total students
+  const totalRevenue = data?.totalRevenue; // the total revenue
 
   // stats
   const stats = [
@@ -34,7 +35,7 @@ function InstructorDashboard() {
     },
     {
       label: "Total Revenue",
-      value: "₹4,250" || 0,
+      value: `₹${totalRevenue}` || 0,
       icon: IndianRupee,
       color: "text-green-400",
     },
