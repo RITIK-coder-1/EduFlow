@@ -21,12 +21,14 @@ import {
 } from "@/components/index.components";
 import { NativeSelectOption } from "@/components/ui/native-select";
 import { FieldLabel } from "@/components/ui/field";
+import { useParams } from "react-router-dom";
 
 function UpdateCourse() {
+  const {courseId} = useParams()
   /* ---------------------------------------------------------------------------------------
   The Redux Toolkit Data
   ------------------------------------------------------------------------------------------ */
-  const { data: courseData } = useGetCourseInstructorQuery();
+  const { data: courseData } = useGetCourseInstructorQuery({courseId});
   const course = courseData?.data;
   const [update] = useUpdateCourseMutation();
   const { data: categoryData } = useGetAllCategoriesQuery();
