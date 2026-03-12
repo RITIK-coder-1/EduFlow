@@ -111,7 +111,7 @@ const enrollCourseFunction = async (req, res) => {
   }
 
   // the course owner
-  const courseOwner = await User.findOne({ userId: course?.owner });
+  const courseOwner = await User.findById(course?.owner);
 
   // see if the student has already enrolled
   if (course?.enrolledBy?.includes(user?._id)) {
