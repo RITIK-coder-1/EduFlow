@@ -49,6 +49,7 @@ function UpdatePassword() {
         inputType="password"
         onChange={setValue}
         placeholder="Old Password"
+        value={passwords?.oldPassword}
       />
 
       <FieldInput
@@ -57,6 +58,7 @@ function UpdatePassword() {
         inputType="password"
         onChange={setValue}
         placeholder="New Password"
+        value={passwords?.newPassword}
       />
 
       <CommonButton
