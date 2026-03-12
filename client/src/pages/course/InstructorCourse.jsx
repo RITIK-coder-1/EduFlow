@@ -57,23 +57,25 @@ function InstructorCourse() {
     The states
   ------------------------------------------------------------------------------------------------- */
 
-  const [sectionData, setSectionData] = useState([]); // the current sections
+  // for updating the current sections
+  const [sectionData, setSectionData] = useState([]);
 
   useEffect(() => {
     setSectionData(course?.sections);
   }, [course]);
 
-  const [newSectionData, setNewSectionData] = useState(""); // new section (title)
+  // for creating a new section (title)
+  const [newSectionData, setNewSectionData] = useState("");
 
+  // to add a new video
   const [videoData, setVideoData] = useState({
-    // to add a new video
     title: "",
     courseVideo: null,
     sectionId: "",
   });
 
+  // to update a video
   const [updatedVideoData, setUpdatedVideoData] = useState({
-    // to update a video
     title: "",
     videoId: "",
   });
@@ -137,6 +139,11 @@ function InstructorCourse() {
       courseVideo: null,
       sectionId: "",
     });
+  };
+
+  // once the add-section dialogue box disappears on cancel or success, clear the new section data
+  const clearNewSectionData = () => {
+    setNewSectionData("");
   };
 
   /* ----------------------------------------------------------------------------------------------
@@ -444,6 +451,7 @@ function InstructorCourse() {
               onSubmit={addSectionCall}
               title="Section"
               titleClass="w-full border-2 text-sm sm:w-56 sm:text-md"
+              onRemoval={clearNewSectionData}
             >
               <FieldInput
                 label="Title"
