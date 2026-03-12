@@ -80,6 +80,11 @@ const userSchema = new mongoose.Schema(
       ref: "Course",
       default: null,
     },
+    totalRevenue: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     refreshTokenString: String,
   },
   {

@@ -136,7 +136,7 @@ const instructorApi = apiSlice.injectEndpoints({
       invalidatesTags: ["Course"],
     }),
 
-    // GET INSTRUCTOR IMPORTANT INFORMATION
+    // GET INSTRUCTOR COURSES IMPORTANT INFORMATION
     getInstructorData: builder.query({
       async queryFn(_, _queryApi, _extraOptions, baseQuery) {
         try {
@@ -163,6 +163,7 @@ const instructorApi = apiSlice.injectEndpoints({
             ?.filter((course) => course?.price > 0) // filter out the free courses
             .map((course) => course?.revenue);
 
+          // the total revenue of the instructor
           const totalRevenue = revenueMadeByEachCourse?.reduce(
             (acc, val) => acc + val,
             0
