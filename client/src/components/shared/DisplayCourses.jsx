@@ -5,6 +5,7 @@ The component for displaying all the courses
 
 import { CourseCard, ProgressBar, SearchBar } from "../index.components";
 import filterCourses from "@/utils/filterCourses";
+import { useState } from "react";
 
 function DisplayCourses({
   heading,
@@ -17,6 +18,15 @@ function DisplayCourses({
   // the specific courses data to show on the page
   const courses = filterCourses(courseData);
 
+  // the search input
+  const [search, setSearch] = useState("");
+
+  // the method to set the search value
+  const setSearchValue = (e) => setSearch(e.target.value);
+
+  // the method to trigger the search
+  const triggerSearch = () => console.log(search);
+
   return (
     <section className="flex flex-col justify-center items-center gap-6">
       <h1 className="text-white text-4xl md:text-6xl">{heading}</h1>
@@ -26,7 +36,11 @@ function DisplayCourses({
       ) : (
         <div className="w-full flex flex-col gap-6 justify-center items-center">
           {/* the search bar */}
-          <SearchBar />
+          <SearchBar
+            value={search}
+            onChange={setSearchValue}
+            onClick={triggerSearch}
+          />
 
           {/* The courses  */}
           <div className="w-full flex flex-col-reverse p-2 gap-5 justify-center items-center sm:flex-row-reverse">
