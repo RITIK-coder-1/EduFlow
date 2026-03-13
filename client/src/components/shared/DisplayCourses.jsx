@@ -20,11 +20,11 @@ function DisplayCourses({
 
   // whenever the value of the actual course data changes, display the filtered data according to it
   useEffect(() => {
-    if (coursesActualData) {
+    if (courseData) {
       const filteredCourses = filterCourses(courseData);
       setCoursesDisplayData(filteredCourses);
     }
-  }, [coursesActualData]);
+  }, [courseData]);
 
   // the search input
   const [search, setSearch] = useState("");
@@ -36,7 +36,6 @@ function DisplayCourses({
 
   // the method to trigger the search
   const triggerSearch = () => {
-    setCoursesActualData(() => courseData);
     let results = courseData;
     // only if the search value is not empty
     if (search) {
@@ -61,7 +60,7 @@ function DisplayCourses({
         // Special label for no courses
         <span className="text-foreground italic mt-5 md:text-lg">{label}</span>
       ) : (
-        <div className="w-full flex flex-col gap-6 justify-center items-center">
+        <div className="w-[85%] flex flex-col gap-6 justify-center items-center sm:w-full">
           {/* the search bar */}
           <SearchBar
             value={search}
