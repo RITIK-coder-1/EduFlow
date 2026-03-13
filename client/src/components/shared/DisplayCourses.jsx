@@ -57,7 +57,7 @@ function DisplayCourses({
 
   return (
     <section className="w-full flex flex-col justify-center items-center gap-6">
-      <h1 className="text-white text-4xl md:text-6xl">{heading}</h1>
+      <h1 className="text-white text-6xl text-center">{heading}</h1>
       {courseData?.length === 0 ? (
         // Special label for no courses
         <span className="text-foreground italic mt-5 md:text-lg">{label}</span>
@@ -71,10 +71,10 @@ function DisplayCourses({
           />
 
           {/* The courses  */}
-          <div className="w-full flex flex-col-reverse p-2 gap-5 justify-center items-center sm:flex-row-reverse">
+          <div className="w-full flex flex-col-reverse p-2 gap-5 justify-center items-center flex-wrap sm:flex-row-reverse">
             {coursesDisplayData?.map((course) => {
               return (
-                <div className="flex flex-col gap-5" key={course.courseId}>
+                <div className="w-full flex flex-col gap-5 justify-center items-center sm:w-64" key={course.courseId}>
                   <CourseCard
                     image={course.img}
                     title={course.title}

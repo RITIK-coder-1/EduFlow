@@ -15,9 +15,9 @@ function CourseCard({
   path,
 }) {
   return (
-    <Navlink to={path}>
+    <Navlink to={path} className="w-full sm:w-64">
       <div
-        className="border w-64 h-88 border-white/10 rounded-lg shadow-2xl shadow-black hover:shadow-4xl flex flex-col cursor-pointer relative z-20 hover:border-white/50 overflow-hidden"
+        className="border w-full h-88 border-white/10 rounded-lg shadow-2xl shadow-black hover:shadow-4xl flex flex-col cursor-pointer relative z-20 hover:border-white/50 overflow-hidden"
         title="Visit the course"
       >
         <img
