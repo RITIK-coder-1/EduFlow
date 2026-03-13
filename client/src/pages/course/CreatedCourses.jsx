@@ -26,15 +26,16 @@ function CreatedCourses() {
       />
 
       {/* The create button  */}
-      <div className="h-90 z-10 w-full fixed flex justify-end items-end pr-2 lg:h-100 lg:pr-5">
-        <Navlink to="/app/created-courses/create">
-          <CommonButton
-            label="+"
-            className="rounded-full w-12 h-12 text-lg md:w-18 md:h-18 md:text-3xl"
-            title="Create Course"
-          />
-        </Navlink>
-      </div>
+      <Navlink
+        to="/app/created-courses/create"
+        className="fixed bottom-6 right-6 z-50"
+      >
+        <CommonButton
+          label="+"
+          className="rounded-full w-14 h-14 text-lg md:w-18 md:h-18 md:text-3xl"
+          title="Create Course"
+        />
+      </Navlink>
     </>
   );
 }
