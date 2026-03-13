@@ -30,7 +30,7 @@ function Login() {
   const [userOTP, setUserOTP] = useState(""); // the otp entered by the user
 
   // control visibility of the otp field
-  const [isOtp, setIsOtp] = useState(false); 
+  const [isOtp, setIsOtp] = useState(false);
 
   /* ---------------------------------------------------------------------------------------
   The Redux Toolkit Query hooks for login 
@@ -82,44 +82,41 @@ function Login() {
   };
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-center">
-      {/* the form element */}
-      <Form onSubmit={handleSubmit}>
-        {/* Credential */}
-        <FieldInput
-          name="credential"
-          onChange={setValue}
-          label="Enter email/username"
-          placeholder="username/email"
-          disabled={isOtp}
-          value={loginData.credential}
+    <Form onSubmit={handleSubmit}>
+      {/* Credential */}
+      <FieldInput
+        name="credential"
+        onChange={setValue}
+        label="Enter email/username"
+        placeholder="username/email"
+        disabled={isOtp}
+        value={loginData.credential}
+      />
+
+      {/* Password */}
+      <FieldInput
+        name="password"
+        onChange={setValue}
+        label="Password"
+        inputType="password"
+        placeholder="••••••••••••••••"
+        disabled={isOtp}
+        value={loginData.password}
+      />
+
+      {/* OTP */}
+      <div className={isOtp ? "visible" : "hidden"}>
+        <OtpInput
+          name="userOTP"
+          required={isOtp}
+          setterFunction={otpCodeFunction}
+          value={userOTP}
         />
+      </div>
 
-        {/* Password */}
-        <FieldInput
-          name="password"
-          onChange={setValue}
-          label="Password"
-          inputType="password"
-          placeholder="••••••••••••••••"
-          disabled={isOtp}
-          value={loginData.password}
-        />
-
-        {/* OTP */}
-        <div className={isOtp ? "visible" : "hidden"}>
-          <OtpInput
-            name="userOTP"
-            required={isOtp}
-            setterFunction={otpCodeFunction}
-            value={userOTP}
-          />
-        </div>
-
-        {/* Submit */}
-        <CommonButton type="submit" label={isOtp ? "Log in" : "Submit"} />
-      </Form>
-    </div>
+      {/* Submit */}
+      <CommonButton type="submit" label={isOtp ? "Log in" : "Submit"} />
+    </Form>
   );
 }
 
