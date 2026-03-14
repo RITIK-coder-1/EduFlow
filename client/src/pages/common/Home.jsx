@@ -3,7 +3,9 @@ Home.jsx
 The landing page of the application 
 ------------------------------------------------------------------------------------------------- */
 
-import { CommonButton } from "@/components/index.components";
+import { useGetAllTheCoursesQuery } from "@/api/index.api";
+import { CommonButton, CourseCard } from "@/components/index.components";
+import filterCourses from "@/utils/filterCourses";
 import { Link } from "react-router-dom";
 
 function Home() {
@@ -14,6 +16,11 @@ function Home() {
     "Samsung Logo.png",
     "Walmart Logo.png",
   ];
+
+  // the courses
+  const { data } = useGetAllTheCoursesQuery();
+  const courses = data?.data.slice(0, 4);
+  const filteredCourses = filterCourses(courses);
 
   return (
     <>
@@ -62,16 +69,44 @@ function Home() {
           for the modern learner.
         </span>
         {/* The brand partners */}
-        <div className="w-full flex flex-col justify-center items-center mt-5 gap-3">
-          <h2 className="text-center text-white/50 font-bold sm:text-lg md:text-xl">
+        <div className="w-full flex flex-col justify-center items-center mt-10 gap-3">
+          <h3 className="text-center text-white/50 font-bold sm:text-lg md:text-xl">
             Trusted By Learners From
-          </h2>
+          </h3>
           <div className="w-full flex flex-wrap justify-center items-start gap-3 sm:gap-7 lg:gap-20">
             {brands.map((brand) => (
               <img src={brand} className="w-23 sm:w-28 md:w-36" />
             ))}
           </div>
         </div>
+      </section>
+
+      {/* The courses section */}
+      <section className="w-full flex flex-col justify-center items-center mt-6 gap-3">
+        <h2 className="text-center text-lg font-bold sm:text-xl">
+          Learn From The Best
+        </h2>
+        <span className="text-center text-xs text-white/80 md:text-sm">
+          Discover our top-rated courses across various categories.
+        </span>
+        <div className="w-full flex flex-col gap-6 px-7 my-5 justify-center items-center sm:flex-row">
+          {filteredCourses?.map((course) => (
+            <CourseCard
+              image={course?.img}
+              title={course?.title}
+              instructor={`${course?.instructorFirstName} ${course?.instructorLastName}`}
+              description={course?.desc}
+              price={course?.price}
+              path={`/app/courses/${course?.courseId}`}
+            />
+          ))}
+        </div>
+        <Link to="/app/courses">
+          <CommonButton
+            label="Show all courses"
+            className="bg-transparent border-white/90"
+          />
+        </Link>
       </section>
     </>
   );
