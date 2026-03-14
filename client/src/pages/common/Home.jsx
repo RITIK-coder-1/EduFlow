@@ -43,6 +43,31 @@ function Home() {
   const courses = data?.data.slice(0, 4); // only 4 courses
   const filteredCourses = filterCourses(courses); // filter the data to showcase
 
+  // the testimonials
+  const testimonials = [
+    {
+      id: 1,
+      name: "Alex Johnson",
+      role: "Product Manager",
+      image: "https://randomuser.me/api/portraits/men/57.jpg",
+      text: "This application has completely transformed our workflow. Highly recommended!",
+    },
+    {
+      id: 2,
+      name: "Sarah Williams",
+      role: "Software Engineer",
+      image: "https://randomuser.me/api/portraits/women/74.jpg",
+      text: "The interface is so intuitive. I was able to get up and running in minutes.",
+    },
+    {
+      id: 3,
+      name: "Michael Chen",
+      role: "UX Designer",
+      image: "https://randomuser.me/api/portraits/men/64.jpg",
+      text: "Finally, a tool that actually understands what designers need. Brilliant execution.",
+    },
+  ];
+
   return (
     <>
       {/* The header */}
@@ -129,10 +154,42 @@ function Home() {
           />
         </Link>
       </Section>
+
+      {/* The testimonials */}
+      <Section>
+        <SecondHeading>Testimonials</SecondHeading>
+        <Span>
+          Hear from the learners as they share their journey of learnings and
+          transformations.
+        </Span>
+        <div className="py-3 px-4">
+          <div className="max-w-6xl mx-auto grid gap-8 md:grid-cols-3">
+            {testimonials.map((item) => (
+              <div
+                key={item.id}
+                className="flex flex-col items-center bg-white/5 pb-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="w-full flex flex-col items-center rounded-2xl pt-8 mb-3 rounded-b-none bg-black/50">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-20 h-20 rounded-full object-cover mb-4"
+                />
+                <h3 className="text-lg font-bold text-white">{item.name}</h3>
+                <p className="text-sm font-medium text-blue-400 mb-4">
+                  {item.role}
+                </p>
+                </div>
+                <p className="text-gray-300 text-center italic leading-relaxed px-8">
+                  "{item.text}"
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
     </>
   );
 }
 
 export default Home;
-
-// /////////
