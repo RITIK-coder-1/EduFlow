@@ -197,7 +197,7 @@ function Home() {
       </Section>
 
       {/* Call To Action */}
-      <Section>
+      <Section className="my-10">
         <SecondHeading>Learn anything, anytime, anywhere.</SecondHeading>
         <Span>Start your learning journey now with EduFlow.</Span>
         <Link to="/register">
@@ -206,8 +206,10 @@ function Home() {
       </Section>
 
       {/* The footer */}
-      <footer className="w-full h-auto bg-black flex flex-col justify-center items-center pb-10 gap-5">
+      <footer className="w-full h-auto bg-black flex flex-col justify-center items-center pb-10 gap-5 mt-5">
         <div className="w-full h-auto flex flex-col justify-center items-center md:flex-row md:px-8 md:h-56">
+
+          {/* The brand */}
           <div className="w-full flex flex-col justify-center items-center gap-6 py-8 md:items-start">
             <BrandLogo />
             <Span className="md:text-start">
@@ -216,6 +218,8 @@ function Home() {
               Built for the modern learner.
             </Span>
           </div>
+
+          {/* The company */}
           <div className="w-full flex flex-col justify-center items-center gap-4 md:h-full md:justify-start md:py-8 md:items-end">
             <span className="text-lg text-white flex flex-col justify-center items-center">
               Company
@@ -240,6 +244,8 @@ function Home() {
             </ul>
           </div>
         </div>
+
+        {/* Coyright */}
         <div className="w-full px-8">
         <hr className="w-full" />
         </div>
