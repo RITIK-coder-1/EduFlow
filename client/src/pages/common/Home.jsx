@@ -10,24 +10,38 @@ import { Link } from "react-router-dom";
 
 function Home() {
   // the local component for recurring elements
-  const Section = ({ children, className }) => (
+  const Section = ({ children, className = "" }) => (
     <section
       className={`w-full flex flex-col justify-center items-center gap-4 mt-5 p-2 ${className}`}
     >
       {children}
     </section>
   );
-  const Span = ({ children, className }) => (
+  const Span = ({ children, className = "" }) => (
     <span
       className={`text-center text-xs text-white/80 md:text-sm ${className}`}
     >
       {children}
     </span>
   );
-  const SecondHeading = ({ children, className }) => (
+  const SecondHeading = ({ children, className = "" }) => (
     <h2 className={`text-center font-bold sm:text-lg md:text-xl ${className}`}>
       {children}
     </h2>
+  );
+  const BrandLogo = () => (
+    <div
+      className="flex items-center justify-center w-auto gap-1 font-bold md:text-lg md:gap-2"
+      title="EduFlow"
+      alt="Company Logo"
+    >
+      <img
+        src="LMS.png"
+        alt="the logo"
+        className="w-9 h-9 rounded-full md:w-10 md:h-10"
+      />
+      <span className="text-xl">EduFlow</span>
+    </div>
   );
 
   // the brand partners
@@ -74,15 +88,8 @@ function Home() {
       <header className="w-full border-b pb-2 px-3 border-white/10">
         <nav className="w-full flex justify-between">
           <div className="flex justify-start" title="EduFlow">
-            <div className="flex items-center justify-center w-auto gap-1 font-bold md:text-lg md:gap-2">
-              {/* The logo */}
-              <img
-                src="LMS.png"
-                alt="the logo"
-                className="w-7 h-7 rounded-full md:w-10 md:h-10"
-              />
-              <span>EduFlow</span>
-            </div>
+            {/* The logo */}
+            <BrandLogo />
           </div>
           {/* Account links */}
           <div className="flex justify-center items-center gap-6">
@@ -197,6 +204,39 @@ function Home() {
           <CommonButton label="Get Started" title="Create Account" />
         </Link>
       </Section>
+
+      {/* The footer */}
+      <footer className="w-full h-auto bg-black flex flex-col justify-center items-center pb-10 md:flex-row md:px-8 md:h-56">
+        <div className="w-full flex flex-col justify-center items-center gap-6 py-8 md:items-start">
+          <BrandLogo />
+          <Span className="md:text-start">
+            Experience a high-performance LMS <br /> featuring secure
+            authentication, RBAC, and intuitive course management. <br /> Built
+            for the modern learner.
+          </Span>
+        </div>
+        <div className="w-full flex flex-col justify-center items-center gap-4 md:h-full md:justify-start md:py-8 md:items-end">
+          <span className="text-lg text-white flex flex-col justify-center items-center">
+            Company
+          </span>
+          <ul className="w-full flex justify-center items-center text-sm gap-4 md:flex-col md:items-end md:w-auto">
+            <a href="#">
+              <li className="cursor-pointer hover:text-blue-500">Home</li>
+            </a>
+            <a href="#">
+              <li className="cursor-pointer hover:text-blue-500">About Us</li>
+            </a>
+            <a href="#">
+              <li className="cursor-pointer hover:text-blue-500">Contact Us</li>
+            </a>
+            <a href="#">
+              <li className="cursor-pointer hover:text-blue-500">
+                Privacy Policy
+              </li>
+            </a>
+          </ul>
+        </div>
+      </footer>
     </>
   );
 }
