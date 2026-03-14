@@ -4,7 +4,11 @@ The landing page of the application
 ------------------------------------------------------------------------------------------------- */
 
 import { useGetAllTheCoursesQuery } from "@/api/index.api";
-import { CommonButton, CourseCard } from "@/components/index.components";
+import {
+  CommonButton,
+  CourseCard,
+  SpinnerCustom,
+} from "@/components/index.components";
 import filterCourses from "@/utils/filterCourses";
 import { Link } from "react-router-dom";
 
@@ -46,16 +50,18 @@ function Home() {
 
   // the brand partners
   const brands = [
-    "Microsoft Logo.png",
-    "Facebook Logo.png",
-    "Samsung Logo.png",
-    "Walmart Logo.png",
+    { id: 1, name: "Microsoft Logo.png" },
+    { id: 2, name: "Facebook Logo.png" },
+    { id: 3, name: "Samsung Logo.png" },
+    { id: 4, name: "Walmart Logo.png" },
   ];
 
   // the courses to display
-  const { data } = useGetAllTheCoursesQuery();
+  const { data, isLoading } = useGetAllTheCoursesQuery();
   const courses = data?.data.slice(0, 4); // only 4 courses
   const filteredCourses = filterCourses(courses); // filter the data to showcase
+
+  console.log(isLoading);
 
   // the testimonials
   const testimonials = [
@@ -129,7 +135,7 @@ function Home() {
           </SecondHeading>
           <div className="w-full flex flex-wrap justify-center items-start gap-3 sm:gap-7 lg:gap-20">
             {brands.map((brand) => (
-              <img src={brand} className="w-23 sm:w-28 md:w-36" />
+              <img src={brand.name} className="w-23 sm:w-28 md:w-36" key={brand.id}/>
             ))}
           </div>
         </div>
@@ -145,6 +151,7 @@ function Home() {
         <div className="w-full flex flex-col gap-6 px-7 my-5 justify-center items-center sm:flex-row">
           {filteredCourses?.map((course) => (
             <CourseCard
+              key={course?.courseId}
               image={course?.img}
               title={course?.title}
               instructor={`${course?.instructorFirstName} ${course?.instructorLastName}`}
@@ -170,6 +177,7 @@ function Home() {
           transformations.
         </Span>
         <div className="py-3 px-4">
+          <SpinnerCustom />
           <div className="max-w-6xl mx-auto grid gap-8 md:grid-cols-3">
             {testimonials.map((item) => (
               <div
@@ -208,7 +216,6 @@ function Home() {
       {/* The footer */}
       <footer className="w-full h-auto bg-black flex flex-col justify-center items-center pb-10 gap-5 mt-5">
         <div className="w-full h-auto flex flex-col justify-center items-center md:flex-row md:px-8 md:h-56">
-
           {/* The brand */}
           <div className="w-full flex flex-col justify-center items-center gap-6 py-8 md:items-start">
             <BrandLogo />
@@ -247,9 +254,11 @@ function Home() {
 
         {/* Coyright */}
         <div className="w-full px-8">
-        <hr className="w-full" />
+          <hr className="w-full" />
         </div>
-        <Span className="tracking-wider">Copyright 2026 © EduFlow | All Rights Reserved.</Span>
+        <Span className="tracking-wider">
+          Copyright 2026 © EduFlow | All Rights Reserved.
+        </Span>
       </footer>
     </>
   );

@@ -34,6 +34,7 @@ import {
 import StudentAccordion from "./layout/StudentAccordion";
 import ProgressBar from "./shared/ProgressBar";
 import SearchBar from "./shared/SearchBar";
+import { SpinnerCustom } from "./shared/Spinner";
 
 export {
   Logout,
@@ -64,5 +65,6 @@ export {
   CourseCommonAccordionItem,
   StudentAccordion,
   ProgressBar,
-  SearchBar
+  SearchBar,
+  SpinnerCustom
 };
