@@ -135,7 +135,11 @@ function Home() {
           </SecondHeading>
           <div className="w-full flex flex-wrap justify-center items-start gap-3 sm:gap-7 lg:gap-20">
             {brands.map((brand) => (
-              <img src={brand.name} className="w-23 sm:w-28 md:w-36" key={brand.id}/>
+              <img
+                src={brand.name}
+                className="w-23 sm:w-28 md:w-36"
+                key={brand.id}
+              />
             ))}
           </div>
         </div>
@@ -147,21 +151,24 @@ function Home() {
           {" "}
           Learn From The Best
         </SecondHeading>
-        <SpinnerCustom className="size-10"/>
 
         <Span>Discover our top-rated courses across various categories.</Span>
         <div className="w-full flex flex-col gap-6 px-7 my-5 justify-center items-center sm:flex-row">
-          {filteredCourses?.map((course) => (
-            <CourseCard
-              key={course?.courseId}
-              image={course?.img}
-              title={course?.title}
-              instructor={`${course?.instructorFirstName} ${course?.instructorLastName}`}
-              description={course?.desc}
-              price={course?.price}
-              path={`/app/courses/${course?.courseId}`}
-            />
-          ))}
+          {isLoading ? (
+            <SpinnerCustom className="size-10" />
+          ) : (
+            filteredCourses?.map((course) => (
+              <CourseCard
+                key={course?.courseId}
+                image={course?.img}
+                title={course?.title}
+                instructor={`${course?.instructorFirstName} ${course?.instructorLastName}`}
+                description={course?.desc}
+                price={course?.price}
+                path={`/app/courses/${course?.courseId}`}
+              />
+            ))
+          )}
         </div>
         <Link to="/app/courses">
           <CommonButton
