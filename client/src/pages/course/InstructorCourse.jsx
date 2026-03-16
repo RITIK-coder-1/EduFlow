@@ -93,7 +93,10 @@ function InstructorCourse() {
     videoId: "",
   });
 
-  const [open, setOpen] = useState(false);
+  // state to control the dialog box of adding a new video
+  const [videoOpen, setVideoOpen] = useState(false);
+  // state to control the dialog box of adding a new section
+  const [sectionOpen, setSectionOpen] = useState(false);
 
   /* ----------------------------------------------------------------------------------------------
     The methods to manipulate the states 
@@ -205,6 +208,7 @@ function InstructorCourse() {
         sectionData: { title: newSectionData },
         courseId,
       }).unwrap();
+      setSectionOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -223,7 +227,7 @@ function InstructorCourse() {
           courseId,
           sectionId: id,
         }).unwrap();
-        setOpen(false);
+        setVideoOpen(false);
       } catch (error) {
         console.error(error);
       }
@@ -464,8 +468,8 @@ function InstructorCourse() {
                         title="Video"
                         titleClass="w-full text-xs sm:w-24 md:w-30 md:text-sm"
                         onRemoval={clearVideoData}
-                        open={open}
-                        setOpen={setOpen}
+                        open={videoOpen}
+                        setOpen={setVideoOpen}
                         isLoading={isAddVideoLoading}
                       >
                         <FieldInput
@@ -500,6 +504,9 @@ function InstructorCourse() {
                   title="Section"
                   titleClass="w-full border-2 text-sm sm:w-56 sm:text-md"
                   onRemoval={clearNewSectionData}
+                  open={sectionOpen}
+                  setOpen={setSectionOpen}
+                  isLoading={isAddSectionLoading}
                 >
                   <FieldInput
                     label="Title"

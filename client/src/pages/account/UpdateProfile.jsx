@@ -18,15 +18,19 @@ import {
   Form,
   InputFile,
   UserProfilePic,
+  SpinnerCustom,
 } from "@/components/index.components";
+
 function UpdateProfile() {
   /* ---------------------------------------------------------------------------------------
   The Redux Toolkit Data
   ------------------------------------------------------------------------------------------ */
-  const [update] = useUpdateUserDetailsMutation();
-  const { data } = useGetUserQuery();
+  const [update, { isLoading: isUpdateLoading }] =
+    useUpdateUserDetailsMutation();
+  const { data, isLoading: isUserLoading } = useGetUserQuery();
   const user = data?.data;
-  const [deleteProfilePic] = useDeleteUserProfilePicMutation();
+  const [deleteProfilePic, { isLoading: isDeleteProfileLoading }] =
+    useDeleteUserProfilePicMutation();
   const dispatch = useDispatch();
 
   /* ---------------------------------------------------------------------------------------
@@ -100,60 +104,72 @@ function UpdateProfile() {
 
   return (
     <>
-      <UserProfilePic />
-      <Form onSubmit={updateDetails}>
-        {/* The profile pic */}
-        <InputFile
-          description="Update Your Profile Pic"
-          required={false}
-          name="profilePic"
-          onChange={updateProfilePic}
-        />
-
-        {/* Only students can delete the profile pic */}
-        {user?.accountType === "Student" && user?.profilePic !== "" && (
-          <span className="w-full">
-            <CommonButton
-              label="Delete Pic"
-              onClick={deletePicFunction}
-              className="bg-red-900 hover:bg-red-950 w-24 text-md"
-              title="Delete Pic"
+      {isUserLoading ? (
+        <SpinnerCustom className="size-9" />
+      ) : (
+        <>
+          <UserProfilePic />
+          <Form onSubmit={updateDetails} className="mb-3">
+            {/* The profile pic */}
+            <InputFile
+              description="Update Your Profile Pic"
+              required={false}
+              name="profilePic"
+              onChange={updateProfilePic}
             />
-          </span>
-        )}
 
-        <hr className="border-b border-white/10 w-full" />
+            {/* Only students can delete the profile pic */}
+            {user?.accountType === "Student" && user?.profilePic !== "" && (
+              <span className="w-full">
+                <CommonButton
+                  label={
+                    isDeleteProfileLoading ? <SpinnerCustom /> : "Delete Pic"
+                  }
+                  onClick={deletePicFunction}
+                  className="bg-red-900 hover:bg-red-950 w-24 text-md"
+                  title="Delete Pic"
+                />
+              </span>
+            )}
 
-        {/* The username */}
-        <FieldInput
-          label="Username"
-          name="username"
-          value={userDetails.username}
-          onChange={changeValue}
-          required={false}
-        />
+            <hr className="border-b border-white/10 w-full" />
 
-        {/* The first name */}
-        <FieldInput
-          label="First Name"
-          name="firstName"
-          value={userDetails.firstName}
-          onChange={changeValue}
-          required={false}
-        />
+            {/* The username */}
+            <FieldInput
+              label="Username"
+              name="username"
+              value={userDetails.username}
+              onChange={changeValue}
+              required={false}
+            />
 
-        {/* The last name */}
-        <FieldInput
-          label="Last Name"
-          name="lastName"
-          value={userDetails.lastName}
-          onChange={changeValue}
-          required={false}
-        />
+            {/* The first name */}
+            <FieldInput
+              label="First Name"
+              name="firstName"
+              value={userDetails.firstName}
+              onChange={changeValue}
+              required={false}
+            />
 
-        {/* The button */}
-        <CommonButton type="submit" label="Update" title="Update Details" />
-      </Form>
+            {/* The last name */}
+            <FieldInput
+              label="Last Name"
+              name="lastName"
+              value={userDetails.lastName}
+              onChange={changeValue}
+              required={false}
+            />
+
+            {/* The button */}
+            <CommonButton
+              type="submit"
+              label={isUpdateLoading ? <SpinnerCustom /> : "Update"}
+              title="Update Details"
+            />
+          </Form>
+        </>
+      )}
     </>
   );
 }
