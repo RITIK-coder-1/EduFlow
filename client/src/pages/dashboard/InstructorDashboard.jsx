@@ -11,15 +11,18 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useGetInstructorDataQuery, useGetUserQuery } from "@/api/index.api";
+import { SpinnerCustom } from "@/components/index.components";
 
 function InstructorDashboard() {
   // instructor data
-  const { data: instructorData } = useGetInstructorDataQuery();
-  const { data: userData } = useGetUserQuery();
+  const { data: instructorData, isLoading: isInstructorDataLoading } =
+    useGetInstructorDataQuery();
+  const { data: userData, isLoading: isUserDataLoading } = useGetUserQuery();
+  const user = userData?.data;
 
   const createdCourses = instructorData?.createdCourses; // created courses
   const totalStudents = instructorData?.totalStudents; // total students
-  const totalRevenue = userData?.data?.totalRevenue; // the total revenue
+  const totalRevenue = user?.totalRevenue; // the total revenue
 
   // stats
   const stats = [
@@ -51,7 +54,10 @@ function InstructorDashboard() {
       {/* Header Section */}
       <div className="flex flex-col justify-center items-center gap-6 mb-10">
         <div className="text-center">
-          <h1 className="text-3xl font-bold">Welcome back, Ritik!!</h1>
+          <h1 className="text-3xl font-bold flex gap-1">
+            Welcome back,{" "}
+            {isUserDataLoading ? <SpinnerCustom /> : user?.firstName}!!
+          </h1>
           <p className="text-gray-400 mt-1">
             Empowering students through meaningful content.
           </p>
@@ -76,7 +82,9 @@ function InstructorDashboard() {
                 <p className="text-gray-400 text-sm font-medium uppercase tracking-wider">
                   {stat.label}
                 </p>
-                <h3 className="text-3xl font-bold mt-2">{stat.value}</h3>
+                <h3 className="text-3xl font-bold mt-2">
+                  {isInstructorDataLoading ? <SpinnerCustom /> : stat.value}
+                </h3>
               </div>
               <stat.icon className={`${stat.color} opacity-80`} size={28} />
             </div>
@@ -95,51 +103,59 @@ function InstructorDashboard() {
           </Link>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="bg-[#1e293b]/50 text-gray-400 text-sm uppercase">
-              <tr>
-                <th className="px-6 py-4 font-medium">Course Title</th>
-                <th className="px-6 py-4 font-medium text-center">Enrolled</th>
-                <th className="px-6 py-4 font-medium text-center">Price</th>
-                <th className="px-6 py-4 font-medium text-center">Status</th>
-                <th className="px-6 py-4 font-medium text-right">Visit</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-800">
-              {diplayCourses?.map((course) => (
-                <tr
-                  key={course?._id}
-                  className="hover:bg-gray-800/30 transition-colors"
-                >
-                  <td className="px-6 py-4 font-medium">{course?.title}</td>
-                  <td className="px-6 py-4 text-center">
-                    {course?.enrolledBy?.length}
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    {course?.price === 0 ? "Free" : course?.price}
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-bold ${
-                        course.status === "Published"
-                          ? "bg-green-900/30 text-green-400"
-                          : "bg-yellow-900/30 text-yellow-400"
-                      }`}
-                    >
-                      {course?.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <Link to={`/app/created-courses/${course?._id}`}>
-                      <button className="p-2 hover:bg-gray-700 rounded-full">
-                        <ArrowRight size={18} className="text-gray-400" />
-                      </button>
-                    </Link>
-                  </td>
+          {isUserDataLoading ? (
+            <div className="w-full border flex justify-center items-center p-5 bg-[#0f172a] border-gray-800 rounded-b-xl">
+              <SpinnerCustom className="size-6" />
+            </div>
+          ) : (
+            <table className="w-full text-left">
+              <thead className="bg-[#1e293b]/50 text-gray-400 text-sm uppercase">
+                <tr>
+                  <th className="px-6 py-4 font-medium">Course Title</th>
+                  <th className="px-6 py-4 font-medium text-center">
+                    Enrolled
+                  </th>
+                  <th className="px-6 py-4 font-medium text-center">Price</th>
+                  <th className="px-6 py-4 font-medium text-center">Status</th>
+                  <th className="px-6 py-4 font-medium text-right">Visit</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-800">
+                {diplayCourses?.map((course) => (
+                  <tr
+                    key={course?._id}
+                    className="hover:bg-gray-800/30 transition-colors"
+                  >
+                    <td className="px-6 py-4 font-medium">{course?.title}</td>
+                    <td className="px-6 py-4 text-center">
+                      {course?.enrolledBy?.length}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {course?.price === 0 ? "Free" : course?.price}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          course.status === "Published"
+                            ? "bg-green-900/30 text-green-400"
+                            : "bg-yellow-900/30 text-yellow-400"
+                        }`}
+                      >
+                        {course?.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <Link to={`/app/created-courses/${course?._id}`}>
+                        <button className="p-2 hover:bg-gray-700 rounded-full">
+                          <ArrowRight size={18} className="text-gray-400" />
+                        </button>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>
