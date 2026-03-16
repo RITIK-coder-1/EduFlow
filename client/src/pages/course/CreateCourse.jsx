@@ -201,15 +201,16 @@ function CreateCourse() {
       // setting the thumbnail
       formData.append("thumbnail", thumbnail);
 
-      await create(formData).unwrap();
+      const { data } = await create(formData).unwrap();
+
+      // navigate to the course page once it's created
+      if (isSuccess) {
+        navigate(`/app/created-courses/${data?._id}`);
+      }
     } catch (error) {
       console.error(error);
     }
   };
-
-  // if (isSuccess){
-  //   navigate(`/app/created-courses/${}`)
-  // }
 
   return (
     <Form onSubmit={createCourse} className="mb-3">
