@@ -349,7 +349,7 @@ function InstructorCourse() {
                 {course?.status !== "Published" ? (
                   <div className="relative w-full">
                     {isPublishCourseLoading ? (
-                      <SpinnerCustom className="size-5 ml-3"/>
+                      <SpinnerCustom className="size-5 ml-3" />
                     ) : (
                       <SelectInput
                         onChange={publishCourseCall}
@@ -411,17 +411,25 @@ function InstructorCourse() {
                                 onChange={setVideoDataForUpdate(video?._id)}
                               />
                               <span className="flex justify-center items-center w-auto h-full gap-3">
-                                <MdOutlineSystemUpdateAlt
-                                  className="text-blue-500 w-7 h-7 cursor-pointer"
-                                  onClick={updateVideoApiCall(section?._id)}
-                                />
-                                <MdDelete
-                                  className="text-red-900 w-7 h-7 cursor-pointer"
-                                  onClick={deleteVideoApiCall(
-                                    section?._id,
-                                    video?._id
-                                  )}
-                                />
+                                {isUpdateVideoLoading ? (
+                                  <SpinnerCustom />
+                                ) : (
+                                  <MdOutlineSystemUpdateAlt
+                                    className="text-blue-500 w-7 h-7 cursor-pointer"
+                                    onClick={updateVideoApiCall(section?._id)}
+                                  />
+                                )}
+                                {isDeleteVideoLoading ? (
+                                  <SpinnerCustom />
+                                ) : (
+                                  <MdDelete
+                                    className="text-red-900 w-7 h-7 cursor-pointer"
+                                    onClick={deleteVideoApiCall(
+                                      section?._id,
+                                      video?._id
+                                    )}
+                                  />
+                                )}
                               </span>
                             </div>
                           </li>
