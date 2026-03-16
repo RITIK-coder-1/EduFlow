@@ -116,6 +116,7 @@ function UpdateProfile() {
               required={false}
               name="profilePic"
               onChange={updateProfilePic}
+              accept="image/*"
             />
 
             {/* Only students can delete the profile pic */}
