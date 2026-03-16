@@ -19,6 +19,7 @@ import {
   SpinnerCustom,
 } from "../../../components/index.components.js";
 import { NativeSelectOption } from "@/components/ui/native-select.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   // navigation
@@ -54,7 +55,7 @@ function Register() {
 
   const [createRegisterOtp, { isLoading: isCreateOtpLoading }] =
     useRegisterOtpMutation();
-  const [registerUser, { isLoading: isRegisterUserLoading }] =
+  const [registerUser, { isLoading: isRegisterUserLoading, isSuccess }] =
     useRegisterMutation();
 
   /* ---------------------------------------------------------------------------------------
@@ -113,7 +114,7 @@ function Register() {
       }
     } else {
       try {
-        const { } = await registerUser({
+        const {} = await registerUser({
           ...userData,
           userOTP,
         }).unwrap();
@@ -122,6 +123,11 @@ function Register() {
       }
     }
   };
+
+  // navigate to the dashboard once the user successfully registers
+  if (isSuccess) {
+    navigate("/app/dashboard", { replace: true });
+  }
 
   return (
     // the form element
