@@ -118,12 +118,13 @@ function AlertDialogMedia({ className, ...props }) {
 function AlertDialogAction({
   className,
   onClick,
+  type = "submit",
   variant = "default",
   size = "default",
   ...props
 }) {
   return (
-    <Button variant={variant} size={size} onClick={onClick} asChild>
+    <Button variant={variant} size={size} onClick={onClick} type={type} asChild>
       <AlertDialogPrimitive.Action
         data-slot="alert-dialog-action"
         className={cn(className)}

@@ -16,9 +16,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { Form, CommonButton } from "../index.components";
 
-function AddDialogueBox({ title, label, children, onSubmit, titleClass, onRemoval }) {
+function AddDialogueBox({
+  title,
+  label,
+  children,
+  onSubmit,
+  titleClass,
+  onRemoval,
+  open,
+  setOpen,
+  isLoading,
+}) {
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button
           variant="outline"
@@ -42,13 +52,19 @@ function AddDialogueBox({ title, label, children, onSubmit, titleClass, onRemova
               {children}
 
               <AlertDialogFooter className="flex flex-row justify-center items-center">
-                <AlertDialogCancel className="hover:bg-red-700 w-30" onClick={onRemoval}>
+                <AlertDialogCancel
+                  className="hover:bg-red-700 w-30"
+                  onClick={onRemoval}
+                  disabled={isLoading}
+                >
                   Cancel
                 </AlertDialogCancel>
                 <CommonButton
-                  className="bg-green-800 hover:bg-green-950 border border-white w-30 font-normal p-0 text-sm"
+                  label={isLoading ? "Processing..." : "Continue"}
                   type="submit"
-                  label="Continue"
+                  className="bg-green-800 hover:bg-green-950 border border-white w-30 font-normal p-0 text-sm"
+                  onClick={onSubmit}
+                  disabled={isLoading}
                 />
               </AlertDialogFooter>
             </Form>

@@ -54,7 +54,7 @@ function InstructorCourse() {
     useDeleteCourseInstructorMutation();
   const [addSection, { isLoading: isAddSectionLoading }] =
     useAddNewSectionMutation();
-  const [updateSection, { isLoading: isUpdateeSectionLoading }] =
+  const [updateSection, { isLoading: isUpdateSectionLoading }] =
     useUpdateSectionMutation();
   const [deleteSection, { isLoading: isDeleteSectionLoading }] =
     useDeleteSectionMutation();
@@ -92,6 +92,8 @@ function InstructorCourse() {
     title: "",
     videoId: "",
   });
+
+  const [open, setOpen] = useState(false);
 
   /* ----------------------------------------------------------------------------------------------
     The methods to manipulate the states 
@@ -221,6 +223,7 @@ function InstructorCourse() {
           courseId,
           sectionId: id,
         }).unwrap();
+        setOpen(false);
       } catch (error) {
         console.error(error);
       }
@@ -443,7 +446,13 @@ function InstructorCourse() {
                     <div className="w-full flex flex-col justify-center items-center gap-3 mt-5 p-3 sm:flex-row">
                       {/* The update section button */}
                       <CommonButton
-                        label="Update Section"
+                        label={
+                          isUpdateSectionLoading ? (
+                            <SpinnerCustom />
+                          ) : (
+                            "Update Section"
+                          )
+                        }
                         onClick={updateSectionCall(section._id)}
                         className="bg-transparent hover:bg-blue-950 border border-blue-900/90 w-full p-0 font-normal  text-xs sm:w-24 md:text-sm md:w-30"
                         title="update chapter"
@@ -455,6 +464,9 @@ function InstructorCourse() {
                         title="Video"
                         titleClass="w-full text-xs sm:w-24 md:w-30 md:text-sm"
                         onRemoval={clearVideoData}
+                        open={open}
+                        setOpen={setOpen}
+                        isLoading={isAddVideoLoading}
                       >
                         <FieldInput
                           label="Title"
