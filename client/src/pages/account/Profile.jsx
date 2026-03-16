@@ -4,11 +4,15 @@ The user profile page
 ------------------------------------------------------------------------------------------------- */
 
 import UserProfilePic from "@/components/layout/UserProfilePic";
-import { CommonButton, Navlink } from "../../components/index.components";
+import {
+  CommonButton,
+  Navlink,
+  SpinnerCustom,
+} from "../../components/index.components";
 import { useGetUserQuery } from "@/api/index.api";
 
 function Profile() {
-  const { data } = useGetUserQuery();
+  const { data, isLoading } = useGetUserQuery();
   const user = data?.data;
 
   // The date of birth of the user
@@ -20,58 +24,66 @@ function Profile() {
 
   return (
     <section className="w-full h-full flex flex-col justify-start gap-5">
-      {/* The profile pic and Name */}
-      <div className="flex flex-col gap-3 justify-center items-center">
-        <UserProfilePic />
-        <h1 className="text-3xl p-3 rounded-lg flex justify-center items-center border-b border-t border-white/10 font-black shadow-lg shadow-black bg-backgroundContrast lg:text-5xl">
-          {user?.firstName} {user?.lastName}
-        </h1>
-      </div>
+      {isLoading ? (
+        <SpinnerCustom className="size-9"/>
+      ) : (
+        <>
+          {/* The profile pic and Name */}
+          <div className="flex flex-col gap-3 justify-center items-center">
+            <UserProfilePic />
+            <h1 className="text-3xl p-3 rounded-lg flex justify-center items-center border-b border-t border-white/10 font-black shadow-lg shadow-black bg-backgroundContrast lg:text-5xl">
+              {user?.firstName} {user?.lastName}
+            </h1>
+          </div>
 
-      <div className="w-full border border-white/10 p-2 flex flex-col gap-2 text-lg lg:text-xl">
-        {/* The email */}
-        <div className="flex flex-col border border-white/5 rounded-lg p-2">
-          <span className="text-yellow-50">{user?.email}</span>
-          <span className="text-xs lg:text-sm text-foreground">Email</span>
-        </div>
+          <div className="w-full border border-white/10 p-2 flex flex-col gap-2 text-lg lg:text-xl">
+            {/* The email */}
+            <div className="flex flex-col border border-white/5 rounded-lg p-2">
+              <span className="text-yellow-50">{user?.email}</span>
+              <span className="text-xs lg:text-sm text-foreground">Email</span>
+            </div>
 
-        {/* The username */}
-        <div className="flex flex-col border border-white/5 rounded-lg p-2">
-          <span className=" text-yellow-50">{user?.username}</span>
-          <span className="text-xs lg:text-sm  text-foreground">Username</span>
-        </div>
+            {/* The username */}
+            <div className="flex flex-col border border-white/5 rounded-lg p-2">
+              <span className=" text-yellow-50">{user?.username}</span>
+              <span className="text-xs lg:text-sm  text-foreground">
+                Username
+              </span>
+            </div>
 
-        {/* The DOB */}
-        <div className="flex flex-col border border-white/5 rounded-lg p-2">
-          <span className=" text-yellow-50">{`${day}/${month}/${year}`}</span>
-          <span className="text-xs lg:text-sm  text-foreground">D.O.B</span>
-        </div>
+            {/* The DOB */}
+            <div className="flex flex-col border border-white/5 rounded-lg p-2">
+              <span className=" text-yellow-50">{`${day}/${month}/${year}`}</span>
+              <span className="text-xs lg:text-sm  text-foreground">D.O.B</span>
+            </div>
 
-        {/* The Account Type */}
-        <div className="flex flex-col border border-white/5 rounded-lg p-2">
-          <span className=" text-yellow-50">{user?.accountType}</span>
-          <span className="text-xs lg:text-sm  text-foreground">Type</span>
-        </div>
-      </div>
+            {/* The Account Type */}
+            <div className="flex flex-col border border-white/5 rounded-lg p-2">
+              <span className=" text-yellow-50">{user?.accountType}</span>
+              <span className="text-xs lg:text-sm  text-foreground">Type</span>
+            </div>
+          </div>
 
-      {/* The navigation links to the update pages */}
-      <div className="w-full border border-white/10 p-2 py-4 flex flex-col justify-center items-center gap-2">
-        <Navlink to="/app/profile/update-profile">
-          <CommonButton label="Update Profile" />
-        </Navlink>
-        <Navlink to="/app/profile/update-password">
-          <CommonButton
-            label="Update Password"
-            className="bg-blue-900 hover:bg-blue-950"
-          />
-        </Navlink>
-        <Navlink to="/app/profile/update-email">
-          <CommonButton
-            label="Update Email"
-            className="bg-blue-950 hover:bg-blue-900"
-          />
-        </Navlink>
-      </div>
+          {/* The navigation links to the update pages */}
+          <div className="w-full border border-white/10 p-2 py-4 flex flex-col justify-center items-center gap-2">
+            <Navlink to="/app/profile/update-profile">
+              <CommonButton label="Update Profile" />
+            </Navlink>
+            <Navlink to="/app/profile/update-password">
+              <CommonButton
+                label="Update Password"
+                className="bg-blue-900 hover:bg-blue-950"
+              />
+            </Navlink>
+            <Navlink to="/app/profile/update-email">
+              <CommonButton
+                label="Update Email"
+                className="bg-blue-950 hover:bg-blue-900"
+              />
+            </Navlink>
+          </div>
+        </>
+      )}
     </section>
   );
 }
