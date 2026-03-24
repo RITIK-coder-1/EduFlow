@@ -202,7 +202,9 @@ function InstructorCourse() {
 
   // add a section
   const addSectionCall = async (e) => {
+    e.stopPropagation();
     e.preventDefault();
+
     try {
       await addSection({
         sectionData: { title: newSectionData },

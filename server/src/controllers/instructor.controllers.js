@@ -597,7 +597,7 @@ const addSectionFunction = async (req, res) => {
   }
 
   // adding the section to the course
-  const updateCourse = await Course.findByIdAndUpdate(
+  const updatedCourse = await Course.findByIdAndUpdate(
     courseId,
     {
       $push: { sections: section._id },
@@ -607,7 +607,7 @@ const addSectionFunction = async (req, res) => {
     }
   );
 
-  if (!updateCourse) {
+  if (!updatedCourse) {
     console.error("ADD SECTION ERROR: section isn't added to course");
     throw new ApiError(
       500,
