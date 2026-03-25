@@ -18,19 +18,21 @@ import {
   SelectInput,
   Image,
   FieldTextarea,
+  SpinnerCustom,
 } from "@/components/index.components";
 import { NativeSelectOption } from "@/components/ui/native-select";
 import { FieldLabel } from "@/components/ui/field";
 import { useParams } from "react-router-dom";
 
 function UpdateCourse() {
-  const {courseId} = useParams()
+  const { courseId } = useParams();
   /* ---------------------------------------------------------------------------------------
   The Redux Toolkit Data
   ------------------------------------------------------------------------------------------ */
-  const { data: courseData } = useGetCourseInstructorQuery({courseId});
+  const { data: courseData, isLoading: isCourseLoading } =
+    useGetCourseInstructorQuery({ courseId });
   const course = courseData?.data;
-  const [update] = useUpdateCourseMutation();
+  const [update, { isLoading: isUpdateLoading }] = useUpdateCourseMutation();
   const { data: categoryData } = useGetAllCategoriesQuery();
   const categories = categoryData?.data; // the course categories created by the admin
 
@@ -98,8 +100,10 @@ function UpdateCourse() {
     }
   };
 
-  return (
-    <Form onSubmit={updateCourse}>
+  return isCourseLoading ? (
+    <SpinnerCustom className="size-7" />
+  ) : (
+    <Form onSubmit={updateCourse} className="mb-5">
       {/* The thumbnail  */}
       <Image src={course?.thumbnail} alt="Course Thumbnail" />{" "}
       {/* Setting the thumbnail from the course directly instead of the courseDetails state so that it doesn't get removed temporarily once the user selects a different image to upload */}
@@ -152,7 +156,10 @@ function UpdateCourse() {
           ))}
         </SelectInput>
       </div>
-      <CommonButton label="Update" type="submit" />
+      <CommonButton
+        label={isUpdateLoading ? <SpinnerCustom /> : "Update"}
+        type="submit"
+      />
     </Form>
   );
 }
