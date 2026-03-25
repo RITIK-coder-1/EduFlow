@@ -121,10 +121,13 @@ const enrollCourseFunction = async (req, res) => {
 
   // simultaneous async operations
   await Promise.all([
-    // add the course to the enrolled courses list of the user
+    // add the course to the enrolled courses list and last-visited course of the user
     User.findByIdAndUpdate(
       userId,
-      { $addToSet: { enrolledCourses: courseId } },
+      {
+        $addToSet: { enrolledCourses: courseId },
+        $set: { lastCourseVisited: courseId },
+      },
       { new: true }
     ),
     // add the user to the enrolledBy list of the course

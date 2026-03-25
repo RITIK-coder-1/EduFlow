@@ -36,7 +36,7 @@ function StudentDashboard() {
   const enrolledCoursesToDisplay = user?.enrolledCourses?.slice(-3)
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white p-6 font-sans w-full lg:w-[80%]">
+    <div className="min-h-screen bg-[#020617] text-white p-6 font-sans w-full lg:w-[80%] mb-5">
       {/* Header Section */}
       <header className="mb-8">
         <h1 className="text-3xl font-bold">
