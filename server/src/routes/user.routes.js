@@ -52,9 +52,9 @@ router.route("/enrolled-courses").get(getEnrollCourses); // get enroll courses
 router.route("/enrolled-courses/last-visited").patch(lastCourseVisited); // add course as last visited
 router
   .route("/enrolled-courses/:courseId/videos/:videoId")
-  .patch(verifyJwt, completeCourseVideo); // complete the video
+  .patch(completeCourseVideo); // complete the video
 router
   .route("/enrolled-courses/:courseId/progress")
-  .get(verifyJwt, getCourseProgress); // get the course progress
+  .get(getCourseProgress); // get the course progress
 
 export { router as userRouter };

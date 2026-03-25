@@ -33,7 +33,7 @@ const deleteCourse = async (courseId) => {
   const sectionDelete = CourseSection.deleteMany({ course: courseId });
 
   // Deleting all the videos
-  const videosDelete = course.sections.map((section) =>
+  const videosDelete = course?.sections?.map((section) =>
     CourseVideo.deleteMany({ courseSection: section._id })
   );
 
