@@ -1,8 +1,3 @@
-/* ----------------------------------------------------------------------------------------------
-Profile.jsx
-The user profile page 
-------------------------------------------------------------------------------------------------- */
-
 import UserProfilePic from "@/components/layout/UserProfilePic";
 import {
   CommonButton,
@@ -15,74 +10,93 @@ function Profile() {
   const { data, isLoading } = useGetUserQuery();
   const user = data?.data;
 
-  // The date of birth of the user
   const dob = user?.dateOfBirth;
-  const date = new Date(dob);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
+  const formattedDate = dob ? new Date(dob).toLocaleDateString("en-GB") : "N/A";
 
   return (
-    <section className="w-full h-full flex flex-col justify-start gap-5">
+    <section className="w-full max-w-4xl mx-auto p-4 lg:p-8 animate-in fade-in duration-500">
       {isLoading ? (
-        <SpinnerCustom className="size-9"/>
+        <div className="flex justify-center items-center h-64">
+          <SpinnerCustom className="size-10 text-primary" />
+        </div>
       ) : (
-        <>
-          {/* The profile pic and Name */}
-          <div className="flex flex-col gap-3 justify-center items-center">
-            <UserProfilePic />
-            <h1 className="text-3xl p-3 rounded-lg flex justify-center items-center border-b border-t border-white/10 font-black shadow-lg shadow-black bg-backgroundContrast lg:text-5xl">
-              {user?.firstName} {user?.lastName}
-            </h1>
-          </div>
+        <div className="flex flex-col gap-8">
+          {/* Header Section: Profile Header */}
+          <div className="relative overflow-hidden rounded-3xl bg-linear-to-b from-white/10 to-transparent p-px">
+            <div className="bg-backgroundContrast/50 backdrop-blur-md rounded-[23px] p-8 flex flex-col md:flex-row items-center gap-6">
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                <UserProfilePic className="relative size-28 md:size-32 border-2 border-white/20 shadow-2xl" />
+              </div>
 
-          <div className="w-full border border-white/10 p-2 flex flex-col gap-2 text-lg lg:text-xl">
-            {/* The email */}
-            <div className="flex flex-col border border-white/5 rounded-lg p-2">
-              <span className="text-yellow-50">{user?.email}</span>
-              <span className="text-xs lg:text-sm text-foreground">Email</span>
-            </div>
-
-            {/* The username */}
-            <div className="flex flex-col border border-white/5 rounded-lg p-2">
-              <span className=" text-yellow-50">{user?.username}</span>
-              <span className="text-xs lg:text-sm  text-foreground">
-                Username
-              </span>
-            </div>
-
-            {/* The DOB */}
-            <div className="flex flex-col border border-white/5 rounded-lg p-2">
-              <span className=" text-yellow-50">{`${day}/${month}/${year}`}</span>
-              <span className="text-xs lg:text-sm  text-foreground">D.O.B</span>
-            </div>
-
-            {/* The Account Type */}
-            <div className="flex flex-col border border-white/5 rounded-lg p-2">
-              <span className=" text-yellow-50">{user?.accountType}</span>
-              <span className="text-xs lg:text-sm  text-foreground">Type</span>
+              <div className="text-center md:text-left">
+                <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-2">
+                  {user?.firstName} {user?.lastName}
+                </h1>
+                <p className="text-blue-400 font-medium px-3 py-1 bg-blue-500/10 rounded-full inline-block text-sm uppercase tracking-widest">
+                  {user?.accountType || "Member"}
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* The navigation links to the update pages */}
-          <div className="w-full border border-white/10 p-2 py-4 flex flex-col justify-center items-center gap-2">
-            <Navlink to="/app/profile/update-profile">
-              <CommonButton label="Update Profile" />
-            </Navlink>
-            <Navlink to="/app/profile/update-password">
-              <CommonButton
-                label="Update Password"
-                className="bg-blue-900 hover:bg-blue-950"
-              />
-            </Navlink>
-            <Navlink to="/app/profile/update-email">
-              <CommonButton
-                label="Update Email"
-                className="bg-blue-950 hover:bg-blue-900"
-              />
-            </Navlink>
+          {/* Details Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { label: "Email Address", value: user?.email },
+              { label: "Username", value: user?.username },
+              { label: "Date of Birth", value: formattedDate },
+              {
+                label: "Account Status",
+                value: "Active",
+                color: "text-green-400",
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="group p-5 rounded-2xl border border-white/5 bg-white/2 hover:bg-white/5 transition-all duration-300 h-auto w-full"
+              >
+                <p className="text-xs uppercase tracking-widest text-foreground/50 mb-1 ">
+                  {item.label}
+                </p>
+                <p
+                  className={`text-lg font-medium ${
+                    item.color || "text-yellow-50/90"
+                  } wrap-break-word`}
+                >
+                  {item.value}
+                </p>
+              </div>
+            ))}
           </div>
-        </>
+
+          {/* Action Footer */}
+          <div className="mt-4 p-6 rounded-3xl border border-white/10 bg-black/20 backdrop-blur-sm">
+            <h3 className="text-sm font-semibold text-white/70 mb-4 text-center md:text-left">
+              Account Management
+            </h3>
+            <div className="flex flex-wrap justify-center md:justify-start gap-3">
+              <Navlink to="/app/profile/update-profile">
+                <CommonButton
+                  label="Edit Profile"
+                  className="px-6 py-2.5 bg-white text-black hover:bg-white/90 transition-colors"
+                />
+              </Navlink>
+              <Navlink to="/app/profile/update-password">
+                <CommonButton
+                  label="Security"
+                  className="px-6 py-2.5 bg-blue-600/20 border border-blue-500/30 hover:bg-blue-600/30"
+                />
+              </Navlink>
+              <Navlink to="/app/profile/update-email">
+                <CommonButton
+                  label="Change Email"
+                  className="px-6 py-2.5 bg-zinc-800 border border-zinc-700 hover:bg-zinc-700"
+                />
+              </Navlink>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );
