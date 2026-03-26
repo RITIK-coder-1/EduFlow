@@ -14,9 +14,9 @@ function PrivateLayout({ allowedRoles }) {
   const { isAuthenticated, accountType } = useUserStatus();
   const location = useLocation();
 
-  // if the user is authentication or any public user is accessing the courses, return the layout or redirect the user to the homepage
+  // if the user is authentication or any public user is accessing the courses, return the layout or redirect the user to a different page 
   if (
-    (isAuthenticated && allowedRoles.includes(accountType)) ||
+    (isAuthenticated && allowedRoles.includes(accountType) && location.pathname !== "/app") ||
     location.pathname.includes("/app/courses")
   ) {
     return (
