@@ -8,11 +8,11 @@ import {
   SidebarContent,
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
-import { useSelector } from "react-redux";
 import { Navlink } from "../index.components";
+import useUserStatus from "@/hooks/useUserStatus";
 
 export function AppSidebar() {
-  const user = useSelector((state) => state.auth.user); // the quick user access
+  const { accountType } = useUserStatus();
 
   // the navigation list for instructors
   const instructorNavigationList = [
@@ -32,8 +32,13 @@ export function AppSidebar() {
   ];
 
   // the navigation list for students
-  const userNavigationFilter = instructorNavigationList.filter(
+  const studentNavigationFilter = instructorNavigationList.filter(
     (ele) => ele.label !== "Created Courses"
+  );
+
+  // the navigation list for admins
+  const adminNavigationFilter = studentNavigationFilter.filter(
+    (ele) => ele.label !== "Enrolled Courses"
   );
 
   // the navigation items
@@ -62,10 +67,10 @@ export function AppSidebar() {
   return (
     <Sidebar side="left" className="md:shadow-2xl shadow-black">
       <SidebarContent className="rounded-br-lg rounded-tr-lg border border-l-0 border-white/50">
-        {user?.accountType === "Instructor" &&
+        {accountType === "Instructor" &&
           NavigationItem(instructorNavigationList)}
-        {user?.accountType === "Student" &&
-          NavigationItem(userNavigationFilter)}
+        {accountType === "Student" && NavigationItem(studentNavigationFilter)}
+        {accountType === "Admin" && NavigationItem(adminNavigationFilter)}
       </SidebarContent>
     </Sidebar>
   );
