@@ -12,7 +12,8 @@ const EnrollCourse = ({ courseId }) => {
   const navigate = useNavigate();
 
   // the user stats
-  const { isAuthenticated, isOwner, isEnrolled } = useUserStatus(courseId);
+  const { isAuthenticated, isOwner, isEnrolled, accountType } =
+    useUserStatus(courseId);
 
   // the enroll course mutation
   const [enroll] = useEnrollCourseMutation();
@@ -38,7 +39,7 @@ const EnrollCourse = ({ courseId }) => {
     );
   }
 
-  if (isAuthenticated) {
+  if (isAuthenticated && accountType !== "Admin") {
     switch (isOwner) {
       // if the user is the instructor themselves, forward them to the edit page
       case true:
