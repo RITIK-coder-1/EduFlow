@@ -67,7 +67,7 @@ const myRouter = createBrowserRouter([
         path: "enrolled-courses",
       },
 
-      // public course routes
+      // course routes (accessible publically)
       {
         path: "courses",
         children: [
