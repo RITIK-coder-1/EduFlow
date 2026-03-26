@@ -52,7 +52,7 @@ function VideoPlayer() {
   const { isOwner, accountType } = useUserStatus(courseId);
 
   return (
-    <div className="h-auto bg-[#0a0a0c] text-white font-sans rounded-lg w-full shadow-black shadow-2xl lg:w-[80%]">
+    <div className="h-auto bg-[#0a0a0c] text-white font-sans rounded-lg w-[90%] shadow-black mb-5 shadow-2xl lg:w-[80%]">
       {/* Header/Navigation Bar */}
       <nav className="p-4 border-b border-gray-800 flex justify-between items-center">
         <div className="flex items-center gap-4">
