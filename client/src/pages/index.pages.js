@@ -9,7 +9,6 @@ import Profile from "./account/Profile.jsx";
 import UpdateProfile from "./account/UpdateProfile.jsx";
 import UpdatePassword from "./account/UpdatePassword.jsx";
 import UpdateEmail from "./account/UpdateEmail.jsx";
-import DeleteAccount from "./account/DeleteAccount.jsx";
 import CreateCourse from "./course/CreateCourse.jsx";
 import UpdateCourse from "./course/UpdateCourse.jsx";
 import Home from "./common/Home.jsx";
@@ -28,7 +27,6 @@ export {
   UpdateProfile,
   UpdatePassword,
   UpdateEmail,
-  DeleteAccount,
   CreateCourse,
   UpdateCourse,
   Home,

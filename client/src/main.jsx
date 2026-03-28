@@ -19,7 +19,6 @@ import {
   UpdateProfile,
   UpdatePassword,
   UpdateEmail,
-  DeleteAccount,
   CreateCourse,
   UpdateCourse,
   Dashboard,
@@ -108,10 +107,6 @@ const myRouter = createBrowserRouter([
           {
             element: <Profile />,
             index: true,
-          },
-          {
-            element: <DeleteAccount />,
-            path: "delete-profile",
           },
           {
             element: <UpdateProfile />,
