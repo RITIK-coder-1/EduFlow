@@ -5,16 +5,39 @@ AdminDashboard.jsx
 import React, { useState } from "react";
 import { Users, BookOpen, IndianRupee, Trash2, Plus } from "lucide-react";
 import {
+  useCreateCategoryMutation,
   useGetAllCategoriesQuery,
   useGetAllCoursesAdminQuery,
   useGetAllUsersQuery,
   useGetSystemStatsQuery,
 } from "@/api/index.api";
-import { SpinnerCustom } from "@/components/index.components";
+import {
+  AddDialogueBox,
+  FieldInput,
+  SpinnerCustom,
+} from "@/components/index.components";
 
 const AdminDashboard = () => {
+  /* ----------------------------------------------------------------------------------------------
+  The tabs
+  ------------------------------------------------------------------------------------------------- */
   // the activity tab
   const [activeTab, setActiveTab] = useState("users");
+
+  // add categories tab
+  const [categoryOpen, setCategoryOpen] = useState(false);
+
+  /* ----------------------------------------------------------------------------------------------
+  The states
+  ------------------------------------------------------------------------------------------------- */
+  const [category, setCategory] = useState({ name: "", description: "" });
+
+  const [createCategory, { isLoading: isCreateCategoryLoading }] =
+    useCreateCategoryMutation();
+
+  /* ----------------------------------------------------------------------------------------------
+  The data
+  ------------------------------------------------------------------------------------------------- */
 
   // the system stats
   const { data: statsData, isLoading: isStatsLoading } =
@@ -56,6 +79,26 @@ const AdminDashboard = () => {
       color: "text-green-400",
     },
   ];
+
+  /* ----------------------------------------------------------------------------------------------
+  The methods
+  ------------------------------------------------------------------------------------------------- */
+
+  // to set the new category
+  const addCategory = (e) =>
+    setCategory({ ...category, [e.target.name]: e.target.value });
+
+  // the API call to add a category
+  const createCategoryApiCall = async (e) => {
+    e.preventDefault();
+    try {
+      await createCategory(category).unwrap();
+      setCategoryOpen(false);
+      setCategory({ name: "", description: "" });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#020617] text-white p-6 font-sans mb-5">
@@ -113,9 +156,29 @@ const AdminDashboard = () => {
               {activeTab} Management
             </h2>
             {activeTab === "categories" && (
-              <button className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm transition">
-                <Plus size={16} /> Add Category
-              </button>
+              <AddDialogueBox
+                label={<Plus size={16} />}
+                title={"Category"}
+                onSubmit={createCategoryApiCall}
+                open={categoryOpen}
+                setOpen={setCategoryOpen}
+                isLoading={isCreateCategoryLoading}
+              >
+                <FieldInput
+                  label="Name"
+                  name="name"
+                  placeholder="Software Engineering"
+                  onChange={addCategory}
+                  value={category.name}
+                />
+                <FieldInput
+                  label="Description"
+                  name="description"
+                  placeholder="Description"
+                  onChange={addCategory}
+                  value={category.description}
+                />
+              </AddDialogueBox>
             )}
           </div>
 
