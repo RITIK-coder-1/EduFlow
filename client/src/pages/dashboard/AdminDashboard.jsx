@@ -5,6 +5,7 @@ AdminDashboard.jsx
 import React, { useState } from "react";
 import { Users, BookOpen, IndianRupee, Trash2, Plus } from "lucide-react";
 import {
+  useGetAllCoursesAdminQuery,
   useGetAllUsersQuery,
   useGetSystemStatsQuery,
 } from "@/api/index.api";
@@ -22,6 +23,13 @@ const AdminDashboard = () => {
   // the users
   const { data: usersData, isLoading: isUserLoading } = useGetAllUsersQuery();
   const users = usersData?.data;
+
+  // the courses
+  const { data: coursesData, isLoading: isCourseLoading } =
+    useGetAllCoursesAdminQuery();
+  const courses = coursesData?.data;
+
+  console.log(courses)
 
   // Data to display
   const statsToDisplay = [
@@ -112,23 +120,24 @@ const AdminDashboard = () => {
             )}
           </div>
 
-          <table className="w-full text-left">
-            <thead>
-              <tr className="text-gray-500 text-sm border-b border-gray-800">
-                <th className="pb-4 font-medium">NAME / TITLE</th>
-                <th className="pb-4 font-medium">DETAILS</th>
-                <th className="pb-4 font-medium">STATUS</th>
-                <th className="pb-4 font-medium text-right">ACTIONS</th>
-              </tr>
-            </thead>
-            {isUserLoading ? (
-              <div className="w-full p-5 flex justify-start items-center">
-                <SpinnerCustom />
-              </div>
-            ) : (
-              <tbody className="divide-y divide-gray-800">
-                {activeTab === "users" &&
-                  users?.map((user) => (
+          {/* The users table  */}
+          {activeTab === "users" && (
+            <table className="w-full text-left">
+              <thead>
+                <tr className="text-gray-500 text-sm border-b border-gray-800">
+                  <th className="pb-4 font-medium">NAME</th>
+                  <th className="pb-4 font-medium">DETAILS</th>
+                  <th className="pb-4 font-medium">STATUS</th>
+                  <th className="pb-4 font-medium text-right">ACTIONS</th>
+                </tr>
+              </thead>
+              {isUserLoading ? (
+                <div className="w-full p-5 flex justify-start items-center">
+                  <SpinnerCustom />
+                </div>
+              ) : (
+                <tbody className="divide-y divide-gray-800">
+                  {users?.map((user) => (
                     <tr
                       key={user?._id}
                       className="text-sm group hover:bg-[#1e293b] transition-colors"
@@ -156,9 +165,56 @@ const AdminDashboard = () => {
                       </td>
                     </tr>
                   ))}
-              </tbody>
-            )}
-          </table>
+                </tbody>
+              )}
+            </table>
+          )}
+
+          {/* The courses table */}
+          {activeTab === "courses" && (
+            <table className="w-full text-left">
+              <thead>
+                <tr className="text-gray-500 text-sm border-b border-gray-800">
+                  <th className="pb-4 font-medium">TITLE</th>
+                  <th className="pb-4 font-medium">INSTRUCTOR</th>
+                  <th className="pb-4 font-medium">STUDENTS</th>
+                  <th className="pb-4 font-medium">PRICE</th>
+                  <th className="pb-4 font-medium">REVENUE</th>
+                  <th className="pb-4 font-medium text-right">ACTIONS</th>
+                </tr>
+              </thead>
+              {isCourseLoading ? (
+                <div className="w-full p-5 flex justify-start items-center">
+                  <SpinnerCustom />
+                </div>
+              ) : (
+                <tbody className="divide-y divide-gray-800">
+                  {courses?.map((course) => (
+                    <tr
+                      key={course?._id}
+                      className="text-sm group hover:bg-[#1e293b] transition-colors"
+                    >
+                      <td className="py-4">
+                        <div className="font-medium text-gray-200">
+                          {course?.title}
+                        </div>
+                      </td>
+                      <td className="py-4 text-gray-400">{course?.owner?.firstName} {course?.owner?.lastName}</td>
+                      <td className="py-4 text-gray-400">{course?.enrolledBy?.length}</td>
+                      <td className="py-4 text-gray-400">{course?.price}</td>
+
+                      <td className="py-4">{course?.revenue}</td>
+                      <td className="py-4 text-right">
+                        <button className="text-gray-500 hover:text-red-400 transition-colors p-2">
+                          <Trash2 size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              )}
+            </table>
+          )}
         </div>
       </div>
     </div>
