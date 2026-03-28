@@ -6,6 +6,8 @@ import React, { useState } from "react";
 import { Users, BookOpen, IndianRupee, Trash2, Plus } from "lucide-react";
 import {
   useCreateCategoryMutation,
+  useDeleteCourseAdminMutation,
+  useDeleteUserAdminMutation,
   useGetAllCategoriesQuery,
   useGetAllCoursesAdminQuery,
   useGetAllUsersQuery,
@@ -13,6 +15,7 @@ import {
 } from "@/api/index.api";
 import {
   AddDialogueBox,
+  DeleteDialogueBox,
   FieldInput,
   SpinnerCustom,
 } from "@/components/index.components";
@@ -34,6 +37,10 @@ const AdminDashboard = () => {
 
   const [createCategory, { isLoading: isCreateCategoryLoading }] =
     useCreateCategoryMutation();
+
+  const [deleteUser, {}] = useDeleteUserAdminMutation();
+
+  const [deleteCourse, {}] = useDeleteCourseAdminMutation();
 
   /* ----------------------------------------------------------------------------------------------
   The data
@@ -98,6 +105,30 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  // Delete the user
+  const deleteUserApiCall = (userId) => {
+    return async (e) => {
+      e.preventDefault();
+      try {
+        await deleteUser(userId).unwrap();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  };
+
+  // Delete the course
+  const deleteCourseApiCall = (courseId) => {
+    return async (e) => {
+      e.preventDefault();
+      try {
+        await deleteCourse(courseId).unwrap();
+      } catch (error) {
+        console.error(error);
+      }
+    };
   };
 
   return (
@@ -220,10 +251,17 @@ const AdminDashboard = () => {
                           ACTIVE
                         </span>
                       </td>
-                      <td className="py-4 text-right">
-                        <button className="text-gray-500 hover:text-red-400 transition-colors p-2">
-                          <Trash2 size={18} />
-                        </button>
+                      <td className="py-4 text-right flex justify-end text-red-400 hover:text-red-600">
+                        <DeleteDialogueBox
+                          label={<Trash2 size={18} />}
+                          triggerClass="border-none flex justify-center bg-transparent w-10 sm:w-10 md:w-10 hover:bg-transparent "
+                          description={
+                            user?.accountType === "Instructor"
+                              ? "All their courses and videos will be deleted"
+                              : ""
+                          }
+                          onClick={deleteUserApiCall(user?._id)}
+                        />
                       </td>
                     </tr>
                   ))}
