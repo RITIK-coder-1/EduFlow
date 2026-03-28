@@ -202,7 +202,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white p-6 font-sans mb-5">
+    <div className="min-h-screen w-full bg-[#020617] text-white p-6 font-sans mb-5">
       {/* Header */}
       <header className="mb-8">
         <h1 className="text-3xl font-bold">Admin Control Center</h1>
@@ -232,9 +232,9 @@ const AdminDashboard = () => {
       </div>
 
       {/* Management Section */}
-      <div className="bg-[#0f172a] border border-gray-800 rounded-xl overflow-hidden">
+      <div className="bg-[#0f172a] border border-gray-800 rounded-xl overflow-x-scroll w-full">
         {/* Tab Navigation */}
-        <div className="flex border-b border-gray-800">
+        <div className="flex border-b border-gray-800 w-full">
           {["users", "courses", "categories"].map((tab) => (
             <button
               key={tab}
@@ -278,13 +278,13 @@ const AdminDashboard = () => {
 
           {/* The users table  */}
           {activeTab === "users" && (
-            <table className="w-full text-left">
-              <thead>
-                <tr className="text-gray-500 text-sm border-b border-gray-800">
-                  <th className="pb-4 font-medium">NAME</th>
-                  <th className="pb-4 font-medium">DETAILS</th>
-                  <th className="pb-4 font-medium">STATUS</th>
-                  <th className="pb-4 font-medium text-right">ACTIONS</th>
+            <table className="w-auto text-left flex sm:flex-col sm:w-full">
+              <thead className="w-auto sm:w-full">
+                <tr className="text-gray-500 text-sm border-r pr-3 border-gray-800 flex flex-col justify-start items-center gap-10 sm:flex-row sm:justify-between sm:w-full sm:pr-0 sm:border-r-0 sm:border-b">
+                  <th className="pb-4 font-medium  sm:w-[50%]">NAME</th>
+                  <th className="pb-4 font-medium sm:flex-2">DETAILS</th>
+                  <th className="pb-4 font-medium sm:flex-1">STATUS</th>
+                  <th className="pb-4 font-medium sm:flex-1 text-right">ACTIONS</th>
                 </tr>
               </thead>
               {isUserLoading ? (
@@ -292,32 +292,32 @@ const AdminDashboard = () => {
                   <SpinnerCustom />
                 </div>
               ) : (
-                <tbody className="divide-y divide-gray-800">
+                <tbody className="divide-x divide-gray-800 flex sm:flex-col sm:w-full sm:divide-y  sm:divide-x-0">
                   {users?.map((user) => (
                     <tr
                       key={user?._id}
-                      className="text-sm group hover:bg-[#1e293b] transition-colors"
+                      className="text-sm group hover:bg-[#1e293b] transition-colors px-3  flex flex-col  justify-start items-start gap-10 sm:flex-row sm:px-0 sm:justify-between sm:w-full sm:py-3"
                     >
-                      <td className="py-4">
-                        <div className="font-medium text-gray-200">
+                      <td className="sm:w-[50%]">
+                        <div className="font-medium text-gray-200  ">
                           {user?.firstName} {user?.lastName}
                         </div>
                         <div className="text-xs text-gray-500">
                           {user?.email}
                         </div>
                       </td>
-                      <td className="py-4 text-gray-400">
+                      <td className="pb-4 sm:flex-2  text-gray-400">
                         {user?.accountType}
                       </td>
-                      <td className="py-4">
+                      <td className="pb-4 sm:flex-1">
                         <span className="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full border border-green-800">
                           ACTIVE
                         </span>
                       </td>
-                      <td className="py-4 text-right flex justify-end text-red-400 hover:text-red-600">
+                      <td className="flex justify-start items-start sm:flex-1  text-red-400 hover:text-red-600 sm:justify-end">
                         <DeleteDialogueBox
                           label={<Trash2 size={18} />}
-                          triggerClass="border-none flex justify-center bg-transparent w-10 sm:w-10 md:w-10 hover:bg-transparent "
+                          triggerClass="border-none flex justify-start items-start p-0 bg-transparent w-10 sm:w-10 md:w-10 hover:bg-transparent "
                           description={
                             user?.accountType === "Instructor"
                               ? "All their courses and videos will be deleted"
