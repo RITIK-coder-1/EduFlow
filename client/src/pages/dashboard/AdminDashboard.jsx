@@ -4,7 +4,10 @@ AdminDashboard.jsx
 
 import React, { useState } from "react";
 import { Users, BookOpen, IndianRupee, Trash2, Plus } from "lucide-react";
-import { useGetSystemStatsQuery } from "@/api/index.api";
+import {
+  useGetAllUsersQuery,
+  useGetSystemStatsQuery,
+} from "@/api/index.api";
 import { SpinnerCustom } from "@/components/index.components";
 
 const AdminDashboard = () => {
@@ -12,8 +15,13 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("users");
 
   // the system stats
-  const { data, isLoading: isStatsLoading } = useGetSystemStatsQuery();
-  const stats = data?.data;
+  const { data: statsData, isLoading: isStatsLoading } =
+    useGetSystemStatsQuery();
+  const stats = statsData?.data;
+
+  // the users
+  const { data: usersData, isLoading: isUserLoading } = useGetAllUsersQuery();
+  const users = usersData?.data;
 
   // Data to display
   const statsToDisplay = [
@@ -34,23 +42,6 @@ const AdminDashboard = () => {
       value: isStatsLoading ? <SpinnerCustom /> : `₹${stats?.totalRevenue}`,
       icon: <IndianRupee size={20} />,
       color: "text-green-400",
-    },
-  ];
-
-  const mockUsers = [
-    {
-      id: 1,
-      name: "Aarav Sharma",
-      email: "aarav@example.com",
-      role: "Instructor",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Sneha Gupta",
-      email: "sneha@example.com",
-      role: "Student",
-      status: "Active",
     },
   ];
 
@@ -130,33 +121,43 @@ const AdminDashboard = () => {
                 <th className="pb-4 font-medium text-right">ACTIONS</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
-              {activeTab === "users" &&
-                mockUsers.map((user) => (
-                  <tr
-                    key={user.id}
-                    className="text-sm group hover:bg-[#1e293b] transition-colors"
-                  >
-                    <td className="py-4">
-                      <div className="font-medium text-gray-200">
-                        {user.name}
-                      </div>
-                      <div className="text-xs text-gray-500">{user.email}</div>
-                    </td>
-                    <td className="py-4 text-gray-400">{user.role}</td>
-                    <td className="py-4">
-                      <span className="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full border border-green-800">
-                        {user.status}
-                      </span>
-                    </td>
-                    <td className="py-4 text-right">
-                      <button className="text-gray-500 hover:text-red-400 transition-colors p-2">
-                        <Trash2 size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
+            {isUserLoading ? (
+              <div className="w-full p-5 flex justify-start items-center">
+                <SpinnerCustom />
+              </div>
+            ) : (
+              <tbody className="divide-y divide-gray-800">
+                {activeTab === "users" &&
+                  users?.map((user) => (
+                    <tr
+                      key={user?._id}
+                      className="text-sm group hover:bg-[#1e293b] transition-colors"
+                    >
+                      <td className="py-4">
+                        <div className="font-medium text-gray-200">
+                          {user?.firstName} {user?.lastName}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {user?.email}
+                        </div>
+                      </td>
+                      <td className="py-4 text-gray-400">
+                        {user?.accountType}
+                      </td>
+                      <td className="py-4">
+                        <span className="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full border border-green-800">
+                          ACTIVE
+                        </span>
+                      </td>
+                      <td className="py-4 text-right">
+                        <button className="text-gray-500 hover:text-red-400 transition-colors p-2">
+                          <Trash2 size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            )}
           </table>
         </div>
       </div>
