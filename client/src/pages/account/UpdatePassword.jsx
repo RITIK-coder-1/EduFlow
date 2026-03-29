@@ -5,7 +5,13 @@ The page to update the user password
 
 import { useState } from "react";
 import { useUpdateUserPasswordMutation } from "../../api/index.api";
-import { Form, CommonButton, FieldInput, SpinnerCustom } from "@/components/index.components";
+import {
+  Form,
+  CommonButton,
+  FieldInput,
+  SpinnerCustom,
+} from "@/components/index.components";
+import { toast } from "sonner";
 
 function UpdatePassword() {
   /* ---------------------------------------------------------------------------------------
@@ -35,9 +41,10 @@ function UpdatePassword() {
     e.preventDefault();
 
     try {
-      await update(passwords).unwrap();
+      const { message } = await update(passwords).unwrap();
+      toast.success(message, { position: "top-right" });
     } catch (error) {
-      console.error(error.message);
+      toast.error(error.message, { position: "top-right" });
     }
   };
 

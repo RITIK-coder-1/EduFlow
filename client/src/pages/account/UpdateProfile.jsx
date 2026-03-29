@@ -20,6 +20,7 @@ import {
   UserProfilePic,
   SpinnerCustom,
 } from "@/components/index.components";
+import { toast } from "sonner";
 
 function UpdateProfile() {
   /* ---------------------------------------------------------------------------------------
@@ -77,16 +78,18 @@ function UpdateProfile() {
     try {
       // upload the simple object if the profile pic isn't updated
       if (!profilePic) {
-        const { data } = await update(userDetails).unwrap();
+        const { data, message } = await update(userDetails).unwrap();
         dispatch(setUser(data));
+        toast.success(message, { position: "top-right" });
       } else {
         // else upload a form data
         const formData = getFormData(userDetails);
-        const { data } = await update(formData).unwrap();
+        const { data, message } = await update(formData).unwrap();
         dispatch(setUser(data));
+        toast.success(message, { position: "top-right" });
       }
     } catch (error) {
-      console.error(error.message);
+      toast.error(error.message, { position: "top-right" });
     }
   };
 
@@ -95,10 +98,11 @@ function UpdateProfile() {
   ------------------------------------------------------------------------------------------ */
   const deletePicFunction = async () => {
     try {
-      const { data } = await deleteProfilePic().unwrap();
+      const { data, message } = await deleteProfilePic().unwrap();
       dispatch(setUser(data));
+      toast.success(message, { position: "top-right" });
     } catch (error) {
-      console.error(error);
+      toast.error(error.message, { position: "top-right" });
     }
   };
 

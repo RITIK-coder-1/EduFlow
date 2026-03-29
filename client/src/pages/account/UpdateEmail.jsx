@@ -15,10 +15,13 @@ import {
   FieldInput,
   CommonButton,
   OtpInput,
-  SpinnerCustom
+  SpinnerCustom,
 } from "@/components/index.components";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 function UpdateEmail() {
+  const navigate = useNavigate()
   /* ---------------------------------------------------------------------------------------
   The Redux Toolkit Data
   ------------------------------------------------------------------------------------------ */
@@ -55,18 +58,24 @@ function UpdateEmail() {
     e.preventDefault();
     if (!isOtp) {
       try {
-        const res = await getUpdateOtp(userData).unwrap();
+        const { message } = await getUpdateOtp(userData).unwrap();
         setIsOtp(true);
+        toast.success(message, { position: "top-right" });
       } catch (error) {
-        console.error(error.message);
+        toast.error(error.message, { position: "top-right" });
       }
     } else {
       try {
         const newEmail = userData.newEmail;
-        const { data } = await updateEmail({ userOtp, newEmail }).unwrap();
+        const { data, message } = await updateEmail({
+          userOtp,
+          newEmail,
+        }).unwrap();
         dispatch(setUser(data));
+        toast.success(message, { position: "top-right" });
+        navigate(-1)
       } catch (error) {
-        console.error(error.message);
+        toast.error(error.message, { position: "top-right" });
       }
     }
   };

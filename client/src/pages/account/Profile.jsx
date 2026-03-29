@@ -7,6 +7,7 @@ import {
 } from "../../components/index.components";
 import { useDeleteUserAccountMutation, useGetUserQuery } from "@/api/index.api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 function Profile() {
   const navigate = useNavigate();
@@ -26,9 +27,10 @@ function Profile() {
   // the API call to delete the account
   const deleteUserAccount = async () => {
     try {
-      await deleteAccount().unwrap();
+      const { message } = await deleteAccount().unwrap();
+      toast.success(message, { position: "top-right" });
     } catch (error) {
-      console.log(error);
+      toast.error(error.message, { position: "top-right" });
     }
   };
 
