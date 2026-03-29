@@ -82,7 +82,9 @@ function VideoPlayer() {
               src={videoUrl || null}
               controls
               playing={true}
-              onEnded={completeVideoApiCall} // autocomplete the video when the video ends
+              onEnded={
+                (!isOwner && accountType !== "Admin") && completeVideoApiCall
+              } // autocomplete the video when the video ends for students
             />
           </div>
 
