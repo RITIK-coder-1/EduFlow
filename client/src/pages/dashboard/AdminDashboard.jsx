@@ -283,43 +283,52 @@ const AdminDashboard = () => {
                 <SpinnerCustom />
               </div>
             ) : (
-              <table className="w-auto text-left flex sm:flex-col sm:w-full">
-                <thead className="w-auto sm:w-full">
-                  <tr className="text-gray-500 text-sm border-r pr-3 border-gray-800 flex flex-col justify-start items-center gap-10 sm:flex-row sm:justify-between sm:w-full sm:pr-0 sm:border-r-0 sm:border-b">
-                    <th className="pb-4 font-medium  sm:w-[50%]">NAME</th>
-                    <th className="pb-4 font-medium sm:flex-2">DETAILS</th>
-                    <th className="pb-4 font-medium sm:flex-1">STATUS</th>
-                    <th className="pb-4 font-medium sm:flex-1 text-right">
-                      ACTIONS
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-x divide-gray-800 flex sm:flex-col sm:w-full sm:divide-y  sm:divide-x-0">
+              <div className="w-full">
+                {/* Header */}
+                <div className="hidden md:flex items-center px-4 py-3 text-gray-500 text-sm font-medium border-b border-gray-800">
+                  <div className="flex-1 lg:flex-2">NAME</div>
+                  <div className="flex-1">DETAILS</div>
+                  <div className="flex-1">STATUS</div>
+                  <div className="w-20 text-right">ACTIONS</div>
+                </div>
+
+                {/* Body */}
+                <div className="divide-y divide-gray-800">
                   {users?.map((user) => (
-                    <tr
+                    <div
                       key={user?._id}
-                      className="text-sm group hover:bg-[#1e293b] transition-colors px-3  flex flex-col  justify-start items-start gap-10 sm:flex-row sm:px-0 sm:justify-between sm:w-full sm:py-3"
+                      className="flex flex-col md:flex-row md:items-center p-4 pl-0 md:px-4 md:py-3 gap-4 md:gap-0 hover:bg-[#1e293b] transition-colors group"
                     >
-                      <td className="sm:w-[50%]">
-                        <div className="font-medium text-gray-200  ">
+                      {/* Name Column */}
+                      <div className="flex-1 lg:flex-2">
+                        <div className="font-medium text-gray-200">
                           {user?.firstName} {user?.lastName}
                         </div>
                         <div className="text-xs text-gray-500">
                           {user?.email}
                         </div>
-                      </td>
-                      <td className="pb-4 sm:flex-2  text-gray-400">
+                      </div>
+
+                      {/* Details Column */}
+                      <div className="flex-1 text-sm text-gray-400">
+                        <span className="md:hidden text-gray-600 text-xs font-bold mr-2">
+                          ROLE:
+                        </span>
                         {user?.accountType}
-                      </td>
-                      <td className="pb-4 sm:flex-1">
+                      </div>
+
+                      {/* Status Column */}
+                      <div className="flex-1">
                         <span className="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full border border-green-800">
                           ACTIVE
                         </span>
-                      </td>
-                      <td className="flex justify-start items-start sm:flex-1  text-red-400 hover:text-red-600 sm:justify-end">
+                      </div>
+
+                      {/* Actions Column */}
+                      <div className="w-full md:w-20 flex justify-start md:justify-end">
                         <DeleteDialogueBox
                           label={<Trash2 size={18} />}
-                          triggerClass="border-none flex justify-start items-start p-0 bg-transparent w-10 sm:w-10 md:w-10 hover:bg-transparent "
+                          triggerClass="text-red-400 hover:text-red-600 p-0 bg-transparent transition-colors"
                           description={
                             user?.accountType === "Instructor"
                               ? "All their courses and videos will be deleted"
@@ -327,11 +336,11 @@ const AdminDashboard = () => {
                           }
                           onClick={deleteUserApiCall(user?._id)}
                         />
-                      </td>
-                    </tr>
+                      </div>
+                    </div>
                   ))}
-                </tbody>
-              </table>
+                </div>
+              </div>
             )
           ) : (
             ""
@@ -344,61 +353,66 @@ const AdminDashboard = () => {
                 <SpinnerCustom />
               </div>
             ) : (
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="text-gray-500 text-sm border-b border-gray-800">
-                    <th className="pb-4 font-medium">TITLE</th>
-                    <th className="pb-4 font-medium">INSTRUCTOR</th>
-                    <th className="pb-4 font-medium">STUDENTS</th>
-                    <th className="pb-4 font-medium">PRICE</th>
-                    <th className="pb-4 font-medium">REVENUE</th>
-                    <th className="pb-4 font-medium">STATUS</th>
-                    <th className="pb-4 font-medium text-right">ACTIONS</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-800">
-                  {courses?.map((course) => (
-                    <tr
-                      key={course?._id}
-                      className="text-sm group hover:bg-[#1e293b] transition-colors"
-                    >
-                      <td className="py-4">
-                        <div className="font-medium text-gray-200">
-                          {course?.title}
-                        </div>
-                      </td>
-                      <td className="py-4 text-gray-400">
-                        {course?.owner?.firstName} {course?.owner?.lastName}
-                      </td>
-                      <td className="py-4 text-gray-400">
-                        {course?.enrolledBy?.length}
-                      </td>
-                      <td className="py-4 text-gray-400">{course?.price}</td>
-
-                      <td className="py-4">{course?.revenue}</td>
-                      <td className="pb-4 sm:flex-1">
-                        {course?.status === "Published" ? (
-                          <span className="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full border border-green-800">
-                            PUBLISHED
-                          </span>
-                        ) : (
-                          <span className="px-2 py-1 bg-gray-900/30 text-gray-400 text-xs rounded-full border border-white/50">
-                            DRAFT
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-4 text-right flex justify-end text-red-400 hover:text-red-600">
-                        <DeleteDialogueBox
-                          label={<Trash2 size={18} />}
-                          triggerClass="border-none flex justify-center bg-transparent w-10 sm:w-10 md:w-10 hover:bg-transparent "
-                          description="All the videos and related information will be deleted"
-                          onClick={deleteCourseApiCall(course?._id)}
-                        />
-                      </td>
+              <div className="w-full overflow-x-auto">
+                <table className="w-full text-left min-w-[800px]">
+                  <thead>
+                    <tr className="text-gray-500 text-sm border-b border-gray-800">
+                      <th className="pb-4 font-medium w-[25%]">TITLE</th>
+                      <th className="pb-4 font-medium">INSTRUCTOR</th>
+                      <th className="pb-4 font-medium">STUDENTS</th>
+                      <th className="pb-4 font-medium">PRICE</th>
+                      <th className="pb-4 font-medium">REVENUE</th>
+                      <th className="pb-4 font-medium">STATUS</th>
+                      <th className="pb-4 font-medium text-right">ACTIONS</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-gray-800">
+                    {courses?.map((course) => (
+                      <tr
+                        key={course?._id}
+                        className="text-sm group hover:bg-[#1e293b] transition-colors"
+                      >
+                        <td className="py-4">
+                          <div className="font-medium text-gray-200 truncate max-w-[200px]">
+                            {course?.title}
+                          </div>
+                        </td>
+                        <td className="py-4 text-gray-400">
+                          {course?.owner?.firstName} {course?.owner?.lastName}
+                        </td>
+                        <td className="py-4 text-gray-400">
+                          {course?.enrolledBy?.length}
+                        </td>
+                        <td className="py-4 text-gray-400">₹{course?.price}</td>
+                        <td className="py-4 text-gray-200">
+                          ₹{course?.revenue}
+                        </td>
+                        <td className="py-4">
+                          {course?.status === "Published" ? (
+                            <span className="px-2 py-1 bg-green-900/30 text-green-400 text-xs rounded-full border border-green-800">
+                              PUBLISHED
+                            </span>
+                          ) : (
+                            <span className="px-2 py-1 bg-gray-900/30 text-gray-400 text-xs rounded-full border border-white/50">
+                              DRAFT
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-4 text-right">
+                          <div className="flex justify-end">
+                            <DeleteDialogueBox
+                              label={<Trash2 size={18} />}
+                              triggerClass="text-red-400 hover:text-red-600 transition-colors"
+                              description="All the videos and related information will be deleted"
+                              onClick={deleteCourseApiCall(course?._id)}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )
           ) : (
             ""
@@ -416,7 +430,9 @@ const AdminDashboard = () => {
                   <tr className="text-gray-500 text-sm border-b border-gray-800">
                     <th className="pb-4 font-medium">TITLE</th>
                     <th className="pb-4 font-medium">COURSES</th>
-                    <th className="pb-4 font-medium text-right">ACTIONS</th>
+                    <th className="pb-4 font-medium text-right pl-10 pr-3">
+                      ACTIONS
+                    </th>
                   </tr>
                 </thead>
 
@@ -446,18 +462,18 @@ const AdminDashboard = () => {
                         {category?.courses?.length}
                       </td>
 
-                      <td className="py-4 text-right flex justify-end items-center ">
+                      <td className="py-4 text-right flex justify-end items-center pr-3">
+                        <RefreshCw
+                          size={18}
+                          className="cursor-pointer text-blue-500 hover:text-blue-600"
+                          title="Update"
+                          onClick={activateTheCategory(category?._id)}
+                        />
                         <DeleteDialogueBox
                           label={<Trash2 size={18} />}
                           triggerClass="border-none flex justify-center bg-transparent w-10 sm:w-10 md:w-10 hover:bg-transparent text-red-400 hover:text-red-600"
                           description="Categories with active courses can't be deleted."
                           onClick={deleteCategoryApiCall(category?._id)}
-                        />
-                        <RefreshCw
-                          size={18}
-                          className="cursor-pointer hover:text-blue-500"
-                          title="Update"
-                          onClick={activateTheCategory(category?._id)}
                         />
                       </td>
                     </tr>
