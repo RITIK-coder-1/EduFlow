@@ -2,40 +2,70 @@
 StudentDashboard.jsx
 ------------------------------------------------------------------------------------------------- */
 
-import { useGetCourseQuery, useGetUserQuery, useGetBulkCourseProgressQuery } from "@/api/index.api";
-import { CommonButton, ProgressBar } from "@/components/index.components";
+import {
+  useGetCourseQuery,
+  useGetUserQuery,
+  useGetBulkCourseProgressQuery,
+} from "@/api/index.api";
+import {
+  CommonButton,
+  ProgressBar,
+  SpinnerCustom,
+} from "@/components/index.components";
 import { Link } from "react-router-dom";
 
 function StudentDashboard() {
   // the user
-  const { data: userData } = useGetUserQuery();
+  const { data: userData, isLoading: isUserLoading } = useGetUserQuery();
   const user = userData?.data;
 
   // the progress of the user across all the courses
   const enrolledCoursesIds = user?.enrolledCourses?.map(
     (course) => course?._id
   );
-  const { data: userProgressData } =
-  useGetBulkCourseProgressQuery(enrolledCoursesIds);
+  const { data: userProgressData, isLoading: isProgressLoading } =
+    useGetBulkCourseProgressQuery(enrolledCoursesIds);
   const averageProgress = userProgressData?.average; // the average progress
   const totalLearningCredits = userProgressData?.totalLearningCredits; // the total credits
 
   // the last course visited
   const lastCourseId = user?.lastCourseVisited;
-  const { data: courseData } = useGetCourseQuery({ courseId: lastCourseId });
-  const lastCourse = courseData?.data;  
+  const { data: courseData, isLoading: isCourseLoading } = useGetCourseQuery({
+    courseId: lastCourseId,
+  });
+  const lastCourse = courseData?.data;
 
   // user stats
   const stats = [
     { label: "Enrolled Courses", value: user?.enrolledCourses?.length },
-    { label: "Average Progress", value: averageProgress },
-    { label: "Total Credits", value: totalLearningCredits },
+    {
+      label: "Average Progress",
+      value: isProgressLoading ? (
+        <div className="w-full flex justify-center items-center">
+          <SpinnerCustom className="size-7" />
+        </div>
+      ) : (
+        averageProgress
+      ),
+    },
+    {
+      label: "Total Credits",
+      value: isProgressLoading ? (
+        <div className="w-full flex justify-center items-center">
+          <SpinnerCustom className="size-7" />
+        </div>
+      ) : (
+        totalLearningCredits
+      ),
+    },
   ];
 
   // enrolled courses to display (only the last three)
-  const enrolledCoursesToDisplay = user?.enrolledCourses?.slice(-3)
+  const enrolledCoursesToDisplay = user?.enrolledCourses?.slice(-3);
 
-  return (
+  return isUserLoading ? (
+    <SpinnerCustom className="size-7" />
+  ) : (
     <div className="min-h-screen bg-[#020617] text-white p-6 font-sans w-[90%] lg:w-[80%] mb-5 ml-5 mr-5">
       {/* Header Section */}
       <header className="mb-8">
@@ -47,7 +77,11 @@ function StudentDashboard() {
 
       {/* Hero: Last Visited */}
       <section className="bg-[#0f172a] border border-gray-800 rounded-xl p-6 mb-8 h-auto sm:h-66">
-        {!lastCourseId ? (
+        {isCourseLoading ? (
+          <div className="w-full flex justify-center items-center">
+            <SpinnerCustom className="size-7" />
+          </div>
+        ) : !lastCourseId ? (
           <span className="flex justify-center items-center w-full text-foreground italic">
             You have not visited any enrolled courses yet.
           </span>
@@ -59,22 +93,25 @@ function StudentDashboard() {
               className="w-full sm:w-48 md:w-120 h-full rounded-lg object-cover"
             />
             <div className="w-full flex flex-col gap-6 h-full">
-            <div className="flex-1 w-full">
-              <h2 className="text-2xl font-bold mt-2 text-[#fbbf24]">
-                {lastCourse?.title}
-              </h2>
-              <p className="text-gray-400 mb-4">
-                Instructor: {lastCourse?.owner?.firstName}{" "}
-                {lastCourse?.owner?.lastName}
-              </p>
-              <ProgressBar courseId={lastCourseId} />
-            </div>
-            <Link to={`/app/courses/${lastCourseId}`} className="w-full flex justify-center items-center">
-              <CommonButton
-                label="Resume Lesson"
-                className="bg-transparent border-2 border-purple-500 hover:bg-purple-500 text-white w-full md:w-66"
-              />
-            </Link>
+              <div className="flex-1 w-full">
+                <h2 className="text-2xl font-bold mt-2 text-[#fbbf24]">
+                  {lastCourse?.title}
+                </h2>
+                <p className="text-gray-400 mb-4">
+                  Instructor: {lastCourse?.owner?.firstName}{" "}
+                  {lastCourse?.owner?.lastName}
+                </p>
+                <ProgressBar courseId={lastCourseId} />
+              </div>
+              <Link
+                to={`/app/courses/${lastCourseId}`}
+                className="w-full flex justify-center items-center"
+              >
+                <CommonButton
+                  label="Resume Lesson"
+                  className="bg-transparent border-2 border-purple-500 hover:bg-purple-500 text-white w-full md:w-66"
+                />
+              </Link>
             </div>
           </div>
         )}
@@ -119,7 +156,11 @@ function StudentDashboard() {
         {user?.enrolledCourses?.length > 0 ? (
           <div className="flex justify-end items-center flex-col-reverse sm:flex-row-reverse gap-6 w-full">
             {enrolledCoursesToDisplay?.map((course) => (
-              <Link to={`/app/courses/${course?._id}`} key={course?._id} className="w-full sm:w-66">
+              <Link
+                to={`/app/courses/${course?._id}`}
+                key={course?._id}
+                className="w-full sm:w-66"
+              >
                 <div className="bg-[#1e293b] rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500 transition-colors cursor-pointer w-full">
                   <div className="h-32 bg-gray-800">
                     <img
@@ -132,7 +173,7 @@ function StudentDashboard() {
                     <p className="text-xs text-gray-400 mb-3">
                       By {course?.owner?.firstName} {course?.owner?.lastName}
                     </p>
-                    <ProgressBar courseId={course?._id}/>
+                    <ProgressBar courseId={course?._id} />
                   </div>
                 </div>
               </Link>
