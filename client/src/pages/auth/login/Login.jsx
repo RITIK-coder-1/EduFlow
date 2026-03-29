@@ -15,6 +15,7 @@ import {
   OtpInput,
   SpinnerCustom,
 } from "@/components/index.components";
+import { toast } from "sonner";
 
 function Login() {
   const navigate = useNavigate();
@@ -70,18 +71,23 @@ function Login() {
 
     if (!isOtp) {
       try {
-        const { data } = await createLoginOtp(loginData).unwrap();
+        const { data, message } = await createLoginOtp(loginData).unwrap();
         setIsOtp(true);
         setEmail(data?.email);
+        toast.success(message, { position: "top-right" });
       } catch (error) {
-        console.log(error.message);
+        toast.error(error.message, { position: "top-right" });
       }
     } else {
       try {
-        const { data: user } = await loginUser({ email, userOTP }).unwrap();
+        const { data: user, message } = await loginUser({
+          email,
+          userOTP,
+        }).unwrap();
         dispatch(setUser({ id: user?._id, accountType: user?.accountType })); // changing the value of the authentication state
+        toast.success(message, { position: "top-right" });
       } catch (error) {
-        console.log(error.message);
+        toast.error(error.message, { position: "top-right" });
       }
     }
   };
