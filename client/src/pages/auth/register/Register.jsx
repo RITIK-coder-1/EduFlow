@@ -20,6 +20,7 @@ import {
 } from "../../../components/index.components.js";
 import { NativeSelectOption } from "@/components/ui/native-select.jsx";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 function Register() {
   // navigation
@@ -106,20 +107,23 @@ function Register() {
       const formData = getFormData(userData);
 
       try {
-        const { data } = await createRegisterOtp(formData).unwrap();
+        const { data, message } = await createRegisterOtp(formData).unwrap();
+        console.log(data);
         setIsOtp(true);
         setUserData({ ...userData, profilePic: data.profilePic }); // resetting the value of the profile pic to the server local file path so that it gets uploaded to cloudinary
+        toast.success(message, { position: "top-right" });
       } catch (error) {
-        console.log(error.message);
+        toast.error(error.message, { position: "top-right" });
       }
     } else {
       try {
-        const {} = await registerUser({
+        const { message } = await registerUser({
           ...userData,
           userOTP,
         }).unwrap();
+        toast.success(message, { position: "top-right" });
       } catch (error) {
-        console.log(error.message);
+        toast.error(error.message, { position: "top-right" });
       }
     }
   };
