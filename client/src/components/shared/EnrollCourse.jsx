@@ -4,7 +4,7 @@ The enrollment logic
 ------------------------------------------------------------------------------------------------- */
 
 import { useEnrollCourseMutation } from "@/api/index.api";
-import { CommonButton } from "@/components/index.components";
+import { CommonButton, SpinnerCustom } from "@/components/index.components";
 import { useNavigate } from "react-router-dom";
 import useUserStatus from "@/hooks/useUserStatus";
 
@@ -16,7 +16,7 @@ const EnrollCourse = ({ courseId }) => {
     useUserStatus(courseId);
 
   // the enroll course mutation
-  const [enroll] = useEnrollCourseMutation();
+  const [enroll, { isLoading }] = useEnrollCourseMutation();
 
   // the enroll course API call
   const enrollIntoCourse = async () => {
@@ -52,7 +52,9 @@ const EnrollCourse = ({ courseId }) => {
           />
         );
       case false:
-        return isEnrolled ? (
+        return isLoading ? (
+          <CommonButton label={<SpinnerCustom />} className="w-full" />
+        ) : isEnrolled ? (
           // if the user has already enrolled, forward them to the enrolled course page
           <CommonButton
             label="ENROLLED"
