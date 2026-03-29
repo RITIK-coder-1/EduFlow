@@ -15,13 +15,15 @@ import {
   StudentAccordion,
   CommonButton,
   ProgressBar,
+  SpinnerCustom,
 } from "@/components/index.components";
 import useUserStatus from "@/hooks/useUserStatus";
 
 function VideoPlayer() {
   // the data
   const { courseId, videoId } = useParams();
-  const [completeVideo] = useCompleteCourseVideoMutation();
+  const [completeVideo, { isLoading: isCompleteVideoLoading }] =
+    useCompleteCourseVideoMutation();
   const { data: courseData } = useGetCourseQuery({ courseId });
   const course = courseData?.data; // course
   const sections = course?.sections; // sections
@@ -83,7 +85,7 @@ function VideoPlayer() {
               controls
               playing={true}
               onEnded={
-                (!isOwner && accountType !== "Admin") && completeVideoApiCall
+                !isOwner && accountType !== "Admin" && completeVideoApiCall
               } // autocomplete the video when the video ends for students
             />
           </div>
@@ -115,7 +117,13 @@ function VideoPlayer() {
                 />
               ) : (
                 <CommonButton
-                  label="Mark as completed"
+                  label={
+                    isCompleteVideoLoading ? (
+                      <SpinnerCustom />
+                    ) : (
+                      "Mark as completed"
+                    )
+                  }
                   onClick={completeVideoApiCall}
                 />
               )}
