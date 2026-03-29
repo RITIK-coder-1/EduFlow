@@ -43,7 +43,7 @@ function UserProfilePic({ isTopBar = false }) {
               <DropdownMenuItem title="Visit Profile">Profile</DropdownMenuItem>
             </Navlink>
             <DropdownMenuSeparator className="border-b border-white/10 m-0" />
-            <Logout className="text-red-700 hover:bg-red-500 hover:text-black grow font-black text-start py-1.5 px-2 text-md lg:text-lg" />
+            <Logout className="text-red-700 hover:bg-red-500 hover:text-black grow font-black text-start py-1.5 px-2 text-md lg:text-xl" />
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
