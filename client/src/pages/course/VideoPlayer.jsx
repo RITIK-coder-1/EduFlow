@@ -18,6 +18,7 @@ import {
   SpinnerCustom,
 } from "@/components/index.components";
 import useUserStatus from "@/hooks/useUserStatus";
+import { toast } from "sonner";
 
 function VideoPlayer() {
   // the data
@@ -44,9 +45,11 @@ function VideoPlayer() {
   // the API call to complete the video
   const completeVideoApiCall = async () => {
     try {
-      await completeVideo({ courseId, videoId }).unwrap();
+      const { message } = await completeVideo({ courseId, videoId }).unwrap();
+      toast.success(message, { position: "top-right" });
     } catch (error) {
       console.error(error);
+      toast.error(error.message, { position: "top-right" });
     }
   };
 

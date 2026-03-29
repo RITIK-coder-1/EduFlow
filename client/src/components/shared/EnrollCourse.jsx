@@ -7,6 +7,7 @@ import { useEnrollCourseMutation } from "@/api/index.api";
 import { CommonButton, SpinnerCustom } from "@/components/index.components";
 import { useNavigate } from "react-router-dom";
 import useUserStatus from "@/hooks/useUserStatus";
+import { toast } from "sonner";
 
 const EnrollCourse = ({ courseId }) => {
   const navigate = useNavigate();
@@ -21,9 +22,11 @@ const EnrollCourse = ({ courseId }) => {
   // the enroll course API call
   const enrollIntoCourse = async () => {
     try {
-      await enroll({ courseId }).unwrap();
+      const {message} = await enroll({ courseId }).unwrap();
+      toast.success(message, { position: "top-right" });
     } catch (error) {
-      console.error("There was an error");
+      toast.error(error.message, { position: "top-right" });
+
     }
   };
 
