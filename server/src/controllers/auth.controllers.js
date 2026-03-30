@@ -237,9 +237,9 @@ const generateTokens = async (userId) => {
   }
 };
 
-// function to verify the user for login and generate an OTP
+// function to verify the user for login
 
-const createLogInOtpFunction = async (req, res) => {
+const loginUserController = async (req, res) => {
   // getting data from the client request
   const { credential, password } = req.body;
 
@@ -267,50 +267,7 @@ const createLogInOtpFunction = async (req, res) => {
     );
   }
 
-  // Generating OTP
-  const code = generateOTP();
-
-  const createdOTP = await OTP.create({
-    email: existingUser.email,
-    code,
-  });
-
-  if (!createdOTP) {
-    console.error("LOGIN USER ERROR: couldn't generate OTP!");
-    throw new ApiError(
-      500,
-      "There was a problem while generating the OTP. Please try again!"
-    );
-  }
-
-  console.log("OTP for user log in has been created!");
-
-  return res.status(200).json(
-    new ApiResponse(200, "OTP has been successfully sent!", {
-      email: existingUser.email, // frontend stores this for the next request
-    })
-  );
-};
-
-// function to verify the OTP and log the user in
-
-const loginFunction = async (req, res) => {
-  const { email, userOTP } = req.body;
-  const recentOtp = await OTP.findOne({ email }).sort({ createdAt: -1 }); // the OTP saved in the database (the latest one only)
-
-  if (userOTP !== recentOtp?.code) {
-    console.error("LOGIN USER ERROR: Wrong OTP!");
-    throw new ApiError(
-      400,
-      "The OTP doesn't match! Please enter the correct one!"
-    );
-  }
-
-  // if the otp matches, we need to generate the access and refresh token
-  const user = await User.findOne({ email }).select(
-    "-password -refreshTokenString"
-  );
-  const { accessToken, refreshToken } = await generateTokens(user._id);
+  const { accessToken, refreshToken } = await generateTokens(existingUser._id);
 
   // once the user has successfully logged in, we need to send in the cookies to the client
 
@@ -321,13 +278,13 @@ const loginFunction = async (req, res) => {
     path: "/", // ensuring the cookie is sent to all routes
   };
 
-  console.log("User has successfully logged in!");
-
   return res
     .status(200)
     .cookie("refreshToken", refreshToken, options)
     .cookie("accessToken", accessToken, options)
-    .json(new ApiResponse(200, "The user has successfully logged in!", user));
+    .json(
+      new ApiResponse(200, "The user has successfully logged in!", existingUser)
+    );
 };
 
 /* ---------------------------------------------------------------------------------------
@@ -457,15 +414,13 @@ Error Handling
 
 const createRegisterOtp = asyncHandler(createRegisterOtpFunction);
 const registerUser = asyncHandler(registerUserFunction);
-const createLoginOtp = asyncHandler(createLogInOtpFunction);
-const loginUser = asyncHandler(loginFunction);
+const loginUser = asyncHandler(loginUserController);
 const logoutUser = asyncHandler(logoutFunction);
 const newAccessToken = asyncHandler(newAccessTokenFunction);
 
 export {
   createRegisterOtp,
   registerUser,
-  createLoginOtp,
   loginUser,
   logoutUser,
   newAccessToken,

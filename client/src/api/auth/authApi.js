@@ -34,16 +34,6 @@ const authApi = apiSlice.injectEndpoints({
       invalidatesTags: ["User"],
     }),
 
-    // CREATE LOGIN OTP
-    loginOtp: builder.mutation({
-      query: (userData) => ({
-        url: "/auth/login-otp",
-        method: "POST",
-        body: userData,
-      }),
-      transformResponse: transformResponse,
-      transformErrorResponse: transformErrorResponse,
-    }),
     // VALIDATE THE OTP AND LOGIN THE USER
     login: builder.mutation({
       query: (userData) => ({
@@ -81,7 +71,6 @@ export const {
   useRegisterOtpMutation,
   useRegisterMutation,
   useLoginMutation,
-  useLoginOtpMutation,
   useLogoutMutation,
   useNewTokenMutation,
 } = authApi;

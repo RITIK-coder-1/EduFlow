@@ -7,7 +7,6 @@ import {
   useRegisterOtpMutation,
   useRegisterMutation,
   useLoginMutation,
-  useLoginOtpMutation,
   useLogoutMutation,
   useNewTokenMutation,
 } from "./auth/authApi.js";
@@ -64,7 +63,6 @@ export {
   useRegisterOtpMutation,
   useRegisterMutation,
   useLoginMutation,
-  useLoginOtpMutation,
   useLogoutMutation,
   useNewTokenMutation,
   useGetUserQuery,
