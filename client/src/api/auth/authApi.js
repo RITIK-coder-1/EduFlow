@@ -31,7 +31,7 @@ const authApi = apiSlice.injectEndpoints({
       }),
       transformResponse: transformResponse,
       transformErrorResponse: transformErrorResponse,
-      invalidatesTags: ["User", "Stats"],
+      invalidatesTags: ["User", "Stats", "Course"],
     }),
 
     // VALIDATE THE OTP AND LOGIN THE USER
@@ -43,7 +43,7 @@ const authApi = apiSlice.injectEndpoints({
       }),
       transformResponse: transformResponse,
       transformErrorResponse: transformErrorResponse,
-      invalidatesTags: ["User"],
+      invalidatesTags: ["User", "Course"],
     }),
 
     // ISSUE A NEW TOKEN
@@ -62,7 +62,7 @@ const authApi = apiSlice.injectEndpoints({
       }),
       transformResponse: transformResponse,
       transformErrorResponse: transformErrorResponse,
-      invalidatesTags: ["User"],
+      invalidatesTags: ["User", "Course"],
     }),
   }),
 });

@@ -17,7 +17,7 @@ const userApi = apiSlice.injectEndpoints({
       query: () => "/users/profile",
       transformResponse,
       transformErrorResponse,
-      providesTags: ["User"],
+      providesTags: ["User", "Course"],
     }),
 
     // UPDATE USER DETAILS
@@ -102,7 +102,7 @@ const userApi = apiSlice.injectEndpoints({
       }),
       transformResponse,
       transformErrorResponse,
-      invalidatesTags: ["User"],
+      invalidatesTags: ["User", "Course"],
     }),
 
     // GET COURSE PROGRESS
