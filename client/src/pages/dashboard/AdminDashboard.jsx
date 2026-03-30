@@ -55,14 +55,11 @@ const AdminDashboard = () => {
 
   const [updateCategory, {}] = useUpdateCategoryMutation();
 
-  const [deleteUser] =
-    useDeleteUserAdminMutation();
+  const [deleteUser] = useDeleteUserAdminMutation();
 
-  const [deleteCourse] =
-    useDeleteCourseAdminMutation();
+  const [deleteCourse] = useDeleteCourseAdminMutation();
 
-  const [deleteCategory] =
-    useDeleteCategoryMutation();
+  const [deleteCategory] = useDeleteCategoryMutation();
 
   /* ----------------------------------------------------------------------------------------------
   The data
@@ -213,7 +210,7 @@ const AdminDashboard = () => {
   const deleteCategoryApiCall = (categoryId) => {
     return async (e) => {
       e.preventDefault();
-      const deletePromise = await deleteCategory(categoryId).unwrap();
+      const deletePromise = deleteCategory(categoryId).unwrap();
       toast.promise(
         deletePromise,
         {

@@ -153,7 +153,7 @@ const deleteCategoryFunction = async (req, res) => {
     console.error("CATEGORY DELETE ERROR: category has active courses!");
     throw new ApiError(
       400,
-      "This category has active courses. Please delete the courses before deleing the category!"
+      "This category has active courses. Please delete the courses before deleting the category!"
     );
   }
 
