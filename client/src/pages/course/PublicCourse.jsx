@@ -93,12 +93,22 @@ function PublicCourse() {
             <p className="text-white/70 text-xs">{course?.description}</p>
 
             {/* Instructor Info */}
-            <p className="text-sm text-gray-400 flex items-center gap-1.5">
-              Created by
-              <span className="font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-500">
-                {instructorFirstName} {instructorLastName}
-              </span>
-            </p>
+            <div className="flex items-center gap-3 p-2 rounded-xl bg-gray-900/50 w-fit">
+              <img
+                src={course?.owner?.profilePic}
+                alt="Instructor"
+                className="h-11 w-11 rounded-full object-cover border-2 border-purple-500/30 shadow-lg"
+              />
+
+              <div className="flex flex-col">
+                <span className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">
+                  Created by
+                </span>
+                <span className="text-base font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-500 leading-none">
+                  {instructorFirstName} {instructorLastName}
+                </span>
+              </div>
+            </div>
 
             {/* The lessons */}
             <div className="w-full border mt-5 border-white/10 p-5 flex flex-col justify-center items-center gap-3 ">
