@@ -45,7 +45,7 @@ function StudentDashboard() {
           <SpinnerCustom className="size-7" />
         </div>
       ) : (
-        averageProgress
+        `${averageProgress}%`
       ),
     },
     {
