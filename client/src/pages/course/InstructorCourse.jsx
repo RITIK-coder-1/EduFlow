@@ -204,17 +204,20 @@ function InstructorCourse() {
     return async (e) => {
       setCurrentSectionManipulation(id);
       e.stopPropagation();
-      try {
-        await deleteSection({
-          courseId,
-          sectionId: id,
-        }).unwrap();
-        toast.success("The section has been deleted!", {
-          position: "top-right",
-        });
-      } catch (error) {
-        toast.error(error.message, { position: "top-right" });
-      }
+      const deletePromise = deleteSection({
+        courseId,
+        sectionId: id,
+      }).unwrap();
+
+      toast.promise(
+        deletePromise,
+        {
+          loading: "Deleting the section...",
+          success: "Section deleted successfully!",
+          error: "There was a problem while deleting the section.",
+        },
+        { position: "top-right" }
+      );
     };
   };
 
