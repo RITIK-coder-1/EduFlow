@@ -24,7 +24,7 @@ function Logout({ className }) {
       await logout().unwrap();
       dispatch(disableUser());
       navigate("/");
-      toast.success("Successfully logged out", { position: "top-right" });
+      toast.success("Successfully logged out", { position: "bottom-right" });
     } catch (error) {
       toast.error(error.message, { position: "top-right" });
     }
