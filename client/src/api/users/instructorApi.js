@@ -166,7 +166,7 @@ const instructorApi = apiSlice.injectEndpoints({
           return { error };
         }
       },
-      providesTags: ["Course"],
+      providesTags: ["Course", "User"],
     }),
   }),
 });
