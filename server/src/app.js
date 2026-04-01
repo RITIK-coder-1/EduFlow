@@ -40,8 +40,7 @@ const corsFunction = (origin, callback) => {
 
   // If a specific origin isn't allowed, add this specific message to the error object
   if (allowedOrigins.indexOf(origin) === -1) {
-    const message =
-      "CORS ERROR: The CORS policy of this site doesn't allow requests from this specific origin.";
+    const message = `CORS ERROR: The CORS policy of this site doesn't allow requests from this specific origin: ${origin}`;
     return callback(new Error(message), false);
   }
 
