@@ -8,7 +8,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://eduflow-o1gf.onrender.com/api/v1",
+    baseUrl: process.env.RENDER_SERVER,
     credentials: "include",
     prepareHeaders: (headers) => {
       return headers;
