@@ -14,7 +14,7 @@
 
 Experience the different roles within the ecosystem:
 
-| Role | Email | Password |
+| Role | ID | Password |
 | --- | --- | --- |
 | **Admin** | **admin_core** | 1234567890 |
 | **Instructor** | **learnwithjane** | 1234567890 |
@@ -52,6 +52,7 @@ EduFlow prioritizes data integrity and user security through a rigorous onboardi
 - **Smart Enrollment:** Public course browsing with restricted video access until enrollment is confirmed.
 - **Persistence:** Granular progress tracking based on video completion counts.
 - **Account Autonomy:** Full profile management, including secure credential updates and account deletion.
+- **Search Filter:** A search bar to search for specific courses using the names or tags for quick access.
 
 ### 👨‍🏫 Instructors (The Creators)
 
