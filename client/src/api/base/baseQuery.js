@@ -25,13 +25,26 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
   if (
-    result.error &&
-    (result.error.status === 401 || result.error.status === 403)
+    (result?.error && result?.error?.status === 401) ||
+    result?.error?.status === 403
   ) {
-    toast.error("Your token expired. Please login again.");
+    // if the access token expired, refresh it
+    const refreshResult = await baseQuery(
+      {
+        url: "/auth/token",
+        method: "POST",
+      },
+      api,
+      extraOptions
+    );
 
-    // Clear Redux State
-    api.dispatch(disableUser());
+    if (refreshResult.data) {
+      result = await baseQuery(args, api, extraOptions);
+    } else {
+      // if the refresh token expired, disable the user to login again
+      api.dispatch(disableUser());
+      toast.error("Your token expired. Please login again.");
+    }
   }
   return result;
 };
