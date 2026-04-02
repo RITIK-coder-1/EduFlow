@@ -17,7 +17,7 @@ Experience the different roles within the ecosystem:
 | Role | Email | Password |
 | --- | --- | --- |
 | **Admin** | **admin_core** | 1234567890 |
-| **Instructor** | **fosterjane@gmail.com** | 1234567890 |
+| **Instructor** | **learnwithjane** | 1234567890 |
 | **Student** | **ishaan_malhotra** | 1234567890 |
 
 ---
