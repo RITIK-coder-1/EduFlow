@@ -5,7 +5,6 @@ This base query file to set up the base url and to look for the token expiry
 
 import { disableUser } from "@/features/authSlice";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { toast } from "sonner";
 
 // the API base for every network call
 const baseQuery = fetchBaseQuery({
@@ -43,7 +42,6 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
     } else {
       // if the refresh token expired, disable the user to login again
       api.dispatch(disableUser());
-      toast.error("Your token expired. Please login again.");
     }
   }
   return result;
