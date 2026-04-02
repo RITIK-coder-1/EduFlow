@@ -35,7 +35,7 @@ function StudentAccordion({ sections, courseId, videoLabel = "WATCH NOW" }) {
               section.courseVideos.map((video, index) => (
                 <li
                   key={video?._id}
-                  className="w-full group border-b border-white/5 last:border-0 list-none"
+                  className="w-full group border-b border-white/5 last:border-0 list-none overflow-x-scroll"
                 >
                   {/* The link to each video */}
                   <Link
@@ -70,7 +70,7 @@ function StudentAccordion({ sections, courseId, videoLabel = "WATCH NOW" }) {
                     </div>
 
                     {/* Link/Action Label */}
-                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground group-hover:text-primary transition-colors">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground group-hover:text-primary transition-colors pr-3">
                       <span className="opacity-0 group-hover:opacity-100 transition-opacity">
                         {/* If the student isn't enrolled, ask them to enroll */}
                         {!isAuthenticated
