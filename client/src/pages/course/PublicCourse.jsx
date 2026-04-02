@@ -13,6 +13,7 @@ import {
 } from "@/components/index.components";
 import { useLastCourseVisitedMutation } from "@/api/users/userApi";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 function PublicCourse() {
   // the data
@@ -32,7 +33,7 @@ function PublicCourse() {
       try {
         await lastCourseVisited({ courseId }).unwrap();
       } catch (error) {
-        console.error(error);
+        toast.error("Couldn't get the last course visited.");
       }
     };
     courseFunc();

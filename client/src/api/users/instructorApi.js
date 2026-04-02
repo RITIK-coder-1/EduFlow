@@ -162,7 +162,6 @@ const instructorApi = apiSlice.injectEndpoints({
             data: { totalStudents, createdCourses },
           };
         } catch (error) {
-          console.log("there is an error");
           return { error };
         }
       },

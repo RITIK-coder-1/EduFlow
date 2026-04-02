@@ -2,7 +2,6 @@
 Logout.jsx
 ------------------------------------------------------------------------------------------------- */
 
-import React from "react";
 import { useLogoutMutation } from "../../api/index.api";
 import { useDispatch } from "react-redux";
 import { disableUser } from "../../features/authSlice";

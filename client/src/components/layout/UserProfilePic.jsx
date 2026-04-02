@@ -3,7 +3,6 @@ UserProfilePic.jsx
 The profile of the user
 ------------------------------------------------------------------------------------------------- */
 
-import { useSelector } from "react-redux";
 import { Image, Navlink, Logout } from "../index.components";
 import { Button } from "@/components/ui/button";
 import {

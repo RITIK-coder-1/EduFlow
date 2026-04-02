@@ -48,7 +48,6 @@ function VideoPlayer() {
       const { message } = await completeVideo({ courseId, videoId }).unwrap();
       toast.success(message, { position: "top-right" });
     } catch (error) {
-      console.error(error);
       toast.error(error.message, { position: "top-right" });
     }
   };
