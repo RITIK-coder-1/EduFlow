@@ -33,7 +33,7 @@ Experience the different roles within the ecosystem:
   <p><em>Demo: Instructor Course Update (Adding Sections and Videos)</em></p>
 </div>
 <div align="center">
-  <video src="https://github.com/user-attachments/assets/6b74cc6b-e83c-4759-9dd1-1629d5bbca83" width="100%" autoplay loop muted playsinline></video>
+  <video src="https://github.com/user-attachments/assets/efb4ca12-d03c-49c0-9e27-d276d0c8f20c" width="100%" autoplay loop muted playsinline></video>
   <p><em>Demo: Student Course Enrollment</em></p>
 </div>
 <div align="center">
