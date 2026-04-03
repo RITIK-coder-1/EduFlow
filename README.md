@@ -25,7 +25,7 @@ Experience the different roles within the ecosystem:
 ### 📺 Platform Overview & User Journey
 
 <div align="center">
-    <h1><em>Demo: Exploring the Admin Dashboard</em></h1>
+    <h3><em>Demo: Exploring the Admin Dashboard</em></h3>
   <video src="https://github.com/user-attachments/assets/042afe15-00c0-48b2-83e1-19b546930664" width="100%" autoplay loop muted playsinline></video>
 </div>
 <div align="center">
