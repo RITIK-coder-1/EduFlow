@@ -11,6 +11,8 @@ import {
 } from "@/components/index.components";
 import filterCourses from "@/utils/filterCourses";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
+import { useEffect } from "react";
 
 function Home() {
   // the local component for recurring elements
@@ -60,6 +62,26 @@ function Home() {
   const { data, isLoading } = useGetAllTheCoursesQuery();
   const courses = data?.data.slice(0, 4); // only 4 courses
   const filteredCourses = filterCourses(courses); // filter the data to showcase
+
+  // the toast if the server takes time to wake up
+  useEffect(() => {
+    let timer;
+
+    if (isLoading) {
+      timer = setTimeout(() => {
+        // id ensures we don't spam multiple toasts if the user clicks twice
+        toast.loading("Waking up the server. Wait for some time...", {
+          id: "loading-toast",
+        });
+      }, 5000);
+    } else {
+      // If loading finishes before 5s (or fails), clear the timer and the toast
+      clearTimeout(timer);
+      toast.dismiss("loading-toast");
+    }
+
+    return () => clearTimeout(timer); // Cleanup on unmount
+  }, [isLoading]);
 
   // the testimonials
   const testimonials = [
