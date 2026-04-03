@@ -105,6 +105,36 @@ function Login() {
           Register here
         </Link>
       </div>
+
+      {/* --- DEMO CREDENTIALS SECTION --- */}
+      <div className="mt-5 p-5 border border-purple-500/20 bg-purple-500/5 rounded-xl backdrop-blur-sm">
+        <h3 className="text-sm font-semibold text-purple-400 mb-3 text-center uppercase tracking-wider">
+          Demo Access
+        </h3>
+        <div className="space-y-3 text-xs">
+          {[
+            { role: "Admin", id: "admin_core", pass: "1234567890" },
+            { role: "Instructor", id: "learnwithjane", pass: "1234567890" },
+            { role: "Student", id: "ishaan_malhotra", pass: "1234567890" },
+          ].map((demo) => (
+            <div
+              key={demo.role}
+              className="flex justify-between items-center border-b border-white/5 pb-2 last:border-0"
+            >
+              <span className="text-gray-400 font-medium w-16">
+                {demo.role}
+              </span>
+              <code className="text-purple-300 bg-purple-500/10 px-2 py-1 rounded">
+                {demo.id}
+              </code>
+              <code className="text-gray-500 select-all">{demo.pass}</code>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-sm text-gray-500 text-center italic">
+          * Use these to explore the pre-populated courses and analytics.
+        </p>
+      </div>
     </Form>
   );
 }
