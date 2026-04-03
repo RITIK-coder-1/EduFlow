@@ -40,6 +40,10 @@ Experience the different roles within the ecosystem:
   <h3><em>Demo: Register OTP Flow</em></h3>
   <video src="https://github.com/user-attachments/assets/7ed1ce63-80e3-4899-a310-139b56ad426d" width="100%" autoplay loop muted playsinline></video>
 </div>
+<div align="center">
+  <h3><em>Demo: Home Page</em></h3>
+  <video src="https://github.com/user-attachments/assets/b5ffed11-2c15-442e-9a99-6530e02b12c9" width="100%" autoplay loop muted playsinline></video>
+</div>
 
 ---
 
