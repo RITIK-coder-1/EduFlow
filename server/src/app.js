@@ -84,6 +84,7 @@ const __dirname = path.dirname(__filename);
 const publicPath = path.join(__dirname, "..", "public");
 
 // just in case the folder doesn't exist in the repo
+const tempPath = path.join(path.resolve(), "public", "temp");
 if (!fs.existsSync(tempPath)) {
   fs.mkdirSync(tempPath, { recursive: true });
   console.log("Created missing temp directory at:", tempPath);
