@@ -55,7 +55,7 @@ const uploadOnCloudinary = async (filepath) => {
       resource_type: "auto", // it uploads the file and provides the resource
     });
 
-    console.log("The file has been successfully uploaded: ", response);
+    console.log("The file has been successfully uploaded");
 
     return response; // the url will be stored inside the database
   } catch (error) {
