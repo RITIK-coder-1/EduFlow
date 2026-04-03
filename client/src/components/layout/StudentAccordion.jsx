@@ -41,7 +41,7 @@ function StudentAccordion({ sections, courseId, videoLabel = "WATCH NOW" }) {
                   <Link
                     to={
                       !isAuthenticated
-                        ? ""
+                        ? "/login"
                         : // link only if the user is an admin or the student is enrolled or don't
                         accountType === "Admin"
                         ? `/app/courses/${courseId}/watch/${
