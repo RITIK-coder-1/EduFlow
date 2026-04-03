@@ -28,6 +28,18 @@ Experience the different roles within the ecosystem:
   <video src="https://github.com/user-attachments/assets/042afe15-00c0-48b2-83e1-19b546930664" width="100%" autoplay loop muted playsinline></video>
   <p><em>Demo: Exploring the Admin Dashboard</em></p>
 </div>
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/250f74de-f35c-49ea-a907-4e0fb193d0a1" width="100%" autoplay loop muted playsinline></video>
+  <p><em>Demo: Instructor Course Update (Adding Sections and Videos)</em></p>
+</div>
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/6b74cc6b-e83c-4759-9dd1-1629d5bbca83" width="100%" autoplay loop muted playsinline></video>
+  <p><em>Demo: Student Course Enrollment</em></p>
+</div>
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/84ae772e-392d-4d0a-8da7-a3b076959df1" width="100%" autoplay loop muted playsinline></video>
+  <p><em>Demo: Register OTP Flow</em></p>
+</div>
 
 ---
 
