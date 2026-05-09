@@ -273,8 +273,8 @@ const loginUserController = async (req, res) => {
 
   const options = {
     httpOnly: true, // cookie can't be manipulated by the client
-    secure: process.env.NODE_ENV === "production", // False on localhost (HTTP is allowed), True on external cloud (HTTPS only)
-    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    secure: true,
+    sameSite: "none",
     path: "/", // ensuring the cookie is sent to all routes
   };
 

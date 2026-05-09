@@ -18,7 +18,8 @@ function PrivateLayout({ allowedRoles }) {
   if (
     (isAuthenticated &&
       allowedRoles.includes(accountType) &&
-      (location.pathname !== "/app" && location.pathname !== "/app/")) ||
+      location.pathname !== "/app" &&
+      location.pathname !== "/app/") ||
     location.pathname.includes("/app/courses")
   ) {
     return (
