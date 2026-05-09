@@ -283,7 +283,7 @@ const loginUserController = async (req, res) => {
     .cookie("refreshToken", refreshToken, options)
     .cookie("accessToken", accessToken, options)
     .json(
-      new ApiResponse(200, "The user has successfully logged in!", existingUser)
+      new ApiResponse(200, "The user has successfully logged in!", {existingUser, accessToken})
     );
 };
 
