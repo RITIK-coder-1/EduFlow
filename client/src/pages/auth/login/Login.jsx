@@ -55,8 +55,16 @@ function Login() {
     e.preventDefault();
 
     try {
-      const { data: user, message } = await loginUser(loginData).unwrap();
-      dispatch(setUser({ id: user?._id, accountType: user?.accountType })); // changing the value of the authentication state
+      const {
+        data: { existingUser: user, accessToken },
+        message,
+      } = await loginUser(loginData).unwrap();
+      dispatch(
+        setUser({
+          user: { id: user?._id, accountType: user?.accountType },
+          accessToken,
+        })
+      ); // changing the value of the authentication state
       toast.success(message, { position: "top-right" });
     } catch (error) {
       toast.error(error.message, { position: "top-right" });
