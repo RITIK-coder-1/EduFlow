@@ -371,8 +371,8 @@ const newAccessTokenFunction = async (req, res) => {
     // the cookie options
     const options = {
       httpOnly: true,
-      secure: false,
-      sameSite: "Lax",
+      secure: true,
+      sameSite: "none",
       path: "/",
     };
 
