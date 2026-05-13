@@ -447,8 +447,8 @@ const deleteUserAccountFunction = async (req, res) => {
   // clearing the cookies
   const options = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    secure: true,
+    sameSite: "none",
     path: "/",
   };
 
