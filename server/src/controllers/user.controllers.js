@@ -1,6 +1,6 @@
 /* ---------------------------------------------------------------------------------------
 user.controllers.js
-All the controllers for users including authentication 
+All the controllers for users
 ------------------------------------------------------------------------------------------ */
 
 import {
