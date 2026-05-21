@@ -28,6 +28,18 @@
     "validator": "^13.15.26"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^25.9.1",
+    "@types/nodemailer": "^8.0.0",
+    "@types/otp-generator": "^4.0.2",
+    "@types/uuid": "^10.0.0",
+    "@types/validator": "^13.15.10",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
   }
 }

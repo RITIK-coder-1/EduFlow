@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "rootDir": "./src",
+
+    "allowJs": true, // Allows JavaScript files to be compiled
+    "checkJs": false, // Disables type-checking on your legacy .js files
+
+    "strict": true,
+    "noImplicitAny": true, // Prevents variables from accidentally defaulting to 'any'
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"]
+}
