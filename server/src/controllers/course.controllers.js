@@ -9,7 +9,7 @@ import {
   User,
   CourseCategory,
   CourseProgress,
-} from "../models/index.model.js";
+} from "../models/index.model.ts";
 
 /* ---------------------------------------------------------------------------------------
 GET ALL COURSES CONTROLLER

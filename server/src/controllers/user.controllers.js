@@ -9,7 +9,7 @@ import {
   CourseVideo,
   CourseProgress,
   Course,
-} from "../models/index.model.js";
+} from "../models/index.model.ts";
 import {
   ApiError,
   ApiResponse,

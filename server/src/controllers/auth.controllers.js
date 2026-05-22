@@ -3,7 +3,7 @@ auth.controllers.js
 All the controllers for authentication
 ------------------------------------------------------------------------------------------ */
 
-import { User, OTP } from "../models/index.model.js";
+import { User, OTP } from "../models/index.model.ts";
 import {
   ApiError,
   ApiResponse,

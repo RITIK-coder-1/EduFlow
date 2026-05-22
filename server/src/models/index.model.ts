@@ -10,7 +10,7 @@ import CourseVideo from "./course/CourseVideo.model.js";
 import CourseCategory from "./course/CourseCategory.model.js";
 
 // User models
-import User from "./user/User.model.js";
+import User from "./user/User.model.ts";
 import CourseProgress from "./user/CourseProgress.model.js";
 
 // Auth Model

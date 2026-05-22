@@ -10,7 +10,7 @@ import {
   CourseCategory,
   User,
   CourseProgress,
-} from "../../models/index.model.js";
+} from "../../models/index.model.ts";
 import { deleteFromCloudinary } from "../index.utils.js";
 import ApiError from "../api/apiError.js";
 

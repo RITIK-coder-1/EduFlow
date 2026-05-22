@@ -16,7 +16,7 @@ import {
   User,
   CourseVideo,
   CourseCategory,
-} from "../models/index.model.js";
+} from "../models/index.model.ts";
 
 /* ---------------------------------------------------------------------------------------
 CREATE COURSE CONTROLLER
