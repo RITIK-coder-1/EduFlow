@@ -4,6 +4,7 @@ This file builds the user schema for defining the user data points
 ------------------------------------------------------------------------------------------ */
 
 import mongoose from "mongoose";
+import type { Document } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -22,8 +23,8 @@ interface UserDomain {
   dateOfBirth: Date;
   accountType: AccountType;
   profilePic: string;
-  createdCourses?: mongoose.Types.ObjectId[];
-  enrolledCourses?: mongoose.Types.ObjectId[];
+  createdCourses: mongoose.Types.ObjectId[];
+  enrolledCourses: mongoose.Types.ObjectId[];
   lastCourseVisited: mongoose.Types.ObjectId | null;
   totalRevenue: number;
   refreshTokenString?: string;
@@ -33,6 +34,9 @@ interface UserDomain {
 interface UserContract extends UserDomain, Document {
   createdAt: Date;
   updatedAt: Date;
+  isPasswordCorrect(this: UserContract, password: string): Promise<boolean>;
+  generateAccessToken(this: UserContract): string;
+  generateRefreshToken(this: UserContract, uniqueString: string): string;
 }
 
 /* ---------------------------------------------------------------------------------------
@@ -123,7 +127,7 @@ const userSchema = new mongoose.Schema<UserContract>(
 Hashing password before saving it to the document for security
 ------------------------------------------------------------------------------------------ */
 
-async function hashPassword() {
+async function hashPassword(this: UserContract): Promise<void> {
   if (!this.isModified("password")) {
     return; // If password hasn't been modified, skip hashing and move on.
   }
@@ -132,20 +136,28 @@ async function hashPassword() {
   try {
     this.password = await bcrypt.hash(this.password, 10); // hash the passoword with 10 salt rounds
     console.log("User Model:  Password successfully hashed before saving.");
-  } catch (error) {
-    // If hashing fails, log the error and pass it to Mongoose to abort the save operation, preventing plain text data exposure.
-    console.error("User Model Error:  Failed to hash password.", error);
+  } catch (error: unknown) {
+    error instanceof Error
+      ? console.error(
+          "User Model Error:  Failed to hash password. ",
+          error.message
+        )
+      : // If hashing fails, log the error and pass it to Mongoose to abort the save operation, preventing plain text data exposure.
+        console.error("User Model Error:  Failed to hash password.", error);
     throw error; // Abort the save operation
   }
 }
 
-userSchema.pre("save", hashPassword);
+userSchema.pre<UserContract>("save", hashPassword);
 
 /* ---------------------------------------------------------------------------------------
 Custom Method to validate the user password for logging in purposes 
 ------------------------------------------------------------------------------------------ */
 
-userSchema.methods.isPasswordCorrect = async function (password) {
+userSchema.methods.isPasswordCorrect = async function (
+  this: UserContract,
+  password: string
+): Promise<boolean> {
   if (!this.password) {
     console.warn(
       "User Model Warning: Attempted to compare password on a document missing a hash."
@@ -156,12 +168,17 @@ userSchema.methods.isPasswordCorrect = async function (password) {
     // 'password' is the plain text string submitted by the user.
     // 'this.password' is the hashed string retrieved from the database document.
     return await bcrypt.compare(password, this.password);
-  } catch (error) {
-    // If the comparison fails due to a library error (e.g., malformed hash)
-    console.error(
-      "Critical USER MODEL error during password comparison:",
-      error.message
-    );
+  } catch (error: unknown) {
+    error instanceof Error
+      ? console.error(
+          "Critical USER MODEL error during password comparison:",
+          error.message
+        )
+      : // If the comparison fails due to a library error (e.g., malformed hash)
+        console.error(
+          "Critical USER MODEL error during password comparison:",
+          error
+        );
     return false;
   }
 };
@@ -170,29 +187,58 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 Custom Method to generate the access and the refresh tokens
 ------------------------------------------------------------------------------------------ */
 
-userSchema.methods.generateAccessToken = function () {
+userSchema.methods.generateAccessToken = function (this: UserContract): string {
+  const secret = process.env["ACCESS_TOKEN_SECRET"];
+  const expiry = process.env["ACCESS_TOKEN_EXPIRY"];
+
+  // Fail-fast configuration check
+  if (!secret || !expiry) {
+    console.error(
+      "CRITICAL AUTH ERROR: ACCESS_TOKEN_SECRET or ACCESS_TOKEN_EXPIRY is undefined in environment variables."
+    );
+    throw new Error(
+      "CRITICAL AUTH ERROR: ACCESS_TOKEN_SECRET or ACCESS_TOKEN_EXPIRY is undefined in environment variables."
+    );
+  }
+
   return jwt.sign(
     {
       _id: this._id,
       email: this.email,
       username: this.username,
     },
-    process.env.ACCESS_TOKEN_SECRET,
+    secret,
     {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+      expiresIn: expiry,
     }
   );
 };
 
-userSchema.methods.generateRefreshToken = function (uniqueTokenString) {
+userSchema.methods.generateRefreshToken = function (
+  this: UserContract,
+  uniqueTokenString: string
+): string {
+  const secret = process.env["REFRESH_TOKEN_SECRET"];
+  const expiry = process.env["REFRESH_TOKEN_EXPIRY"];
+
+  // Fail-fast configuration check
+  if (!secret || !expiry) {
+    console.error(
+      "CRITICAL AUTH ERROR: REFRESH_TOKEN_SECRET or REFRESH_TOKEN_EXPIRY is undefined in environment variables."
+    );
+    throw new Error(
+      "CRITICAL AUTH ERROR: REFRESH_TOKEN_SECRET or REFRESH_TOKEN_EXPIRY is undefined in environment variables."
+    );
+  }
+
   return jwt.sign(
     {
       _id: this._id, // the id is saved for the refresh token
       uniqueToken: uniqueTokenString, // this unique string separates two distinct refresh tokens
     },
-    process.env.REFRESH_TOKEN_SECRET,
+    secret,
     {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+      expiresIn: expiry,
     }
   );
 };
@@ -201,6 +247,6 @@ userSchema.methods.generateRefreshToken = function (uniqueTokenString) {
 The Model
 ------------------------------------------------------------------------------------------ */
 
-const User = new mongoose.model<UserContract>("User", userSchema);
+const User = mongoose.model<UserContract>("User", userSchema);
 
 export default User;
