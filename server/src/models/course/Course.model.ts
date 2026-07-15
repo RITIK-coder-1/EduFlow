@@ -25,7 +25,7 @@ interface CourseDomain {
 }
 
 // interface segreggation to avoid tight coupling
-interface CourseContract extends CourseDomain, Document {
+export interface CourseContract extends CourseDomain, Document {
   createdAt: Date;
   updatedAt: Date;
 }

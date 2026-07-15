@@ -31,7 +31,7 @@ interface UserDomain {
 }
 
 // interface segreggation to avoid tight coupling
-interface UserContract extends UserDomain, Document {
+export interface UserContract extends UserDomain, Document {
   createdAt: Date;
   updatedAt: Date;
   isPasswordCorrect(this: UserContract, password: string): Promise<boolean>;

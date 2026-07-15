@@ -20,7 +20,7 @@ interface CourseVideoDomain {
 The Contract Interface 
 ------------------------------------------------------------------------------------------ */
 
-interface CourseVideoContract extends Document, CourseVideoDomain {
+export interface CourseVideoContract extends Document, CourseVideoDomain {
   createdAt: Date;
   updatedAt: Date;
 }

@@ -17,7 +17,7 @@ interface CourseProgressDomain {
 }
 
 // interface segreggation to avoid tight coupling
-interface CourseProgressContract extends CourseProgressDomain, Document {
+export interface CourseProgressContract extends CourseProgressDomain, Document {
   createdAt: Date;
   updatedAt: Date;
 }

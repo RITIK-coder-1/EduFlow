@@ -11,10 +11,10 @@ import {
   User,
   CourseProgress,
 } from "../../models/index.model.ts";
-import { deleteFromCloudinary } from "../index.utils.js";
+import { deleteFromCloudinary } from "../index.utils.ts";
 import ApiError from "../api/apiError.js";
 
-const deleteCourse = async (courseId) => {
+const deleteCourse = async (courseId: string): Promise<void> => {
   // Getting the course
   const course = await Course.findById(courseId)
     .populate({

@@ -19,7 +19,7 @@ interface CourseSectionDomain {
 The Contract Interface 
 ------------------------------------------------------------------------------------------ */
 
-interface CourseSectionContract extends Document, CourseSectionDomain {
+export interface CourseSectionContract extends Document, CourseSectionDomain {
   createdAt: Date;
   updatedAt: Date;
 }
