@@ -10,8 +10,10 @@ The function to connect to the database
 ------------------------------------------------- */
 
 async function connectDB(): Promise<void> {
-  const mongoUri = process.env["MONGO_URI"];
-  const dbName = process.env["DB_NAME"];
+  type envVar = string | undefined;
+
+  const mongoUri: envVar = process.env["MONGO_URI"];
+  const dbName: envVar = process.env["DB_NAME"];
 
   // Fail fast if critical environment variables are missing
   if (!mongoUri || !dbName) {
