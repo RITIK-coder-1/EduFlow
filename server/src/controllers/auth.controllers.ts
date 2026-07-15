@@ -12,6 +12,7 @@ import {
   calculateAge,
   uploadOnCloudinary,
   generateRefreshTokenString,
+  CloudinaryUploadResult,
 } from "../utils/index.utils.js";
 import validator from "validator";
 import jwt from "jsonwebtoken";
@@ -76,9 +77,7 @@ const createRegisterOtpFunction = async (
   }
 
   // checking if a malicios user sends a skwed account type
-  if (
-    (accountType !== "Instructor" && accountType !== "Student")
-  ) {
+  if (accountType !== "Instructor" && accountType !== "Student") {
     console.error("REGISTER USER ERROR: malicious account type!");
     throw new ApiError(
       400,
@@ -142,7 +141,7 @@ const createRegisterOtpFunction = async (
   }
 
   // uploading the image on cloudinary (if uploaded by the student)
-  let picResponse = "";
+  let picResponse: CloudinaryUploadResult | null = null;
   if (profilePicLocalPath) {
     picResponse = await uploadOnCloudinary(profilePicLocalPath);
 
@@ -160,7 +159,7 @@ const createRegisterOtpFunction = async (
   // success response to the client
   return res.status(200).json(
     new ApiResponse(200, "OTP has been sent successfully!", {
-      profilePic: picResponse.url || "",
+      profilePic: picResponse?.url || "",
     })
   );
 };

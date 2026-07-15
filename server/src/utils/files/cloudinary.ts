@@ -37,14 +37,14 @@ const deleteLocalFile = async (filepath: string): Promise<void> => {
 Function to upload the file on cloudinary 
 ------------------------------------------------------------------------------------------------- */
 
-export interface ICloudinaryUploadResult {
+export interface CloudinaryUploadResult {
   url: string;
   public_id: string;
 }
 
-const uploadOnCloudinary = async (
+export const uploadOnCloudinary = async (
   filepath: string
-): Promise<ICloudinaryUploadResult | null> => {
+): Promise<CloudinaryUploadResult | null> => {
   if (!filepath) return null;
 
   try {
@@ -69,5 +69,3 @@ const uploadOnCloudinary = async (
     await deleteLocalFile(filepath);
   }
 };
-
-export default uploadOnCloudinary;
