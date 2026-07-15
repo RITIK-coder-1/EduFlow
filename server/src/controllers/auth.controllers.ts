@@ -15,6 +15,7 @@ import {
 } from "../utils/index.utils.js";
 import validator from "validator";
 import jwt from "jsonwebtoken";
+import { Request, Response } from "express";
 
 /* ---------------------------------------------------------------------------------------
 REGISTER USER CONTROLLERS
@@ -22,11 +23,24 @@ REGISTER USER CONTROLLERS
 
 // This function takes all the user data to register and sends an OTP to the email for verification purposes
 
-const createRegisterOtpFunction = async (req, res) => {
+// Defining an interface for the Request Body
+interface RegisterRequestBody {
+  firstName: string;
+  username: string;
+  password: string;
+  email: string;
+  dateOfBirth: string;
+  accountType: "Instructor" | "Student";
+}
+
+const createRegisterOtpFunction = async (
+  req: Request<{}, {}, RegisterRequestBody>,
+  res: Response
+): Promise<Response> => {
   // Gathering all the important user data from the request object
   const { firstName, username, password, email, dateOfBirth, accountType } =
     req.body;
-  const profilePicLocalPath = req.file?.path;
+  const profilePicLocalPath: string | undefined = req.file?.path;
 
   // Checking if mandatory fields are submitted or not
   const isImportantDataEmpty = [
@@ -63,8 +77,7 @@ const createRegisterOtpFunction = async (req, res) => {
 
   // checking if a malicios user sends a skwed account type
   if (
-    (accountType !== "Instructor" && accountType !== "Student") ||
-    accountType === "Admin"
+    (accountType !== "Instructor" && accountType !== "Student")
   ) {
     console.error("REGISTER USER ERROR: malicious account type!");
     throw new ApiError(
@@ -283,7 +296,10 @@ const loginUserController = async (req, res) => {
     .cookie("refreshToken", refreshToken, options)
     .cookie("accessToken", accessToken, options)
     .json(
-      new ApiResponse(200, "The user has successfully logged in!", {existingUser, accessToken})
+      new ApiResponse(200, "The user has successfully logged in!", {
+        existingUser,
+        accessToken,
+      })
     );
 };
 
