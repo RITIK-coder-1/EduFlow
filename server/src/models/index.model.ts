@@ -4,10 +4,10 @@ This is a centralized exporting file for every single model
 ------------------------------------------------------------------------------------------ */
 
 // Course models
-import Course from "./course/Course.model.js";
+import Course from "./course/Course.model.ts";
 import CourseSection from "./course/CourseSection.model.js";
 import CourseVideo from "./course/CourseVideo.model.js";
-import CourseCategory from "./course/CourseCategory.model.js";
+import CourseCategory from "./course/CourseCategory.model.ts";
 
 // User models
 import User from "./user/User.model.ts";
