@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------------------
-deleteCourse.js
+deleteCourse.ts
 This utility function is used to delete a course that involes multi-step procedures
 ------------------------------------------------------------------------------------------ */
 
@@ -10,6 +10,8 @@ import {
   CourseCategory,
   User,
   CourseProgress,
+  CourseSectionContract,
+  CourseVideoContract,
 } from "../../models/index.model.ts";
 import { deleteFromCloudinary } from "../index.utils.ts";
 import ApiError from "../api/apiError.js";
@@ -17,7 +19,11 @@ import ApiError from "../api/apiError.js";
 const deleteCourse = async (courseId: string): Promise<void> => {
   // Getting the course
   const course = await Course.findById(courseId)
-    .populate({
+    .populate<{
+      sections: (CourseSectionContract & {
+        courseVideos: CourseVideoContract[];
+      })[];
+    }>({
       path: "sections",
       populate: {
         path: "courseVideos",
@@ -51,14 +57,14 @@ const deleteCourse = async (courseId: string): Promise<void> => {
 
   // Removing the course from the category lists
   const categoryCourseDelete = CourseCategory.updateOne(
-    { name: course.category },
+    { name: course?.category },
     {
       $pull: { courses: courseId },
     }
   );
 
   // Removing the course from the instructor's list
-  const instructorCourseDelete = User.findByIdAndUpdate(course.owner, {
+  const instructorCourseDelete = User.findByIdAndUpdate(course?.owner, {
     $pull: { createdCourses: courseId },
   });
 
@@ -78,13 +84,13 @@ const deleteCourse = async (courseId: string): Promise<void> => {
   // CLOUDINARY DELETES
 
   // Deleting the thumbnail from cloudinary
-  const thumbnailDelete = deleteFromCloudinary(course.thumbnail);
+  const thumbnailDelete = deleteFromCloudinary(course?.thumbnail);
 
   // Deleting the videos from cloudinary
   // course object has sections array. Sections array has documents. Each sectionDocument has courseVideos array. The array has video documents
-  const videosDeleteCloudinary = course.sections.map((sectionDocument) =>
+  const videosDeleteCloudinary = course?.sections.map((sectionDocument) =>
     sectionDocument.courseVideos.map((video) => {
-      deleteFromCloudinary(video.videoUrl, "video");
+      deleteFromCloudinary(video?.videoUrl, "video");
     })
   );
 
