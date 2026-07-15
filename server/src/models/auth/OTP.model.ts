@@ -1,16 +1,34 @@
 /* ---------------------------------------------------------------------------------------
-OTP.model.js
+OTP.model.ts
 This file builds the schema for OTP data fields for user verification
 ------------------------------------------------------------------------------------------ */
 
 import mongoose from "mongoose";
 import { mailSender } from "../../utils/index.utils.js";
+import type { Document } from "mongoose";
+
+/* ---------------------------------------------------------------------------------------
+The Domain Interface
+------------------------------------------------------------------------------------------ */
+
+interface OTPDomain {
+  email: string;
+  code: string;
+}
+
+/* ---------------------------------------------------------------------------------------
+The Contract Interface 
+------------------------------------------------------------------------------------------ */
+
+interface OTPContract extends Document, OTPDomain {
+  createdAt: Date;
+}
 
 /* ---------------------------------------------------------------------------------------
 The Schema 
 ------------------------------------------------------------------------------------------ */
 
-const OTPSchema = new mongoose.Schema({
+const OTPSchema = new mongoose.Schema<OTPContract>({
   email: {
     type: String,
     required: true,
@@ -33,7 +51,10 @@ Send an email to the user before saving the OTP
 ------------------------------------------------------------------------------------------ */
 
 // function to handle the email sending logic
-async function sendVerificationEmail(email, code) {
+async function sendVerificationEmail(
+  email: string,
+  code: string
+): Promise<void> {
   try {
     const mailResponse = await mailSender(
       // the email of the user
@@ -45,17 +66,22 @@ async function sendVerificationEmail(email, code) {
        <p>Here is your OTP code: <b>${code}</b></p>`
     );
     console.log("OTP Model: Email sent successfully: ", mailResponse);
-  } catch (error) {
-    console.log(
-      "OTP Model Error: Problem occurred while sending email: ",
-      error
-    );
+  } catch (error: unknown) {
+    error instanceof Error
+      ? console.error(
+          "OTP Model Error: Problem occurred while sending email: ",
+          error.message
+        )
+      : console.error(
+          "OTP Model Error: Problem occurred while sending email: ",
+          error
+        );
     throw error; // Stop the save process if email fails
   }
 }
 
 // The middleware
-OTPSchema.pre("save", async function () {
+OTPSchema.pre<OTPContract>("save", async function (this: OTPContract) {
   // Only send email if the document is new (not being updated)
   if (this.isNew) {
     await sendVerificationEmail(this.email, this.code);
@@ -66,6 +92,6 @@ OTPSchema.pre("save", async function () {
 The Model
 ------------------------------------------------------------------------------------------ */
 
-const OTP = new mongoose.model("OTP", OTPSchema);
+const OTP = mongoose.model<OTPContract>("OTP", OTPSchema);
 
 export default OTP;
