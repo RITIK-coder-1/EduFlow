@@ -4,12 +4,37 @@ This file builds the course schema for defining the course data points
 ------------------------------------------------------------------------------------------ */
 
 import mongoose from "mongoose";
+import type { Document } from "mongoose";
+
+/* ---------------------------------------------------------------------------------------
+The Interface 
+------------------------------------------------------------------------------------------ */
+
+interface CourseDomain {
+  title: string;
+  description: string;
+  price: number;
+  thumbnail: string;
+  tags: string[];
+  status: string;
+  category: string;
+  revenue: number;
+  sections: mongoose.Types.ObjectId[];
+  owner: mongoose.Types.ObjectId;
+  enrolledBy: mongoose.Types.ObjectId[];
+}
+
+// interface segreggation to avoid tight coupling
+interface CourseContract extends CourseDomain, Document {
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 /* ---------------------------------------------------------------------------------------
 The Schema 
 ------------------------------------------------------------------------------------------ */
 
-const courseSchema = new mongoose.Schema(
+const courseSchema = new mongoose.Schema<CourseContract>(
   {
     title: {
       type: String,
@@ -47,9 +72,9 @@ const courseSchema = new mongoose.Schema(
       required: true,
     },
     revenue: {
-      type: Number, 
+      type: Number,
       default: 0,
-      min: 0
+      min: 0,
     },
 
     // SEPERATED DOCUMENTS (I've seperated the documents to keep them light individually)
@@ -86,6 +111,6 @@ const courseSchema = new mongoose.Schema(
 The Model
 ------------------------------------------------------------------------------------------ */
 
-const Course = new mongoose.model("Course", courseSchema);
+const Course = mongoose.model<CourseContract>("Course", courseSchema);
 
 export default Course;
