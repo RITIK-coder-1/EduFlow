@@ -330,7 +330,10 @@ const loginUserController = async (
 LOGOUT USER CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const logoutFunction = async (req, res) => {
+const logoutFunction = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   const userId = req.user?._id;
 
   if (!userId) {
@@ -356,7 +359,7 @@ const logoutFunction = async (req, res) => {
   }
 
   // cookie security options
-  const options = {
+  const options: CookieOptions = {
     httpOnly: true,
     secure: true,
     sameSite: "none",
@@ -370,7 +373,7 @@ const logoutFunction = async (req, res) => {
     .status(200)
     .clearCookie("refreshToken", options)
     .clearCookie("accessToken", options)
-    .json(new ApiResponse(200, "User Logged Out Succesfully!"));
+    .json(new ApiResponse(200, "User Logged Out Succesfully!", {}));
 };
 
 /* ---------------------------------------------------------------------------------------
