@@ -1,13 +1,17 @@
 /* ---------------------------------------------------------------------------------------
-asyncHandler.js
+asyncHandler.ts
 This is a special middleware to encapsulate efficient error handling for each asynchronous function
 ------------------------------------------------------------------------------------------ */
 
-function asyncHandler(func) {
-  return async (req, res, next) => {
+import { Request, Response, NextFunction } from "express";
+
+type Controller = (req: Request, res: Response) => Promise<Response>;
+
+function asyncHandler(func: Controller) {
+  return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await func(req, res, next);
-    } catch (error) {
+      await func(req, res);
+    } catch (error: unknown) {
       next(error); // passing the error to the global error handler
     }
   };
