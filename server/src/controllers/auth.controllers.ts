@@ -241,10 +241,13 @@ const generateTokens = async (
   accessToken: string | undefined;
   refreshToken: string | undefined;
 }> => {
-  const randomString = generateRefreshTokenString(); // this random set of strings is used with the refresh token to validate the user
+  const randomString: string = generateRefreshTokenString(); // this random set of strings is used with the refresh token to validate the user
   try {
     const user: UserContract | null = await User.findById(userId);
-    user?.refreshTokenString = randomString; // refresh token string for security purposes
+
+    if (user) {
+      user.refreshTokenString = randomString; // refresh token string for security purposes
+    }
 
     const accessToken = user?.generateAccessToken();
     const refreshToken = user?.generateRefreshToken(randomString);
@@ -254,7 +257,7 @@ const generateTokens = async (
     console.log("Tokens have been generated for user log in!");
 
     return { accessToken, refreshToken };
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("LOGIN USER ERROR: Generating tokens failed!!");
     throw new ApiError(500, "Could not generate tokens");
   }
