@@ -3,12 +3,12 @@ app.js
 This is the main backend application 
 ------------------------------------------------------------------------------------------ */
 
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
 import helmet from "helmet";
-import { ApiError } from "./utils/index.utils.js";
+import { ApiError } from "./utils/index.utils.ts";
 import { fileURLToPath } from "url";
 import fs from "fs";
 
@@ -26,30 +26,34 @@ Setting the CORS origin for allowing the client to talk to my server
 ------------------------------------------------------------------------------------------ */
 
 // all the allowed origins for my application
-const allowedOrigins = [
+const allowedOrigins: string[] = [
   "http://localhost:5173", // My React App's current development server
   "http://localhost:3000", // The origin the server was previously allowing
   "http://127.0.0.1:5173", // A good practice for comprehensive localhost coverage
-  process.env.VERCEL_CLIENT, // the vercel client
+  process.env.VERCEL_CLIENT || "", // the vercel client
 ];
 
 // the function to filter origins
-const corsFunction = (origin, callback) => {
-  // Allowing requests from no origins like mobile apps
+const corsFunction = (
+  origin: string | undefined, // Origin can be undefined for non-browser requests
+  callback: (err: Error | null, allow?: boolean) => void
+) => {
+  // Allowing requests with no origin (like mobile apps, curl, postman)
   if (!origin) {
     return callback(null, true);
   }
 
-  // If a specific origin isn't allowed, add this specific message to the error object
-  if (allowedOrigins.indexOf(origin) === -1) {
+  // Checking if the origin is in my whitelist
+  if (allowedOrigins.indexOf(origin) !== -1) {
+    return callback(null, true); // Allowed
+  } else {
+    // Denying access
     const message = `CORS ERROR: The CORS policy of this site doesn't allow requests from this specific origin: ${origin}`;
     return callback(new Error(message), false);
   }
-
-  return callback(null, true);
 };
 
-// setting up the CORS policy
+// Setting up the CORS policy
 app.use(
   cors({
     origin: corsFunction,
@@ -119,7 +123,7 @@ Error Handling
 ------------------------------------------------------------------------------------------ */
 
 // Error handler for non-existant routes
-app.use((req, _res, next) => {
+app.use((req: Request, _res: Response, next: NextFunction) => {
   console.error("APP ERROR: invalid resource requested!");
   next(
     new ApiError(
@@ -130,7 +134,7 @@ app.use((req, _res, next) => {
 });
 
 // Global Error Handler
-app.use((error, _req, res, _next) => {
+app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
   // Check if the error coming in is a JWT error
   if (error.name === "TokenExpiredError") {
     error = new ApiError(403, "Token has expired");
@@ -139,16 +143,16 @@ app.use((error, _req, res, _next) => {
     error = new ApiError(401, "Token is invalid");
   }
 
-  const statusCode = error.statusCode || 500;
+  const statusCode = error instanceof ApiError ? error.statusCode : 500;
   const message = error.message || "CRITICAL: Internal Server Error";
+
+  console.error("CRITICAL SYSTEM ERROR: ", error);
 
   res.status(statusCode).json({
     success: false,
     message,
     error: process.env.NODE_ENV === "development" ? error : undefined, // Full error object for debugging (only in development)
   });
-
-  console.error("CRITICAL SYSTEM ERROR: ", error);
 });
 
 export default app;
