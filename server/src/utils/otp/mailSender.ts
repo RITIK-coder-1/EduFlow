@@ -1,10 +1,15 @@
 /* ---------------------------------------------------------------------------------------
-mailSender.js
+mailSender.ts
 This utility connects to the SMTP server (Gmail) and sends the email.
 ------------------------------------------------------------------------------------------ */
 import nodemailer from "nodemailer";
+import { SentMessageInfo } from "nodemailer";
 
-const mailSender = async (email, subject, body) => {
+const mailSender = async (
+  email: string,
+  subject: string,
+  body: string
+): Promise<SentMessageInfo> => {
   try {
     // Creating a Transporter (The Bridge)
     // This connects our Node server to the Gmail server
@@ -17,17 +22,20 @@ const mailSender = async (email, subject, body) => {
     });
 
     // Send this email to the user
-    let info = await transporter.sendMail({
+    let info: SentMessageInfo = await transporter.sendMail({
       from: `EduFlow - Learning Management System: <${process.env.MAIL_USER}>`,
-      to: `${email}`,
-      subject: `${subject}`,
-      html: `${body}`,
+      to: email,
+      subject: subject,
+      html: body,
     });
 
     console.log("Mail Sender: Email sent successfully:", info.messageId);
     return info;
-  } catch (error) {
-    console.log("Error inside mailSender utility:", error.message);
+  } catch (error: unknown) {
+    error instanceof Error
+      ? console.log("Error inside mailSender utility:", error.message)
+      : console.log("Error inside mailSender utility:", error);
+
     throw error; // Let the caller know it failed
   }
 };
