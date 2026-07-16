@@ -16,7 +16,7 @@ import {
 } from "../utils/index.utils.js";
 import validator from "validator";
 import jwt from "jsonwebtoken";
-import { Request, Response } from "express";
+import { CookieOptions, Request, Response } from "express";
 
 /* ---------------------------------------------------------------------------------------
 REGISTER USER CONTROLLERS
@@ -238,8 +238,8 @@ LOGIN USER CONTROLLERS
 const generateTokens = async (
   userId: string
 ): Promise<{
-  accessToken: string | undefined;
-  refreshToken: string | undefined;
+  accessToken: string;
+  refreshToken: string;
 }> => {
   const randomString: string = generateRefreshTokenString(); // this random set of strings is used with the refresh token to validate the user
   try {
@@ -249,8 +249,8 @@ const generateTokens = async (
       user.refreshTokenString = randomString; // refresh token string for security purposes
     }
 
-    const accessToken = user?.generateAccessToken();
-    const refreshToken = user?.generateRefreshToken(randomString);
+    const accessToken = user?.generateAccessToken() || "";
+    const refreshToken = user?.generateRefreshToken(randomString) || "";
 
     await user?.save({ validateBeforeSave: false }); // we don't validate each field whenever the user logs in or out
 
@@ -265,7 +265,15 @@ const generateTokens = async (
 
 // function to verify the user for login
 
-const loginUserController = async (req, res) => {
+interface LoginRequestBody {
+  credential: string;
+  password: string;
+}
+
+const loginUserController = async (
+  req: Request<{}, {}, LoginRequestBody>,
+  res: Response
+): Promise<Response> => {
   // getting data from the client request
   const { credential, password } = req.body;
 
@@ -293,11 +301,13 @@ const loginUserController = async (req, res) => {
     );
   }
 
-  const { accessToken, refreshToken } = await generateTokens(existingUser._id);
+  const { accessToken, refreshToken } = await generateTokens(
+    String(existingUser?._id)
+  );
 
   // once the user has successfully logged in, we need to send in the cookies to the client
 
-  const options = {
+  const options: CookieOptions = {
     httpOnly: true, // cookie can't be manipulated by the client
     secure: true,
     sameSite: "none",
