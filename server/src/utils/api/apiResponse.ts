@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------------------
-apiResponse.table-captions
+apiResponse.ts
 This is a class to send specific API JSON objects on success 
 ------------------------------------------------------------------------------------------ */
 
