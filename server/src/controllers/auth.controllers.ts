@@ -3,7 +3,7 @@ auth.controllers.js
 All the controllers for authentication
 ------------------------------------------------------------------------------------------ */
 
-import { User, OTP } from "../models/index.model.ts";
+import { User, OTP, UserContract } from "../models/index.model.ts";
 import {
   ApiError,
   ApiResponse,
@@ -27,11 +27,14 @@ REGISTER USER CONTROLLERS
 // Defining an interface for the Request Body
 interface RegisterRequestBody {
   firstName: string;
+  lastName?: string;
   username: string;
   password: string;
   email: string;
   dateOfBirth: string;
   accountType: "Instructor" | "Student";
+  userOTP?: string;
+  profilePic?: string;
 }
 
 const createRegisterOtpFunction = async (
@@ -166,7 +169,10 @@ const createRegisterOtpFunction = async (
 
 // This method verifies the OTP submitted by the user and registers the user on the database
 
-const registerUserFunction = async (req, res) => {
+const registerUserFunction = async (
+  req: Request<{}, {}, RegisterRequestBody>,
+  res: Response
+): Promise<Response> => {
   // the frontend will temporarily save the user data and send it back for creation
   const {
     userOTP,
@@ -229,16 +235,21 @@ LOGIN USER CONTROLLERS
 
 // function to generate access and refresh tokens on logging in
 
-const generateTokens = async (userId) => {
+const generateTokens = async (
+  userId: string
+): Promise<{
+  accessToken: string | undefined;
+  refreshToken: string | undefined;
+}> => {
   const randomString = generateRefreshTokenString(); // this random set of strings is used with the refresh token to validate the user
   try {
-    const user = await User.findById(userId);
-    user.refreshTokenString = randomString; // refresh token string for security purposes
+    const user: UserContract | null = await User.findById(userId);
+    user?.refreshTokenString = randomString; // refresh token string for security purposes
 
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken(randomString);
+    const accessToken = user?.generateAccessToken();
+    const refreshToken = user?.generateRefreshToken(randomString);
 
-    await user.save({ validateBeforeSave: false }); // we don't validate each field whenever the user logs in or out
+    await user?.save({ validateBeforeSave: false }); // we don't validate each field whenever the user logs in or out
 
     console.log("Tokens have been generated for user log in!");
 
