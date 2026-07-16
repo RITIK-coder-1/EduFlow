@@ -8,7 +8,7 @@ import ApiError from "./api/apiError.js";
 import asyncHandler from "./errorHandler/asyncHandler.js";
 import mailSender from "./otp/mailSender.js";
 import generateOTP from "./otp/otpGenerator.js";
-import generateRefreshTokenString from "./tokens/generateRefreshTokenString.js";
+import generateRefreshTokenString from "./tokens/generateRefreshTokenString.ts";
 import {
   CloudinaryUploadResult,
   uploadOnCloudinary,
