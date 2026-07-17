@@ -1,14 +1,8 @@
 /* ---------------------------------------------------------------------------------------
-global.types.ts 
-To include global types 
+User.model.ts
+Centralized exporting file for all the types 
 ------------------------------------------------------------------------------------------ */
 
 import { UserContract } from "../models/index.model.ts";
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: UserContract;
-    }
-  }
-}
+export { UserContract };

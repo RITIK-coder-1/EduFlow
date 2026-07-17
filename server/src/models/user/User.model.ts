@@ -4,40 +4,9 @@ This file builds the user schema for defining the user data points
 ------------------------------------------------------------------------------------------ */
 
 import mongoose from "mongoose";
-import type { Document } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
-/* ---------------------------------------------------------------------------------------
-The Interface 
------------------------------------------------------------------------------------------- */
-
-type AccountType = "Student" | "Instructor" | "Admin";
-
-interface UserDomain {
-  firstName: string;
-  lastName: string;
-  username: string;
-  password: string;
-  email: string;
-  dateOfBirth: Date;
-  accountType: AccountType;
-  profilePic: string;
-  createdCourses: mongoose.Types.ObjectId[];
-  enrolledCourses: mongoose.Types.ObjectId[];
-  lastCourseVisited: mongoose.Types.ObjectId | null;
-  totalRevenue: number;
-  refreshTokenString?: string;
-}
-
-// interface segreggation to avoid tight coupling
-export interface UserContract extends UserDomain, Document {
-  createdAt: Date;
-  updatedAt: Date;
-  isPasswordCorrect(this: UserContract, password: string): Promise<boolean>;
-  generateAccessToken(this: UserContract): string;
-  generateRefreshToken(this: UserContract, uniqueString: string): string;
-}
+import { UserContract } from "../index.model.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 
