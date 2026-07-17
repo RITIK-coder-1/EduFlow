@@ -381,8 +381,9 @@ NEW ACCESS TOKEN CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
 // custom interface for the token
-interface myTokenPayload extends JwtPayload {
+interface TokenPayload extends JwtPayload {
   _id: string;
+  refreshTokenString: string;
 }
 
 const newAccessTokenFunction = async (
@@ -402,7 +403,7 @@ const newAccessTokenFunction = async (
     const decodedToken = jwt.verify(
       incomingRefreshToken,
       process.env.REFRESH_TOKEN_SECRET || ""
-    ) as myTokenPayload;
+    ) as TokenPayload;
 
     // we get the user
     const user = await User.findById(decodedToken?._id);
