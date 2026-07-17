@@ -3,7 +3,7 @@ user.controllers.ts
 All the controllers for users
 ------------------------------------------------------------------------------------------ */
 
-import { Response, Request } from "express";
+import { Response, Request, CookieOptions } from "express";
 import {
   User,
   OTP,
@@ -21,8 +21,8 @@ import {
   deleteCourse,
 } from "../utils/index.utils.ts";
 import validator from "validator";
-import { CourseContract } from "../types/course.types.ts";
-import { UserContract } from "../types/user.types.ts";
+import { UserContract, CourseContract } from "../types/index.types.ts";
+import { Types } from "mongoose";
 
 type MinimalUser = Pick<UserContract, "firstName" | "lastName" | "username">;
 
@@ -31,7 +31,10 @@ GET USER CONTROLLER
 This is a function to fetch a single user's details
 ------------------------------------------------------------------------------------------ */
 
-const getUserFunction = async (req: Request, res: Response) => {
+const getUserFunction = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   const user = await User.findById(req.user._id)
     .select("-password -refreshTokenString")
     .populate<{
@@ -67,7 +70,7 @@ This is a function to update a user's details including the profile picture (not
 const updateUserDetailsFunction = async (
   req: Request<{}, {}, MinimalUser>,
   res: Response
-) => {
+): Promise<Response> => {
   // gathering data to update
   const { firstName, lastName, username } = req.body; // (Account type and DOB can't be changed once created)
   const profilePicLocalPath = req.file?.path;
@@ -177,7 +180,7 @@ interface PasswordUpdateContract {
 const updatePasswordFunction = async (
   req: Request<{}, {}, PasswordUpdateContract>,
   res: Response
-) => {
+): Promise<Response> => {
   // getting the old and the new passwords
   const { oldPassword, newPassword } = req.body;
 
@@ -252,7 +255,7 @@ interface UpdateEmailContract {
 const createUpdateEmailOtpFunction = async (
   req: Request<{}, {}, UpdateEmailContract>,
   res: Response
-) => {
+): Promise<Response> => {
   // getting the new email to update and the password for security
   const { newEmail, password } = req.body;
 
@@ -331,7 +334,7 @@ const createUpdateEmailOtpFunction = async (
 const updateEmailFunction = async (
   req: Request<{}, {}, UpdateEmailContract>,
   res: Response
-) => {
+): Promise<Response> => {
   // getting the otp
   const { userOtp, newEmail } = req.body;
 
@@ -387,7 +390,10 @@ DELETE PROFILE PIC CONTROLLER
 This will be available only on the interface of students
 ------------------------------------------------------------------------------------------ */
 
-const deleteProfilePicFunction = async (req, res) => {
+const deleteProfilePicFunction = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   // getting the user profile
   const user = req.user;
 
@@ -436,7 +442,10 @@ const deleteProfilePicFunction = async (req, res) => {
 DELETE THE USER ACCOUNT CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const deleteUserAccountFunction = async (req, res) => {
+const deleteUserAccountFunction = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   // getting the user's details
   const user = await User.findById(req.user._id);
 
@@ -459,7 +468,7 @@ const deleteUserAccountFunction = async (req, res) => {
   // if it's a teacher, delete all their courses
   if (user.accountType === "Instructor") {
     try {
-      user.createdCourses.forEach(async (id) => await deleteCourse(id));
+      user.createdCourses.forEach(async (id) => await deleteCourse(String(id)));
 
       console.log("Course successfully deleted!");
     } catch (error) {
@@ -485,7 +494,7 @@ const deleteUserAccountFunction = async (req, res) => {
   }
 
   // clearing the cookies
-  const options = {
+  const options: CookieOptions = {
     httpOnly: true,
     secure: true,
     sameSite: "none",
@@ -507,18 +516,27 @@ const deleteUserAccountFunction = async (req, res) => {
     .status(204)
     .clearCookie("refreshToken", options)
     .clearCookie("accessToken", options)
-    .json(new ApiResponse(204, "Your account has been successfully deleted"));
+    .json(
+      new ApiResponse(204, "Your account has been successfully deleted", {})
+    );
 };
 
 /* ---------------------------------------------------------------------------------------
 LAST COURSE VISITED CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const lastCourseVisitedController = async (req, res) => {
+interface MinimalCourse {
+  courseId: string;
+}
+
+const lastCourseVisitedController = async (
+  req: Request<{}, {}, MinimalCourse>,
+  res: Response
+): Promise<Response> => {
   const { courseId } = req.body;
   const userId = req.user?._id;
 
-  if (!courseId) throw new ApiError("invalid ID");
+  if (!courseId) throw new ApiError(400, "invalid ID");
 
   const user = await User.findById(userId);
 
@@ -530,13 +548,13 @@ const lastCourseVisitedController = async (req, res) => {
   // single ID check
   const isNotLastVisited = !user?.lastCourseVisited?.equals(courseId);
 
-  if (isEnrolled && isNotLastVisited) {
-    user.lastCourseVisited = courseId;
-    await user.save();
+  if (user && isEnrolled && isNotLastVisited) {
+    user.lastCourseVisited = new Types.ObjectId(courseId);
+    await user?.save();
     console.log("course added to last visited");
   }
 
-  return res.status(200).json(new ApiResponse(200, ""));
+  return res.status(200).json(new ApiResponse(200, "", {}));
 };
 
 /* ---------------------------------------------------------------------------------------
