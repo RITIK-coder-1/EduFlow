@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------------------------
-multer.middleware.js
+multer.middleware.ts
 This middleware handles a file uploaded by the client and stores it in the server temporarily
 ------------------------------------------------------------------------------------------------- */
 

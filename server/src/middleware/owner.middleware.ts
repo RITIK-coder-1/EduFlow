@@ -1,13 +1,18 @@
 /* ----------------------------------------------------------------------------------------------
-owner.middleware.js
+owner.middleware.ts
 This middleware makes sure that only authorized users can check specific routes
 ------------------------------------------------------------------------------------------------- */
 
+import { NextFunction } from "express";
 import { ApiError, asyncHandler } from "../utils/index.utils.js";
 
 // Middleware to verify the instructor
-const isInstructorFunction = async (req, _, next) => {
-  const user = req.user;
+const isInstructorFunction = async (
+  req: Request,
+  _,
+  next: NextFunction
+): Promise<void> => {
+  const user = req.user; // WORK PENDING
 
   if (!user) {
     console.error("INSTRUCTOR VERIFICATION ERROR: user");
@@ -27,7 +32,11 @@ const isInstructorFunction = async (req, _, next) => {
 };
 
 // Middleware to verify the admin
-const isAdminFunction = async (req, _, next) => {
+const isAdminFunction = async (
+  req: Request,
+  _,
+  next: NextFunction
+): Promise<void> => {
   const user = req.user;
 
   if (!user) {

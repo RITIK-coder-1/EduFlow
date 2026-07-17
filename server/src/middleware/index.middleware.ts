@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------------------
-index.middleware.js
+index.middleware.ts
 This is a centralized exporting file for every single middleware
 ------------------------------------------------------------------------------------------ */
 
