@@ -3,22 +3,7 @@ CourseCategory.model.js
 This file builds the course category schema 
 ------------------------------------------------------------------------------------------ */
 import mongoose from "mongoose";
-import type { Document } from "mongoose";
-
-/* ---------------------------------------------------------------------------------------
-The Interface 
------------------------------------------------------------------------------------------- */
-
-interface CourseCategoryDomain {
-  name: string;
-  courses: mongoose.Types.ObjectId[];
-}
-
-// interface segreggation to avoid tight coupling
-export interface CourseCategoryContract extends CourseCategoryDomain, Document {
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { CourseCategoryContract } from "../../types/course.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 

@@ -4,23 +4,7 @@ This file builds the schema for tracking the course progress for each user. Each
 ------------------------------------------------------------------------------------------ */
 
 import mongoose from "mongoose";
-import type { Document } from "mongoose";
-
-/* ---------------------------------------------------------------------------------------
-The Interface 
------------------------------------------------------------------------------------------- */
-
-interface CourseProgressDomain {
-  course: mongoose.Types.ObjectId;
-  user: mongoose.Types.ObjectId;
-  completedVideos: mongoose.Types.ObjectId[];
-}
-
-// interface segreggation to avoid tight coupling
-export interface CourseProgressContract extends CourseProgressDomain, Document {
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { CourseProgressContract } from "../../types/course.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 

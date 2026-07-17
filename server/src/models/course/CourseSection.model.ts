@@ -3,26 +3,8 @@ courseSection.model.ts
 This file builds the schema for the course lessons
 ------------------------------------------------------------------------------------------ */
 
-import mongoose, { Schema, Document, Types, Model } from "mongoose";
-
-/* ---------------------------------------------------------------------------------------
-The Domain Interface
------------------------------------------------------------------------------------------- */
-
-interface CourseSectionDomain {
-  title: string;
-  course: Types.ObjectId;
-  courseVideos: Types.ObjectId[];
-}
-
-/* ---------------------------------------------------------------------------------------
-The Contract Interface 
------------------------------------------------------------------------------------------- */
-
-export interface CourseSectionContract extends Document, CourseSectionDomain {
-  createdAt: Date;
-  updatedAt: Date;
-}
+import mongoose, { Schema, Model } from "mongoose";
+import { CourseSectionContract } from "../../types/course.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 

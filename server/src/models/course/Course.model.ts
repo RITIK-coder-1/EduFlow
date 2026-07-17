@@ -4,31 +4,7 @@ This file builds the course schema for defining the course data points
 ------------------------------------------------------------------------------------------ */
 
 import mongoose from "mongoose";
-import type { Document } from "mongoose";
-
-/* ---------------------------------------------------------------------------------------
-The Interface 
------------------------------------------------------------------------------------------- */
-
-interface CourseDomain {
-  title: string;
-  description: string;
-  price: number;
-  thumbnail: string;
-  tags: string[];
-  status: string;
-  category: string;
-  revenue: number;
-  sections: mongoose.Types.ObjectId[];
-  owner: mongoose.Types.ObjectId;
-  enrolledBy: mongoose.Types.ObjectId[];
-}
-
-// interface segreggation to avoid tight coupling
-export interface CourseContract extends CourseDomain, Document {
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { CourseContract } from "../../types/index.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 

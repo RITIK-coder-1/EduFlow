@@ -3,27 +3,8 @@ courseVideo.model.ts
 This file builds the schema for the course videos. Each video is going to be embedded inside a particular section (lesson)
 ------------------------------------------------------------------------------------------ */
 
-import mongoose, { Schema, Document, Types, Model } from "mongoose";
-
-/* ---------------------------------------------------------------------------------------
-The Domain Interface
------------------------------------------------------------------------------------------- */
-
-interface CourseVideoDomain {
-  title: string;
-  videoUrl: string;
-  duration: number;
-  courseSection: Types.ObjectId;
-}
-
-/* ---------------------------------------------------------------------------------------
-The Contract Interface 
------------------------------------------------------------------------------------------- */
-
-export interface CourseVideoContract extends Document, CourseVideoDomain {
-  createdAt: Date;
-  updatedAt: Date;
-}
+import mongoose, { Schema, Model } from "mongoose";
+import { CourseVideoContract } from "../../types/course.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 
