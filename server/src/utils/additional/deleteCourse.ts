@@ -98,18 +98,13 @@ const deleteCourse = async (courseId: string): Promise<void> => {
 
   // Deleting the videos from cloudinary
 
-  type MinimalVideo = Pick<CourseVideoContract, "videoUrl">; // Creating a new type using ONLY the 'videoUrl' field from CourseVideoContract
-
-  type MinimalSection = Pick<CourseSectionContract, "courseVideos"> & {
-    courseVideos: MinimalVideo[];
-  }; // Creating a new type using ONLY the 'courseVideos' field from CourseSectionContract
-
   // course object has sections array. Sections array has documents. Each sectionDocument has courseVideos array. The array has video documents
-  const videosDeleteCloudinary = (
-    (course?.sections as unknown as MinimalSection[]) || []
-  ).flatMap((section) =>
+  const videosDeleteCloudinary = (course?.sections || []).flatMap((section) =>
     section.courseVideos.map((video) =>
-      deleteFromCloudinary(video.videoUrl, "video")
+      deleteFromCloudinary(
+        (video as unknown as CourseVideoContract).videoUrl,
+        "video"
+      )
     )
   );
 

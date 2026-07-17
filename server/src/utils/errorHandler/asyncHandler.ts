@@ -12,6 +12,9 @@ function asyncHandler(func: Controller) {
     try {
       await func(req, res);
     } catch (error: unknown) {
+      error instanceof Error
+        ? console.error(`There was a problem: ${error.message}`)
+        : console.error(`There was a problem: ${error}`);
       next(error); // passing the error to the global error handler
     }
   };
