@@ -6,7 +6,7 @@ This file builds the user schema for defining the user data points
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { UserContract } from "../index.model.ts";
+import { UserContract } from "../../types/index.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 
@@ -157,8 +157,8 @@ Custom Method to generate the access and the refresh tokens
 ------------------------------------------------------------------------------------------ */
 
 userSchema.methods.generateAccessToken = function (this: UserContract): string {
-  const secret = process.env["ACCESS_TOKEN_SECRET"];
-  const expiry = process.env["ACCESS_TOKEN_EXPIRY"];
+  const secret = process.env["ACCESS_TOKEN_SECRET"] || "";
+  const expiry = process.env["ACCESS_TOKEN_EXPIRY"] || "";
 
   // Fail-fast configuration check
   if (!secret || !expiry) {
@@ -176,10 +176,10 @@ userSchema.methods.generateAccessToken = function (this: UserContract): string {
       email: this.email,
       username: this.username,
     },
-    secret,
+    secret as jwt.Secret,
     {
       expiresIn: expiry,
-    }
+    } as jwt.SignOptions
   );
 };
 
@@ -205,10 +205,10 @@ userSchema.methods.generateRefreshToken = function (
       _id: this._id, // the id is saved for the refresh token
       uniqueToken: uniqueTokenString, // this unique string separates two distinct refresh tokens
     },
-    secret,
+    secret as jwt.Secret,
     {
       expiresIn: expiry,
-    }
+    } as jwt.SignOptions
   );
 };
 
