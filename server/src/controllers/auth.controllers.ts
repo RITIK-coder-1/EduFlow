@@ -15,7 +15,7 @@ import {
   CloudinaryUploadResult,
 } from "../utils/index.utils.js";
 import validator from "validator";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { CookieOptions, Request, Response } from "express";
 
 /* ---------------------------------------------------------------------------------------
@@ -380,10 +380,18 @@ const logoutFunction = async (
 NEW ACCESS TOKEN CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const newAccessTokenFunction = async (req, res) => {
+// custom interface for the token
+interface myTokenPayload extends JwtPayload {
+  _id: string;
+}
+
+const newAccessTokenFunction = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     // Getting our refresh token from the cookies
-    const incomingRefreshToken = req.cookies?.refreshToken;
+    const incomingRefreshToken: string = req.cookies?.refreshToken;
 
     if (!incomingRefreshToken) {
       console.error("NEW TOKEN ERROR: invalid refresh token");
@@ -393,8 +401,8 @@ const newAccessTokenFunction = async (req, res) => {
     // once we have the refresh token, we decode it to get the user id
     const decodedToken = jwt.verify(
       incomingRefreshToken,
-      process.env.REFRESH_TOKEN_SECRET
-    );
+      process.env.REFRESH_TOKEN_SECRET || ""
+    ) as myTokenPayload;
 
     // we get the user
     const user = await User.findById(decodedToken?._id);
@@ -411,7 +419,7 @@ const newAccessTokenFunction = async (req, res) => {
     }
 
     // the cookie options
-    const options = {
+    const options: CookieOptions = {
       httpOnly: true,
       secure: true,
       sameSite: "none",
@@ -419,7 +427,9 @@ const newAccessTokenFunction = async (req, res) => {
     };
 
     // getting the new access and the refresh tokens
-    const { accessToken, refreshToken } = await generateTokens(user._id);
+    const { accessToken, refreshToken } = await generateTokens(
+      String(user._id)
+    );
 
     console.log("New access token created!");
 
@@ -428,12 +438,12 @@ const newAccessTokenFunction = async (req, res) => {
       .status(200)
       .cookie("refreshToken", refreshToken, options)
       .cookie("accessToken", accessToken, options)
-      .json(new ApiResponse(200, "Access Token Refreshed!"));
-  } catch (error) {
+      .json(new ApiResponse(200, "Access Token Refreshed!", {}));
+  } catch (error: unknown) {
     // JWT errors (like signature mismatch or simple expiration)
     if (
-      error.name === "JsonWebTokenError" ||
-      error.name === "TokenExpiredError"
+      error instanceof Error &&
+      (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError")
     ) {
       return res
         .status(403)
