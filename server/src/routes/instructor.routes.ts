@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------------------
-instructor.routes.js
+instructor.routes.ts
 All the routes for instructors
 ------------------------------------------------------------------------------------------ */
 
@@ -8,7 +8,7 @@ import {
   upload,
   verifyJwt,
   isInstructor,
-} from "../middleware/index.middleware.js";
+} from "../middleware/index.middleware.ts";
 import {
   addCourseVideo,
   createCourse,

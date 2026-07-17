@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------------------
-admin.routes.js
+admin.routes.ts
 This file handles all the admin related routes
 ------------------------------------------------------------------------------------------ */
 
@@ -16,7 +16,7 @@ import {
   systemStats,
   updateCategory,
 } from "../controllers/admin.controllers.js";
-import { verifyJwt, isAdmin } from "../middleware/index.middleware.js";
+import { verifyJwt, isAdmin } from "../middleware/index.middleware.ts";
 
 const router = Router();
 
