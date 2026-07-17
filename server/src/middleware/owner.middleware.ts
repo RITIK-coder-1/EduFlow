@@ -12,7 +12,7 @@ const isInstructorFunction = async (
   _res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const user = req.user; // WORK PENDING
+  const user = req.user;
 
   if (!user) {
     console.error("INSTRUCTOR VERIFICATION ERROR: user");
@@ -34,7 +34,7 @@ const isInstructorFunction = async (
 // Middleware to verify the admin
 const isAdminFunction = async (
   req: Request,
-  _,
+  _res: Response,
   next: NextFunction
 ): Promise<void> => {
   const user = req.user;
