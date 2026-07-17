@@ -1,14 +1,20 @@
 /* ----------------------------------------------------------------------------------------------
-token.middleware.js
+token.middleware.ts
 This middleware verifies the access token of the users for each secured request
 ------------------------------------------------------------------------------------------------- */
 
 import jwt from "jsonwebtoken";
 import { User } from "../models/index.model.ts";
-import { ApiError, asyncHandler } from "../utils/index.utils.js";
+import { ApiError, asyncHandler } from "../utils/index.utils.ts";
+import { NextFunction, Request, Response } from "express";
+import { TokenPayload } from "../types/api.types.ts";
 
-const verifyJwtFunction = async (req, _, next) => {
-  const token =
+const verifyJwtFunction = async (
+  req: Request,
+  _: Response,
+  next: NextFunction
+) => {
+  const token: string =
     req.cookies?.accessToken ||
     req.header("Authorization")?.replace("Bearer ", ""); // replace "Bearer <token>" to "<token>"
 
@@ -19,10 +25,16 @@ const verifyJwtFunction = async (req, _, next) => {
   } // throw an error if there is no access token
 
   // decoding the payload of the token (only if it is valid)
-  const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+  const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || "");
+
+  if (!decodedToken) {
+    console.error("Token Error: invalid token.");
+
+    throw new ApiError(400, "Invalid Token");
+  }
 
   // the user
-  const user = await User.findById(decodedToken?._id).select(
+  const user = await User.findById((decodedToken as TokenPayload)?._id).select(
     "-password -refreshTokenString"
   );
 
