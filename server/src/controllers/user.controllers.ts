@@ -1,8 +1,9 @@
 /* ---------------------------------------------------------------------------------------
-user.controllers.js
+user.controllers.ts
 All the controllers for users
 ------------------------------------------------------------------------------------------ */
 
+import { Response, Request } from "express";
 import {
   User,
   OTP,
@@ -18,18 +19,26 @@ import {
   uploadOnCloudinary,
   deleteFromCloudinary,
   deleteCourse,
-} from "../utils/index.utils.js";
+} from "../utils/index.utils.ts";
 import validator from "validator";
+import { CourseContract } from "../types/course.types.ts";
+import { UserContract } from "../types/user.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 GET USER CONTROLLER
 This is a function to fetch a single user's details
 ------------------------------------------------------------------------------------------ */
 
-const getUserFunction = async (req, res) => {
+type CourseOwner = Pick<UserContract, "firstName" | "lastName" | "username">;
+
+const getUserFunction = async (req: Request, res: Response) => {
   const user = await User.findById(req.user._id)
     .select("-password -refreshTokenString")
-    .populate({
+    .populate<{
+      enrolledCourses: (CourseContract & {
+        owner?: CourseOwner;
+      })[];
+    }>({
       path: "enrolledCourses",
       populate: {
         path: "owner",
