@@ -24,19 +24,19 @@ import validator from "validator";
 import { CourseContract } from "../types/course.types.ts";
 import { UserContract } from "../types/user.types.ts";
 
+type MinimalUser = Pick<UserContract, "firstName" | "lastName" | "username">;
+
 /* ---------------------------------------------------------------------------------------
 GET USER CONTROLLER
 This is a function to fetch a single user's details
 ------------------------------------------------------------------------------------------ */
-
-type CourseOwner = Pick<UserContract, "firstName" | "lastName" | "username">;
 
 const getUserFunction = async (req: Request, res: Response) => {
   const user = await User.findById(req.user._id)
     .select("-password -refreshTokenString")
     .populate<{
       enrolledCourses: (CourseContract & {
-        owner?: CourseOwner;
+        owner?: MinimalUser;
       })[];
     }>({
       path: "enrolledCourses",
@@ -64,7 +64,10 @@ UPDATE USER CONTROLLER
 This is a function to update a user's details including the profile picture (not password and email)
 ------------------------------------------------------------------------------------------ */
 
-const updateUserDetailsFunction = async (req, res) => {
+const updateUserDetailsFunction = async (
+  req: Request<{}, {}, MinimalUser>,
+  res: Response
+) => {
   // gathering data to update
   const { firstName, lastName, username } = req.body; // (Account type and DOB can't be changed once created)
   const profilePicLocalPath = req.file?.path;
@@ -114,7 +117,7 @@ const updateUserDetailsFunction = async (req, res) => {
   }
 
   // upload profile pic only if it is updated
-  let profilePic = "";
+  let profilePic = null;
   if (profilePicLocalPath) {
     profilePic = await uploadOnCloudinary(profilePicLocalPath);
     if (!profilePic) {
@@ -166,7 +169,15 @@ const updateUserDetailsFunction = async (req, res) => {
 UPDATE PASSWORD CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const updatePasswordFunction = async (req, res) => {
+interface PasswordUpdateContract {
+  oldPassword: string;
+  newPassword: string;
+}
+
+const updatePasswordFunction = async (
+  req: Request<{}, {}, PasswordUpdateContract>,
+  res: Response
+) => {
   // getting the old and the new passwords
   const { oldPassword, newPassword } = req.body;
 
@@ -177,7 +188,9 @@ const updatePasswordFunction = async (req, res) => {
 
   // verifying the old password
   const user = await User.findById(req.user._id); // manually finding the document because the object in the request doesn't have the password field
-  const passwordCorrect = await user.isPasswordCorrect(oldPassword);
+  const passwordCorrect = await (user as UserContract).isPasswordCorrect(
+    oldPassword
+  );
 
   if (!passwordCorrect) {
     console.error("PASSWORD UPDATE ERROR: incorrect password");
@@ -200,10 +213,12 @@ const updatePasswordFunction = async (req, res) => {
   }
 
   // updating the password
-  user.password = newPassword;
+  if (user) {
+    user.password = newPassword;
+  }
 
   // This triggers the pre("save") hook and hashes the password
-  const newUser = await user.save({ validateBeforeSave: false });
+  const newUser = await user?.save({ validateBeforeSave: false });
 
   if (!newUser) {
     console.error("UPDATE USER PASSWORD ERROR: problem updating!");
@@ -217,7 +232,9 @@ const updatePasswordFunction = async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "The password has been successfully updated!"));
+    .json(
+      new ApiResponse(200, "The password has been successfully updated!", {})
+    );
 };
 
 /* ---------------------------------------------------------------------------------------
@@ -226,11 +243,20 @@ UPDATE EMAIL CONTROLLERS
 
 // this function validates the user data and sends an OTP to the current email
 
-const createUpdateEmailOtpFunction = async (req, res) => {
+interface UpdateEmailContract {
+  newEmail: string;
+  password?: string;
+  userOtp?: string;
+}
+
+const createUpdateEmailOtpFunction = async (
+  req: Request<{}, {}, UpdateEmailContract>,
+  res: Response
+) => {
   // getting the new email to update and the password for security
   const { newEmail, password } = req.body;
 
-  if (!newEmail.trim() || !password.trim()) {
+  if (!newEmail.trim() || !password?.trim()) {
     console.error("UPDATE EMAIL ERROR: empty field!");
     throw new ApiError(400, "Both the fields are mandatory!");
   }
@@ -253,7 +279,9 @@ const createUpdateEmailOtpFunction = async (req, res) => {
 
   // checking the password
   const user = await User.findById(req.user._id); // manually finding the document because the object in the request doesn't have the password field
-  const passwordCorrect = await user.isPasswordCorrect(password);
+  const passwordCorrect = await (user as UserContract).isPasswordCorrect(
+    password
+  );
 
   if (!passwordCorrect) {
     console.error("UPDATE EMAIL ERROR: incorrect password!");
@@ -261,7 +289,7 @@ const createUpdateEmailOtpFunction = async (req, res) => {
   }
 
   // checking if it's the same email
-  if (newEmail === user.email) {
+  if (newEmail === user?.email) {
     console.error("UPDATE EMAIL ERROR: no updated email!");
     throw new ApiError(
       409,
@@ -300,7 +328,10 @@ const createUpdateEmailOtpFunction = async (req, res) => {
 
 // this function validates the OTP and updates the email
 
-const updateEmailFunction = async (req, res) => {
+const updateEmailFunction = async (
+  req: Request<{}, {}, UpdateEmailContract>,
+  res: Response
+) => {
   // getting the otp
   const { userOtp, newEmail } = req.body;
 
