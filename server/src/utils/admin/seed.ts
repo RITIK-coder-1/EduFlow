@@ -5,7 +5,8 @@ This file hardcodes the admin into the system. It runs only once.
 
 import "dotenv/config.js";
 import connectDB from "../../db/index.ts";
-import { User, UserContract } from "../../models/index.model.ts";
+import { User } from "../../models/index.model.ts";
+import { UserContract } from "../../types/index.types.ts";
 
 (async () => {
   try {

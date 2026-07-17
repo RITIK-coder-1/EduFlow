@@ -3,7 +3,8 @@ auth.controllers.js
 All the controllers for authentication
 ------------------------------------------------------------------------------------------ */
 
-import { User, OTP, UserContract } from "../models/index.model.ts";
+import { User, OTP } from "../models/index.model.ts";
+import { UserContract, TokenPayload } from "../types/index.types.ts";
 import {
   ApiError,
   ApiResponse,
@@ -15,7 +16,7 @@ import {
   CloudinaryUploadResult,
 } from "../utils/index.utils.js";
 import validator from "validator";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { CookieOptions, Request, Response } from "express";
 
 /* ---------------------------------------------------------------------------------------
@@ -379,12 +380,6 @@ const logoutFunction = async (
 /* ---------------------------------------------------------------------------------------
 NEW ACCESS TOKEN CONTROLLER
 ------------------------------------------------------------------------------------------ */
-
-// custom interface for the token
-interface TokenPayload extends JwtPayload {
-  _id: string;
-  refreshTokenString: string;
-}
 
 const newAccessTokenFunction = async (
   req: Request,

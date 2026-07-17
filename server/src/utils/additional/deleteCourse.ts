@@ -10,13 +10,15 @@ import {
   CourseCategory,
   User,
   CourseProgress,
-  CourseSectionContract,
-  CourseVideoContract,
-  UserContract,
 } from "../../models/index.model.ts";
 import { deleteFromCloudinary } from "../index.utils.ts";
 import ApiError from "../api/apiError.js";
 import { DeleteResult, UpdateResult } from "mongoose";
+import {
+  CourseSectionContract,
+  CourseVideoContract,
+  UserContract,
+} from "../../types/index.types.ts";
 
 const deleteCourse = async (courseId: string): Promise<void> => {
   // Getting the course

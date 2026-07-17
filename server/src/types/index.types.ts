@@ -3,7 +3,7 @@ User.model.ts
 Centralized exporting file for all the types 
 ------------------------------------------------------------------------------------------ */
 
-import { UserContract } from "./user.types.ts"
+import { UserContract } from "./user.types.ts";
 import {
   CourseContract,
   CourseCategoryContract,
@@ -11,6 +11,7 @@ import {
   CourseSectionContract,
   CourseVideoContract,
 } from "./course.types.ts";
+import { TokenPayload } from "./api.types.ts";
 
 export {
   UserContract,
@@ -19,4 +20,5 @@ export {
   CourseProgressContract,
   CourseSectionContract,
   CourseVideoContract,
+  TokenPayload,
 };
