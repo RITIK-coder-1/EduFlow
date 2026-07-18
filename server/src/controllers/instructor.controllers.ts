@@ -18,7 +18,10 @@ import {
   CourseCategory,
 } from "../models/index.model.ts";
 import { Request, Response } from "express";
-import { CourseSectionContract } from "../types/index.types.ts";
+import {
+  CourseSectionContract,
+  CourseVideoContract,
+} from "../types/index.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 CREATE COURSE CONTROLLER
@@ -210,7 +213,14 @@ const getAllInstructorCoursesFunction = async (req: Request, res: Response) => {
 GET COURSE CONTROLLER (for instructor only)
 ------------------------------------------------------------------------------------------ */
 
-const getCourseInstructorFunction = async (req, res) => {
+interface MinimalCourse {
+  courseId: string;
+}
+
+const getCourseInstructorFunction = async (
+  req: Request<MinimalCourse>,
+  res: Response
+) => {
   const { courseId } = req.params;
   const user = req.user;
 
@@ -221,7 +231,11 @@ const getCourseInstructorFunction = async (req, res) => {
 
   // Getting the course along with the nested sub-documents
   const course = await Course.findOne({ _id: courseId, owner: user._id })
-    .populate({
+    .populate<{
+      sections: CourseSectionContract & {
+        courseVideos: CourseVideoContract;
+      };
+    }>({
       path: "sections",
       populate: {
         path: "courseVideos",
