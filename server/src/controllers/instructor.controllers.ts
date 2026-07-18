@@ -145,14 +145,15 @@ const createCourseFunction = async (
   }
 
   // create the course section
-  const sectionPromises = sections?.map(async (sectionData) => {
-    const newSection = await CourseSection.create({
-      // because .map() is synchronous, I had to await here for each database call
-      title: sectionData.title,
-      course: course._id,
-    });
-    return newSection._id;
-  }) || [];
+  const sectionPromises =
+    sections?.map(async (sectionData) => {
+      const newSection = await CourseSection.create({
+        // because .map() is synchronous, I had to await here for each database call
+        title: sectionData.title,
+        course: course._id,
+      });
+      return newSection._id;
+    }) || [];
 
   // wait for all sections to be created
   const sectionIds = await Promise.all(sectionPromises); // as .map() returned an array of pending promises, I had to resolve them all
@@ -258,7 +259,10 @@ const getCourseInstructorFunction = async (
 UPDATE COURSE CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const updateCourseFunction = async (req, res) => {
+const updateCourseFunction = async (
+  req: Request<MinimalCourse, {}, MinimalCourse>,
+  res: Response
+) => {
   const { title, description, price, category } = req.body;
   const thumbnailLocalPath = req.file?.path;
   const courseId = req.params?.courseId;
@@ -274,13 +278,13 @@ const updateCourseFunction = async (req, res) => {
   }
 
   // limit description
-  if (description.length > 1000) {
+  if (description && description.length > 1000) {
     console.error("UPDATE COURSE ERROR: exceeding description");
     throw new ApiError(400, "Description can't be more than 1000 characters!");
   }
 
   // price can't be negative
-  if (price < 0) {
+  if (price && price < 0) {
     console.error("UPDATE COURSE ERROR: negative price");
     throw new ApiError(400, "Invalid price!");
   }
@@ -299,10 +303,10 @@ const updateCourseFunction = async (req, res) => {
   // checking if no value is updated
   if (!thumbnailLocalPath) {
     if (
-      course.title === title &&
-      course.description === description &&
-      course.price === price &&
-      course.category === category
+      course?.title === title &&
+      course?.description === description &&
+      course?.price === price &&
+      course?.category === category
     ) {
       console.error("UPDATE COURSE ERROR: no updated values");
       throw new ApiError(400, "Please update at least one field!");
@@ -310,7 +314,7 @@ const updateCourseFunction = async (req, res) => {
   }
 
   // uploading the new thumbnail
-  let thumbnail = "";
+  let thumbnail = null;
   if (thumbnailLocalPath) {
     thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
     if (!thumbnail) {
@@ -319,21 +323,23 @@ const updateCourseFunction = async (req, res) => {
     }
 
     // deleting the old thumbnail
-    await deleteFromCloudinary(course.thumbnail).catch(() => {
+    await deleteFromCloudinary(course?.thumbnail).catch(() => {
       console.error(
         "UPDATE COURSE NON-CRITICAL ERROR: old thumbnail couldn't be deleted"
       );
     });
 
-    course.thumbnail = thumbnail.url;
+    if (course?.thumbnail) {
+      course.thumbnail = thumbnail.url;
+    }
   }
 
   // Managing the category
-  if (category !== course.category) {
+  if (category !== course?.category) {
     // Removing from OLD Category
     await CourseCategory.findOneAndUpdate(
       {
-        name: course.category,
+        name: course?.category,
       },
       {
         $pull: { courses: courseId },
@@ -355,12 +361,14 @@ const updateCourseFunction = async (req, res) => {
   }
 
   // updating the values
-  course.title = title;
-  course.description = description;
-  course.price = price;
-  course.category = category;
+  if (course) {
+    course.title = title as string;
+    course.description = description as string;
+    course.price = price as number;
+    course.category = category as string;
+  }
 
-  const updatedCourse = await course.save({ validateBeforeSave: false });
+  const updatedCourse = await course?.save({ validateBeforeSave: false });
 
   if (!updatedCourse) {
     console.error("UPDATE COURSE ERROR: problem updating!");
