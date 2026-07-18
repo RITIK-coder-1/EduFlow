@@ -404,7 +404,7 @@ const publishCourseFunction = async (
   }
 
   // publish the course only if the status sent by the client is signaling to publish
-  if (status.trim() === "Published") {
+  if (status?.trim() === "Published") {
     const course = await Course.findByIdAndUpdate(courseId, {
       $set: { status },
     });
@@ -461,7 +461,7 @@ const addCourseVideoFunction = async (
     throw new ApiError(400, "Please upload a video!");
   }
 
-  if (!sectionId.trim()) {
+  if (!sectionId?.trim()) {
     console.error("ADD COURSE VIDEO ERROR: Invalid section id");
     throw new ApiError(400, "Invalid Section ID!");
   }
@@ -637,7 +637,7 @@ const addSectionFunction = async (
     throw new ApiError(404, "Course not found");
   }
 
-  if (!title.trim()) {
+  if (!title?.trim()) {
     console.error("ADD SECTION ERROR: empty title");
     throw new ApiError(400, "The title can't be empty!");
   }
