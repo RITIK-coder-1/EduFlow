@@ -35,6 +35,7 @@ interface MinimalCourse {
   sections?: CourseSectionContract[];
   tags?: string[];
   courseId?: string;
+  status?: string;
 }
 
 const createCourseFunction = async (
@@ -389,7 +390,10 @@ const updateCourseFunction = async (
 PUBLISH COURSE CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const publishCourseFunction = async (req, res) => {
+const publishCourseFunction = async (
+  req: Request<MinimalCourse, {}, MinimalCourse>,
+  res: Response
+) => {
   const { status } = req.body;
   const { courseId } = req.params;
 
