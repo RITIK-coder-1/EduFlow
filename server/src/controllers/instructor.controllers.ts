@@ -421,19 +421,17 @@ const publishCourseFunction = async (
 DELETE COURSE CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const deleteCourseFunction = async (req, res) => {
-  try {
-    const courseId = req.params?.courseId;
-    await deleteCourse(courseId);
-    console.log("Course deleted by the instructor!");
+const deleteCourseFunction = async (
+  req: Request<MinimalCourse>,
+  res: Response
+) => {
+  const courseId = req.params?.courseId;
+  await deleteCourse(courseId as string);
+  console.log("Course deleted by the instructor!");
 
-    return res
-      .status(204)
-      .json(new ApiResponse(204, "The course has been deleted!"));
-  } catch (error) {
-    console.error("DELETE COURSE ERROR INSTRUCTOR", error);
-    throw new ApiError(500, "There was a problem while deleting the course!");
-  }
+  return res
+    .status(204)
+    .json(new ApiResponse(204, "The course has been deleted!", {}));
 };
 
 /* ---------------------------------------------------------------------------------------
