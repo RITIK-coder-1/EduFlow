@@ -3,25 +3,33 @@ course.controllers.js
 All the controllers for courses that are public 
 ------------------------------------------------------------------------------------------ */
 
-import { ApiError, ApiResponse, asyncHandler } from "../utils/index.utils.js";
+import { ApiError, ApiResponse, asyncHandler } from "../utils/index.utils.ts";
 import {
   Course,
   User,
   CourseCategory,
   CourseProgress,
 } from "../models/index.model.ts";
+import { Response, Request } from "express";
+import {
+  CourseSectionContract,
+  CourseVideoContract,
+  UserContract,
+} from "../types/index.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 GET ALL COURSES CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const getAllCoursesFunction = async (_req, res) => {
+const getAllCoursesFunction = async (_req: Request, res: Response) => {
   // only show the courses that are published by the instructors
   const courses = await Course.find({ status: "Published" })
     .select("-enrolledBy -status -__v")
-    .populate({
+    .populate<{
+      owner: Pick<UserContract, "firstName" | "lastName" | "username">;
+    }>({
       path: "owner",
-      select: "-password -refreshTokenString -__v -enrolledCourses",
+      select: "firstName lastName username",
     });
 
   if (!courses) {
@@ -43,7 +51,14 @@ const getAllCoursesFunction = async (_req, res) => {
 GET COURSE CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const getCourseFunction = async (req, res) => {
+interface MinimalCourse {
+  courseId?: string;
+}
+
+const getCourseFunction = async (
+  req: Request<MinimalCourse>,
+  res: Response
+) => {
   const { courseId } = req.params;
 
   if (!courseId) {
@@ -54,7 +69,11 @@ const getCourseFunction = async (req, res) => {
   // Getting the course along with the nested sub-documents
   const course = await Course.findById(courseId)
     .select("-enrolledBy -status -__v -revenue")
-    .populate({
+    .populate<{
+      sections: CourseSectionContract & {
+        courseVideos: CourseVideoContract;
+      };
+    }>({
       path: "sections",
       populate: {
         path: "courseVideos",
@@ -84,7 +103,10 @@ const getCourseFunction = async (req, res) => {
 ENROLL IN A COURSE CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const enrollCourseFunction = async (req, res) => {
+const enrollCourseFunction = async (
+  req: Request<MinimalCourse>,
+  res: Response
+) => {
   const userId = req.user?._id;
   const { courseId } = req.params;
 
@@ -159,9 +181,10 @@ const enrollCourseFunction = async (req, res) => {
     await course.save();
 
     // update the instructor revenue
-    const currentInstructorRevenue = courseOwner.totalRevenue;
-    courseOwner.totalRevenue = currentInstructorRevenue + currentCoursePrice;
-    await courseOwner.save();
+    if (courseOwner?.totalRevenue) {
+      courseOwner.totalRevenue += currentCoursePrice;
+    }
+    await courseOwner?.save();
 
     console.log("revenue updated");
   }
@@ -171,7 +194,8 @@ const enrollCourseFunction = async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        "The student has successfully enrolled in the course"
+        "The student has successfully enrolled in the course",
+        {}
       )
     );
 };
@@ -180,7 +204,7 @@ const enrollCourseFunction = async (req, res) => {
 SHOW ALL CATEGORIES CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const showAllCategoriesFunction = async (req, res) => {
+const showAllCategoriesFunction = async (req: Request, res: Response) => {
   try {
     const categories = await CourseCategory.find({})
       .select("-__v")
