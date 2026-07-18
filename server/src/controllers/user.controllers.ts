@@ -21,8 +21,14 @@ import {
   deleteCourse,
 } from "../utils/index.utils.ts";
 import validator from "validator";
-import { UserContract, CourseContract } from "../types/index.types.ts";
-import { Types } from "mongoose";
+import {
+  UserContract,
+  CourseContract,
+  CourseSectionContract,
+  CourseVideoContract,
+  CourseProgressContract,
+} from "../types/index.types.ts";
+import { HydratedDocument, Types } from "mongoose";
 
 type MinimalUser = Pick<UserContract, "firstName" | "lastName" | "username">;
 
@@ -560,7 +566,10 @@ const lastCourseVisitedController = async (
 /* ---------------------------------------------------------------------------------------
 GET ALL ENROLLED COURSES
 ------------------------------------------------------------------------------------------ */
-const getEnrolledCoursesFunction = async (req, res) => {
+const getEnrolledCoursesFunction = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   const userId = req.user?._id;
 
   if (!userId) {
@@ -594,7 +603,15 @@ const getEnrolledCoursesFunction = async (req, res) => {
 COURSE VIDEO COMPLETION BY THE USER CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const completeCourseVideoController = async (req, res) => {
+interface MinimalCourseVideo {
+  videoId: string;
+  courseId: string;
+}
+
+const completeCourseVideoController = async (
+  req: Request<MinimalCourseVideo>,
+  res: Response
+) => {
   const { videoId, courseId } = req.params;
   const userId = req.user._id;
 
@@ -630,7 +647,7 @@ const completeCourseVideoController = async (req, res) => {
     console.log("Video completed!");
     return res
       .status(200)
-      .json(new ApiResponse(200, "The video is completed!"));
+      .json(new ApiResponse(200, "The video is completed!", {}));
   }
 };
 
@@ -638,7 +655,10 @@ const completeCourseVideoController = async (req, res) => {
 GET COURSE PROGRESS CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const getCourseProgressController = async (req, res) => {
+const getCourseProgressController = async (
+  req: Request<MinimalCourse>,
+  res: Response
+) => {
   const { courseId } = req.params;
   const userId = req.user?._id;
 
@@ -649,7 +669,11 @@ const getCourseProgressController = async (req, res) => {
   }
 
   // get the course along with its sections and videos
-  const course = await Course.findById(courseId).populate({
+  const course = await Course.findById(courseId).populate<{
+    sections: (CourseSectionContract & {
+      courseVideos: CourseVideoContract[];
+    })[];
+  }>({
     path: "sections",
     populate: {
       path: "courseVideos",
@@ -666,12 +690,12 @@ const getCourseProgressController = async (req, res) => {
   ------------------------------------------------------------------------------------------ */
 
   // get the total number of videos in the course
-  let totalCourseVideos = [];
-  course?.sections?.forEach((section) => {
+  let totalCourseVideos: string[] = [];
+  course?.sections?.forEach((section: CourseSectionContract) => {
     section?.courseVideos.forEach((video) => {
       // add only if the video isn't present already
-      if (!totalCourseVideos.includes(video?._id)) {
-        totalCourseVideos.push(video?._id);
+      if (!totalCourseVideos.includes(String(video?._id))) {
+        totalCourseVideos.push(String(video?._id));
       }
     });
   });
@@ -682,8 +706,9 @@ const getCourseProgressController = async (req, res) => {
     user: userId,
   })
     .select("completedVideos")
-    .populate("completedVideos");
-  const courseCompletedVideos = courseProgressData?.completedVideos;
+    .populate<{ completedVideos: CourseVideoContract[] }>("completedVideos");
+
+  const courseCompletedVideos = courseProgressData?.completedVideos || [];
 
   // the total number of videos in the course
   const totalCourseVideosNumber = totalCourseVideos?.length;
