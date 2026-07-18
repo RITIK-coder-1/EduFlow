@@ -181,7 +181,7 @@ const createCourseFunction = async (
 GET ALL CREATED COURSES CONTROLLER (for instructor only)
 ------------------------------------------------------------------------------------------ */
 
-const getAllInstructorCoursesFunction = async (req, res) => {
+const getAllInstructorCoursesFunction = async (req: Request, res: Response) => {
   const userId = req.user?._id;
 
   if (!userId) {
