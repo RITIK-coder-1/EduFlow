@@ -438,13 +438,14 @@ const deleteCourseFunction = async (
 ADD COURSE VIDEO CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-interface AddCourseVideoContract {
+interface MinimalCourseVideoContract {
   title: string;
-  sectionId: string;
+  sectionId?: string;
+  videoId?: string;
 }
 
 const addCourseVideoFunction = async (
-  req: Request<{}, {}, AddCourseVideoContract>,
+  req: Request<{}, {}, MinimalCourseVideoContract>,
   res: Response
 ) => {
   const { title, sectionId } = req.body; // the frontend will send the section id
@@ -520,7 +521,10 @@ const addCourseVideoFunction = async (
 UPDATE COURSE VIDEO CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const updateCourseVideoFunction = async (req, res) => {
+const updateCourseVideoFunction = async (
+  req: Request<{}, {}, MinimalCourseVideoContract>,
+  res: Response
+) => {
   const { title, videoId } = req.body;
 
   if (!videoId) {
@@ -535,14 +539,16 @@ const updateCourseVideoFunction = async (req, res) => {
     throw new ApiError(400, "The title can't be empty!");
   }
 
-  if (video.title === title) {
+  if (video?.title === title) {
     console.error("UPDATE VIDEO ERROR: no updated value");
     throw new ApiError(400, "No updated value");
   }
 
-  video.title = title;
+  if (video) {
+    video.title = title;
+  }
 
-  const updatedVideo = await video.save({ validateBeforeSave: false });
+  const updatedVideo = await video?.save({ validateBeforeSave: false });
 
   if (!updatedVideo) {
     console.error("UPDATE VIDEO ERROR: not updated");
