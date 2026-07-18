@@ -26,9 +26,8 @@ import {
   CourseContract,
   CourseSectionContract,
   CourseVideoContract,
-  CourseProgressContract,
 } from "../types/index.types.ts";
-import { HydratedDocument, Types } from "mongoose";
+import { Types } from "mongoose";
 
 type MinimalUser = Pick<UserContract, "firstName" | "lastName" | "username">;
 
