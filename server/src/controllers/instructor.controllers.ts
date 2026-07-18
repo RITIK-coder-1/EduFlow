@@ -27,17 +27,18 @@ import {
 CREATE COURSE CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-interface CreateCourseContract {
-  title: string;
-  description: string;
-  price: number;
-  category: string;
-  sections: CourseSectionContract[];
-  tags: string[];
+interface MinimalCourse {
+  title?: string;
+  description?: string;
+  price?: number;
+  category?: string;
+  sections?: CourseSectionContract[];
+  tags?: string[];
+  courseId?: string;
 }
 
 const createCourseFunction = async (
-  req: Request<{}, {}, CreateCourseContract>,
+  req: Request<{}, {}, MinimalCourse>,
   res: Response
 ): Promise<Response> => {
   // getting the course data
@@ -61,7 +62,7 @@ const createCourseFunction = async (
   }
 
   // limit description
-  if (description.length > 1000) {
+  if (description && description.length > 1000) {
     console.error("CREATE COURSE ERROR: exceeding description");
     throw new ApiError(400, "Description can't be more than 1000 characters!");
   }
@@ -82,16 +83,16 @@ const createCourseFunction = async (
   }
 
   // tag validity
-  const invalidTag = tags.some((ele) => ele?.trim() === "");
+  const invalidTag = tags?.some((ele) => ele?.trim() === "");
 
   // one tag is needed
-  if (tags.length === 0 || invalidTag) {
+  if (tags?.length === 0 || invalidTag) {
     console.error("CREATE COURSE ERROR: no tags");
     throw new ApiError(400, "Tags can't be empty!");
   }
 
   // one section is needed
-  if (sections.length === 0) {
+  if (sections?.length === 0) {
     console.error("CREATE COURSE ERROR: no section");
     throw new ApiError(
       400,
@@ -100,7 +101,7 @@ const createCourseFunction = async (
   }
 
   // created sections should have a title
-  sections.forEach((ele) => {
+  sections?.forEach((ele) => {
     if (!ele?.title?.trim()) {
       console.error("CREATE COURSE ERROR: empty section title");
       throw new ApiError(400, "Please Add The Section Title!");
@@ -144,14 +145,14 @@ const createCourseFunction = async (
   }
 
   // create the course section
-  const sectionPromises = sections.map(async (sectionData) => {
+  const sectionPromises = sections?.map(async (sectionData) => {
     const newSection = await CourseSection.create({
       // because .map() is synchronous, I had to await here for each database call
       title: sectionData.title,
       course: course._id,
     });
     return newSection._id;
-  });
+  }) || [];
 
   // wait for all sections to be created
   const sectionIds = await Promise.all(sectionPromises); // as .map() returned an array of pending promises, I had to resolve them all
@@ -212,10 +213,6 @@ const getAllInstructorCoursesFunction = async (req: Request, res: Response) => {
 /* ---------------------------------------------------------------------------------------
 GET COURSE CONTROLLER (for instructor only)
 ------------------------------------------------------------------------------------------ */
-
-interface MinimalCourse {
-  courseId: string;
-}
 
 const getCourseInstructorFunction = async (
   req: Request<MinimalCourse>,
