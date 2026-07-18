@@ -575,7 +575,10 @@ const updateCourseVideoFunction = async (
 DELETE COURSE VIDEO CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const deleteCourseVideoFunction = async (req, res) => {
+const deleteCourseVideoFunction = async (
+  req: Request<MinimalCourseVideoContract>,
+  res: Response
+) => {
   const { videoId, sectionId } = req.params;
   if (!videoId || !sectionId) {
     console.error("DELETE VIDEO ERROR: invalid video id or section id");
@@ -609,7 +612,16 @@ const deleteCourseVideoFunction = async (req, res) => {
 ADD COURSE SECTION CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const addSectionFunction = async (req, res) => {
+interface MinimalSectionContract {
+  title?: string;
+  courseId?: string;
+  sectionId?: string;
+}
+
+const addSectionFunction = async (
+  req: Request<MinimalCourse, {}, MinimalSectionContract>,
+  res: Response
+) => {
   const { title } = req.body;
   const courseId = req.params?.courseId;
 
@@ -677,7 +689,10 @@ const addSectionFunction = async (req, res) => {
 DELETE COURSE SECTION CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const deleteSectionFunction = async (req, res) => {
+const deleteSectionFunction = async (
+  req: Request<MinimalSectionContract>,
+  res: Response
+) => {
   const { courseId, sectionId } = req.params;
 
   if (!courseId) {
@@ -688,7 +703,7 @@ const deleteSectionFunction = async (req, res) => {
   const course = await Course.findById(courseId);
 
   // there has to have at lease one section
-  if (course.sections.length === 1) {
+  if (course?.sections.length === 1) {
     console.error("DELETE SECTION ERROR: at least have one section");
     throw new ApiError(400, "The course needs at least one section!");
   }
@@ -698,9 +713,9 @@ const deleteSectionFunction = async (req, res) => {
     throw new ApiError(400, "Invalid Section ID");
   }
 
-  const section = await CourseSection.findById(sectionId).populate(
-    "courseVideos"
-  );
+  const section = await CourseSection.findById(sectionId).populate<{
+    courseVideos: CourseVideoContract[];
+  }>("courseVideos");
 
   if (!section) {
     console.error("DELETE SECTION ERROR: no section");
@@ -736,37 +751,42 @@ const deleteSectionFunction = async (req, res) => {
 
   return res
     .status(204)
-    .json(new ApiResponse(204, "The section and its videos deleted!"));
+    .json(new ApiResponse(204, "The section and its videos deleted!", {}));
 };
 
 /* ---------------------------------------------------------------------------------------
 UPDATE COURSE SECTION CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const updateSectionFunction = async (req, res) => {
+const updateSectionFunction = async (
+  req: Request<MinimalSectionContract, {}, MinimalSectionContract>,
+  res: Response
+) => {
   const { title } = req.body;
   const sectionId = req.params?.sectionId;
 
-  if (!sectionId.trim()) {
+  if (!sectionId?.trim()) {
     console.error("UPDATE SECTION ERROR: invalid section id");
     throw new ApiError(400, "Invalid Section ID!");
   }
 
   const section = await CourseSection.findById(sectionId);
 
-  if (!title.trim()) {
+  if (!title?.trim()) {
     console.error("UPDATE SECTION ERROR: empty title");
     throw new ApiError(400, "The title can't be empty!");
   }
 
-  if (section.title === title) {
+  if (section?.title === title) {
     console.error("UPDATE SECTION ERROR: no updated value");
     throw new ApiError(409, "Please submit the updated value!");
   }
 
-  section.title = title;
+  if (section) {
+    section.title = title as string;
+  }
 
-  const updatedSection = await section.save({ validateBeforeSave: false });
+  const updatedSection = await section?.save({ validateBeforeSave: false });
 
   if (!updatedSection) {
     console.error("UPDATE SECTION ERROR: not updated");
