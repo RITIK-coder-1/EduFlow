@@ -40,6 +40,7 @@ Function to upload the file on cloudinary
 export interface CloudinaryUploadResult {
   url: string;
   public_id: string;
+  duration?: number;
 }
 
 export const uploadOnCloudinary = async (
@@ -58,6 +59,7 @@ export const uploadOnCloudinary = async (
     return {
       url: response.secure_url,
       public_id: response.public_id,
+      duration: response.duration
     };
   } catch (error: unknown) {
     console.error(
