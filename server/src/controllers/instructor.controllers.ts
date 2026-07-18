@@ -438,7 +438,15 @@ const deleteCourseFunction = async (
 ADD COURSE VIDEO CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const addCourseVideoFunction = async (req, res) => {
+interface AddCourseVideoContract {
+  title: string;
+  sectionId: string;
+}
+
+const addCourseVideoFunction = async (
+  req: Request<{}, {}, AddCourseVideoContract>,
+  res: Response
+) => {
   const { title, sectionId } = req.body; // the frontend will send the section id
   const videoLocalPath = req.file?.path;
 
@@ -459,7 +467,7 @@ const addCourseVideoFunction = async (req, res) => {
 
   const video = await uploadOnCloudinary(videoLocalPath);
 
-  if (!video.url) {
+  if (!video?.url) {
     console.error("ADD COURSE VIDEO ERROR: failed");
     throw new ApiError(
       500,
@@ -469,8 +477,8 @@ const addCourseVideoFunction = async (req, res) => {
 
   const courseVideo = await CourseVideo.create({
     title,
-    videoUrl: video.url,
-    duration: video.duration,
+    videoUrl: video?.url,
+    duration: video?.duration,
     courseSection: sectionId,
   });
 
@@ -588,7 +596,7 @@ const deleteCourseVideoFunction = async (req, res) => {
 
   return res
     .status(204)
-    .json(new ApiResponse(204, "The video has been deleted!"));
+    .json(new ApiResponse(204, "The video has been deleted!", {}));
 };
 
 /* ---------------------------------------------------------------------------------------
