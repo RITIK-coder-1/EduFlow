@@ -9,7 +9,7 @@ import {
   deleteFromCloudinary,
   uploadOnCloudinary,
   deleteCourse,
-} from "../utils/index.utils.js";
+} from "../utils/index.utils.ts";
 import {
   Course,
   CourseSection,
@@ -17,12 +17,26 @@ import {
   CourseVideo,
   CourseCategory,
 } from "../models/index.model.ts";
+import { Request, Response } from "express";
+import { CourseSectionContract } from "../types/index.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 CREATE COURSE CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const createCourseFunction = async (req, res) => {
+interface CreateCourseContract {
+  title: string;
+  description: string;
+  price: number;
+  category: string;
+  sections: CourseSectionContract[];
+  tags: string[];
+}
+
+const createCourseFunction = async (
+  req: Request<{}, {}, CreateCourseContract>,
+  res: Response
+): Promise<Response> => {
   // getting the course data
   const { title, description, price, category } = req.body;
   let { sections, tags } = req.body;
