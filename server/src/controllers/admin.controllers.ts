@@ -8,6 +8,7 @@ import {
   ApiResponse,
   asyncHandler,
   deleteCourse,
+  deleteFromCloudinary
 } from "../utils/index.utils.ts";
 import {
   Course,
@@ -205,7 +206,7 @@ const deleteCategoryFunction = async (
 SHOW ALL USERS CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const getAllUsersFunction = async (req, res) => {
+const getAllUsersFunction = async (req: Request, res: Response) => {
   // For a real production app with thousands of users, I would implement the cursor-based pagination here. Since this is a demo, I am fetching all users for simplicity.
 
   try {
@@ -232,7 +233,14 @@ const getAllUsersFunction = async (req, res) => {
 SHOW A PARTICULAR USER CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const getUserAdminFunction = async (req, res) => {
+interface MinimalUser {
+  userId: string;
+}
+
+const getUserAdminFunction = async (
+  req: Request<MinimalUser>,
+  res: Response
+) => {
   const { userId } = req.params;
 
   if (!userId) {
@@ -260,7 +268,10 @@ const getUserAdminFunction = async (req, res) => {
 DELETE A USER CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const deleteUserAccountAdminFunction = async (req, res) => {
+const deleteUserAccountAdminFunction = async (
+  req: Request<MinimalUser>,
+  res: Response
+) => {
   // getting the user's details
   const userId = req.params.userId;
   const user = await User.findById(userId);
@@ -316,7 +327,7 @@ const deleteUserAccountAdminFunction = async (req, res) => {
 
   return res
     .status(204)
-    .json(new ApiResponse(204, "The user has been successfully deleted"));
+    .json(new ApiResponse(204, "The user has been successfully deleted", {}));
 };
 
 /* ---------------------------------------------------------------------------------------
