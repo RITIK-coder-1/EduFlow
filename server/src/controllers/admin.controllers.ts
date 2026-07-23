@@ -8,7 +8,7 @@ import {
   ApiResponse,
   asyncHandler,
   deleteCourse,
-  deleteFromCloudinary
+  deleteFromCloudinary,
 } from "../utils/index.utils.ts";
 import {
   Course,
@@ -342,7 +342,7 @@ const deleteUserAccountAdminFunction = async (
 GET ALL COURSES CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const getAllCoursesAdminFunction = async (req, res) => {
+const getAllCoursesAdminFunction = async (req: Request, res: Response) => {
   try {
     const courses = await Course.find({}).populate("owner");
 
@@ -351,7 +351,7 @@ const getAllCoursesAdminFunction = async (req, res) => {
     return res
       .status(200)
       .json(new ApiResponse(200, "All courses fetched successfully", courses));
-  } catch (error) {
+  } catch (error: unknown) {
     // irrespective of the asynchandler, I'm catching the error here because I want to send a clear response to the frontend
     console.error("GET ALL COURSES ERROR");
     throw new ApiError(
@@ -365,7 +365,14 @@ const getAllCoursesAdminFunction = async (req, res) => {
 GET A PARTICULAR COURSE CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const getCourseAdminFunction = async (req, res) => {
+interface MinimalCourse {
+  courseId: string;
+}
+
+const getCourseAdminFunction = async (
+  req: Request<MinimalCourse>,
+  res: Response
+) => {
   const { courseId } = req.params;
 
   if (!courseId) {
@@ -391,15 +398,18 @@ const getCourseAdminFunction = async (req, res) => {
 DELETE A COURSE CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const deleteCourseAdminFunction = async (req, res) => {
+const deleteCourseAdminFunction = async (
+  req: Request<MinimalCourse>,
+  res: Response
+) => {
   const courseId = req.params?.courseId;
   try {
     await deleteCourse(courseId);
     console.log("Course deleted by the admin!");
     return res
       .status(204)
-      .json(new ApiResponse(204, "Course successfully deleted!"));
-  } catch (error) {
+      .json(new ApiResponse(204, "Course successfully deleted!", {}));
+  } catch (error: unknown) {
     console.error(
       "COURSE DELETE ADMIN ERROR: There was a problem while deleting the course."
     );
