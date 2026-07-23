@@ -8,13 +8,15 @@ import {
   ApiResponse,
   asyncHandler,
   deleteCourse,
-} from "../utils/index.utils.js";
+} from "../utils/index.utils.ts";
 import {
   Course,
   CourseCategory,
   CourseProgress,
   User,
 } from "../models/index.model.ts";
+import { Response, Request } from "express";
+import { CourseCategoryContract } from "../types/course.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------
@@ -24,11 +26,18 @@ import {
 ------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------ */
 
+interface ManageCategoryContract extends CourseCategoryContract {
+  categoryId?: string;
+}
+
 /* ---------------------------------------------------------------------------------------
 CREATE CATEGORY CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const createCategoryFunction = async (req, res) => {
+const createCategoryFunction = async (
+  req: Request<{}, {}, ManageCategoryContract>,
+  res: Response
+): Promise<Response> => {
   // getting all the data
   const { name } = req.body;
 
@@ -78,16 +87,19 @@ const createCategoryFunction = async (req, res) => {
 UPDATE CATEGORY CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const updateCategoryFunction = async (req, res) => {
+const updateCategoryFunction = async (
+  req: Request<ManageCategoryContract, {}, ManageCategoryContract>,
+  res: Response
+) => {
   const { categoryId } = req.params;
   const { name } = req.body;
 
-  if (!name.trim()) {
+  if (!name?.trim()) {
     console.error("UPDATE CATEGORY ERROR: Empty fields!");
     throw new ApiError(400, "Name can't be empty!");
   }
 
-  if (!categoryId.trim()) {
+  if (!categoryId?.trim()) {
     console.error("UPDATE CATEGORY ERROR: invalid category id!");
     throw new ApiError(400, "Invalid Category ID!");
   }
@@ -95,13 +107,13 @@ const updateCategoryFunction = async (req, res) => {
   // checking if the entered values are distinct from the original values
   const category = await CourseCategory.findOne({ _id: categoryId });
 
-  if (category.name === name) {
+  if (category?.name === name) {
     console.error("UPDATE CATEGORY ERROR: non-updated values!");
     throw new ApiError(400, "Please enter updated values!");
   }
 
   // checking if this category already exists if it is updated
-  if (category.name !== name) {
+  if (category?.name !== name) {
     const existingCategory = await CourseCategory.findOne({
       name: { $regex: name, $options: "i" }, // queries for all the categories (turned in smallcase)
       _id: { $ne: categoryId }, // excluding the current document
@@ -114,9 +126,11 @@ const updateCategoryFunction = async (req, res) => {
   }
 
   // updating the category
-  category.name = name;
+  if (category) {
+    category.name = name;
+  }
 
-  const updatedCategory = await category.save({ validateBeforeSave: false });
+  const updatedCategory = await category?.save({ validateBeforeSave: false });
 
   if (!updatedCategory) {
     console.error("UPDATE CATEGORY ERROR: problem updating!");
@@ -139,7 +153,10 @@ const updateCategoryFunction = async (req, res) => {
 DELETE CATEGORY CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const deleteCategoryFunction = async (req, res) => {
+const deleteCategoryFunction = async (
+  req: Request<ManageCategoryContract>,
+  res: Response
+) => {
   const { categoryId } = req.params;
 
   if (!categoryId) {
@@ -149,7 +166,7 @@ const deleteCategoryFunction = async (req, res) => {
 
   const category = await CourseCategory.findOne({ _id: categoryId });
 
-  if (category?.courses.length > 0) {
+  if (category?.courses?.length && category?.courses?.length > 0) {
     console.error("CATEGORY DELETE ERROR: category has active courses!");
     throw new ApiError(
       400,
@@ -171,7 +188,9 @@ const deleteCategoryFunction = async (req, res) => {
 
   return res
     .status(204)
-    .json(new ApiResponse(204, "The category has been successfully deleted!"));
+    .json(
+      new ApiResponse(204, "The category has been successfully deleted!", {})
+    );
 };
 
 /* ---------------------------------------------------------------------------------------
