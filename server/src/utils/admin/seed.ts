@@ -3,7 +3,7 @@ seed.ts
 This file hardcodes the admin into the system. It runs only once.
 ------------------------------------------------------------------------------------------ */
 
-import "dotenv/config.js";
+import "dotenv/config.ts";
 import connectDB from "../../db/index.ts";
 import { User } from "../../models/index.model.ts";
 import { UserContract } from "../../types/index.types.ts";

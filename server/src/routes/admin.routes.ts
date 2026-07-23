@@ -15,7 +15,7 @@ import {
   getUserAdmin,
   systemStats,
   updateCategory,
-} from "../controllers/admin.controllers.js";
+} from "../controllers/admin.controllers.ts";
 import { verifyJwt, isAdmin } from "../middleware/index.middleware.ts";
 
 const router = Router();

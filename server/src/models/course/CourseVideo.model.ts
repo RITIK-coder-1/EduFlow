@@ -4,7 +4,7 @@ This file builds the schema for the course videos. Each video is going to be emb
 ------------------------------------------------------------------------------------------ */
 
 import mongoose, { Schema, Model } from "mongoose";
-import { CourseVideoContract } from "../../types/course.types.ts";
+import type { CourseVideoContract } from "../../types/course.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 

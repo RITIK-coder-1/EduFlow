@@ -5,7 +5,7 @@ This is a special middleware to encapsulate efficient error handling for each as
 
 // I defined the asyncHandler as a generic because it was strictly asking for interfaces to be passed down as req.body only and did not accept them as parameters. Generic makes sure that it allows different types with a fallback to any instead of throwing errors.
 
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 function asyncHandler<P = any, ResBody = any, ReqBody = any, ReqQuery = any>(
   func: RequestHandler<P, ResBody, ReqBody, ReqQuery>

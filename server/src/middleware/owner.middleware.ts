@@ -3,8 +3,8 @@ owner.middleware.ts
 This middleware makes sure that only authorized users can check specific routes
 ------------------------------------------------------------------------------------------------- */
 
-import { NextFunction, Request, Response } from "express";
-import { ApiError, asyncHandler } from "../utils/index.utils.js";
+import type { NextFunction, Request, Response } from "express";
+import { ApiError, asyncHandler } from "../utils/index.utils.ts";
 
 // Middleware to verify the instructor
 const isInstructorFunction = async (

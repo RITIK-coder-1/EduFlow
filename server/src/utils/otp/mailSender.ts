@@ -3,7 +3,7 @@ mailSender.ts
 This utility connects to the SMTP server (Gmail) and sends the email.
 ------------------------------------------------------------------------------------------ */
 import nodemailer from "nodemailer";
-import { SentMessageInfo } from "nodemailer";
+import type { SentMessageInfo } from "nodemailer";
 
 const mailSender = async (
   email: string,

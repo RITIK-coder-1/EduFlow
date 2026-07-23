@@ -3,7 +3,7 @@ global.types.ts
 To include global types 
 ------------------------------------------------------------------------------------------ */
 
-import { UserContract } from "../models/index.model.ts";
+import { UserContract } from "./user.types.ts";
 
 declare global {
   namespace Express {

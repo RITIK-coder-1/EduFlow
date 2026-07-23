@@ -6,7 +6,7 @@ This file builds the user schema for defining the user data points
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { UserContract } from "../../types/index.types.ts";
+import type { UserContract } from "../../types/index.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 

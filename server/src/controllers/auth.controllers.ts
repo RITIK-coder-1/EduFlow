@@ -1,10 +1,10 @@
 /* ---------------------------------------------------------------------------------------
-auth.controllers.js
+auth.controllers.ts
 All the controllers for authentication
 ------------------------------------------------------------------------------------------ */
 
 import { User, OTP } from "../models/index.model.ts";
-import { UserContract, TokenPayload } from "../types/index.types.ts";
+import type { UserContract, TokenPayload } from "../types/index.types.ts";
 import {
   ApiError,
   ApiResponse,
@@ -13,11 +13,11 @@ import {
   calculateAge,
   uploadOnCloudinary,
   generateRefreshTokenString,
-  CloudinaryUploadResult,
-} from "../utils/index.utils.js";
+  type CloudinaryUploadResult,
+} from "../utils/index.utils.ts";
 import validator from "validator";
 import jwt from "jsonwebtoken";
-import { CookieOptions, Request, Response } from "express";
+import type { CookieOptions, Request, Response } from "express";
 
 /* ---------------------------------------------------------------------------------------
 REGISTER USER CONTROLLERS

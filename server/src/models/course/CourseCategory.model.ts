@@ -1,9 +1,9 @@
 /* ---------------------------------------------------------------------------------------
-CourseCategory.model.js
+CourseCategory.model.ts
 This file builds the course category schema 
 ------------------------------------------------------------------------------------------ */
 import mongoose from "mongoose";
-import { CourseCategoryContract } from "../../types/course.types.ts";
+import type { CourseCategoryContract } from "../../types/course.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 

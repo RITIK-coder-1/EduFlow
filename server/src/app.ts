@@ -1,9 +1,10 @@
 /* ---------------------------------------------------------------------------------------
-app.js
+app.ts
 This is the main backend application 
 ------------------------------------------------------------------------------------------ */
 
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
+import type { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -106,7 +107,7 @@ import {
   courseRouter,
   authRouter,
   instructorRouter,
-} from "./routes/index.routes.js";
+} from "./routes/index.routes.ts";
 
 app.get("/api/v1", (_, res) => {
   res.send("The server is successfully running!");

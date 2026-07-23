@@ -6,8 +6,8 @@ This middleware verifies the access token of the users for each secured request
 import jwt from "jsonwebtoken";
 import { User } from "../models/index.model.ts";
 import { ApiError, asyncHandler } from "../utils/index.utils.ts";
-import { NextFunction, Request, Response } from "express";
-import { TokenPayload } from "../types/api.types.ts";
+import type { NextFunction, Request, Response } from "express";
+import type { TokenPayload } from "../types/api.types.ts";
 
 const verifyJwtFunction = async (
   req: Request,

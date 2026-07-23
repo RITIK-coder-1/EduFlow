@@ -4,13 +4,13 @@ This file handles all the course related routes
 ------------------------------------------------------------------------------------------ */
 
 import { Router } from "express";
-import { verifyJwt } from "../middleware/index.middleware.js";
+import { verifyJwt } from "../middleware/index.middleware.ts";
 import {
   getCourse,
   getAllCourses,
   enrollCourse,
   showAllCategories,
-} from "../controllers/course.controllers.js";
+} from "../controllers/course.controllers.ts";
 
 const router = Router();
 

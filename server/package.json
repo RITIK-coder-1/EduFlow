@@ -5,11 +5,12 @@
   "license": "ISC",
   "author": "Ritik Mahapatra",
   "type": "module",
-  "main": "src/server.js",
+  "main": "src/server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js",
-    "start": "node src/server.js"
+    "dev": "nodemon src/server.ts",
+    "start": "node src/server.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

@@ -2,12 +2,10 @@
 api.types.ts
 ------------------------------------------------------------------------------------------ */
 
-import { JwtPayload } from "jsonwebtoken";
+import type { JwtPayload } from "jsonwebtoken";
 
 // custom interface for the token
-interface TokenPayload extends JwtPayload {
+export interface TokenPayload extends JwtPayload {
   _id: string;
   refreshTokenString: string;
 }
-
-export { TokenPayload };

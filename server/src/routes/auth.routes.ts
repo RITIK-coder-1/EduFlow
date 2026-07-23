@@ -4,14 +4,14 @@ All the routes for auth flows
 ------------------------------------------------------------------------------------------ */
 
 import { Router } from "express";
-import { upload, verifyJwt } from "../middleware/index.middleware.js";
+import { upload, verifyJwt } from "../middleware/index.middleware.ts";
 import {
   registerUser,
   createRegisterOtp,
   loginUser,
   logoutUser,
   newAccessToken,
-} from "../controllers/auth.controllers.js";
+} from "../controllers/auth.controllers.ts";
 
 const router = Router();
 

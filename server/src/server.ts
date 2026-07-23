@@ -3,7 +3,7 @@ server.ts
 This is the entry point of our server
 ------------------------------------------------------------------------------------------ */
 
-import "dotenv/config.js";
+import "dotenv/config";
 import app from "./app.ts";
 import connectDB from "./db/index.ts";
 

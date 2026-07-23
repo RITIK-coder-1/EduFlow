@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------------------
-admin.controllers.js
+admin.controllers.ts
 All the controllers specific to admin only
 ------------------------------------------------------------------------------------------ */
 
@@ -16,9 +16,11 @@ import {
   CourseProgress,
   User,
 } from "../models/index.model.ts";
-import { Response, Request } from "express";
-import { CourseCategoryContract } from "../types/course.types.ts";
-import { UserContract } from "../types/user.types.ts";
+import type { Response, Request } from "express";
+import type {
+  CourseCategoryContract,
+  UserContract,
+} from "../types/index.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------
@@ -212,7 +214,7 @@ const getAllUsersFunction = async (req: Request, res: Response) => {
 
   try {
     const users = await User.find({
-      _id: { $ne: req.user._id }, // not the admin themselves
+      _id: { $ne: req.user?._id }, // not the admin themselves
     }).select("-password -refreshTokenString");
 
     console.log("All the users fetched!");

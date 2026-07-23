@@ -1,10 +1,10 @@
 /* ---------------------------------------------------------------------------------------
-CourseProgress.model.js
+CourseProgress.model.ts
 This file builds the schema for tracking the course progress for each user. Each completed video of a particular course will be added to this document. 
 ------------------------------------------------------------------------------------------ */
 
 import mongoose from "mongoose";
-import { CourseProgressContract } from "../../types/course.types.ts";
+import type { CourseProgressContract } from "../../types/index.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 

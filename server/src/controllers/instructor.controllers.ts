@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------------------
-instructor.controllers.js
+instructor.controllers.ts
 All the controllers for instructor-specific operations 
 ------------------------------------------------------------------------------------------ */
 import {
@@ -17,8 +17,8 @@ import {
   CourseVideo,
   CourseCategory,
 } from "../models/index.model.ts";
-import { Request, Response } from "express";
-import {
+import type { Request, Response } from "express";
+import type {
   CourseSectionContract,
   CourseVideoContract,
 } from "../types/index.types.ts";
@@ -133,7 +133,7 @@ const createCourseFunction = async (
     status: "Draft",
     category,
     thumbnail: thumbnail.url,
-    owner: req.user._id,
+    owner: req.user?._id,
     sections: [],
   });
 
@@ -165,7 +165,7 @@ const createCourseFunction = async (
 
   await Promise.all([
     // add to Instructor's List
-    User.findByIdAndUpdate(req.user._id, {
+    User.findByIdAndUpdate(req.user?._id, {
       $addToSet: { createdCourses: course._id },
     }),
     // add to Category's List
@@ -229,7 +229,7 @@ const getCourseInstructorFunction = async (
   }
 
   // Getting the course along with the nested sub-documents
-  const course = await Course.findOne({ _id: courseId, owner: user._id })
+  const course = await Course.findOne({ _id: courseId, owner: user?._id })
     .populate<{
       sections: CourseSectionContract & {
         courseVideos: CourseVideoContract;

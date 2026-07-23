@@ -4,7 +4,7 @@ This file handles all the user related routes
 ------------------------------------------------------------------------------------------ */
 
 import { Router } from "express";
-import { upload, verifyJwt } from "../middleware/index.middleware.js";
+import { upload, verifyJwt } from "../middleware/index.middleware.ts";
 import {
   getUser,
   updateUserDetails,
@@ -17,7 +17,7 @@ import {
   getEnrollCourses,
   completeCourseVideo,
   getCourseProgress,
-} from "../controllers/user.controllers.js";
+} from "../controllers/user.controllers.ts";
 
 const router = Router();
 

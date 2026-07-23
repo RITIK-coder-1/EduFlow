@@ -12,9 +12,9 @@ import {
   CourseProgress,
 } from "../../models/index.model.ts";
 import { deleteFromCloudinary } from "../index.utils.ts";
-import ApiError from "../api/apiError.js";
-import { DeleteResult, UpdateResult } from "mongoose";
-import {
+import ApiError from "../api/apiError.ts";
+import type { DeleteResult, UpdateResult } from "mongoose";
+import type {
   CourseSectionContract,
   CourseVideoContract,
   UserContract,

@@ -1,10 +1,10 @@
 /* ---------------------------------------------------------------------------------------
-Course.model.js
+Course.model.ts
 This file builds the course schema for defining the course data points
 ------------------------------------------------------------------------------------------ */
 
 import mongoose from "mongoose";
-import { CourseContract } from "../../types/index.types.ts";
+import type { CourseContract } from "../../types/index.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 

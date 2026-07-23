@@ -22,7 +22,7 @@ import {
   updateCourse,
   getCourseInstructor,
   publishCourse,
-} from "../controllers/instructor.controllers.js";
+} from "../controllers/instructor.controllers.ts";
 
 const router = Router();
 

@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------------------
-course.controllers.js
+course.controllers.ts
 All the controllers for courses that are public 
 ------------------------------------------------------------------------------------------ */
 
@@ -10,8 +10,8 @@ import {
   CourseCategory,
   CourseProgress,
 } from "../models/index.model.ts";
-import { Response, Request } from "express";
-import {
+import type { Response, Request } from "express";
+import type {
   CourseSectionContract,
   CourseVideoContract,
   UserContract,

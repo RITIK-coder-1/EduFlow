@@ -4,7 +4,7 @@ This file builds the schema for the course lessons
 ------------------------------------------------------------------------------------------ */
 
 import mongoose, { Schema, Model } from "mongoose";
-import { CourseSectionContract } from "../../types/course.types.ts";
+import type { CourseSectionContract } from "../../types/course.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 The Schema 

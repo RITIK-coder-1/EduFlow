@@ -3,7 +3,7 @@ user.controllers.ts
 All the controllers for users
 ------------------------------------------------------------------------------------------ */
 
-import { Response, Request, CookieOptions } from "express";
+import type { Response, Request, CookieOptions } from "express";
 import {
   User,
   OTP,
@@ -21,7 +21,7 @@ import {
   deleteCourse,
 } from "../utils/index.utils.ts";
 import validator from "validator";
-import {
+import type {
   UserContract,
   CourseContract,
   CourseSectionContract,
@@ -40,7 +40,7 @@ const getUserFunction = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const user = await User.findById(req.user._id)
+  const user = await User.findById(req.user?._id)
     .select("-password -refreshTokenString")
     .populate<{
       enrolledCourses: (CourseContract & {
@@ -83,9 +83,9 @@ const updateUserDetailsFunction = async (
 
   // checking if there is no updated value
   if (
-    currentUser.firstName === firstName &&
-    currentUser.lastName === lastName &&
-    currentUser.username === username &&
+    currentUser?.firstName === firstName &&
+    currentUser?.lastName === lastName &&
+    currentUser?.username === username &&
     !profilePicLocalPath
   ) {
     console.error("UPDATE USER DETAILS ERROR: no updated value provided");
@@ -105,7 +105,7 @@ const updateUserDetailsFunction = async (
   // checking if the entered username already matches an existing one
   const existingUsername = await User.findOne({
     username,
-    _id: { $ne: currentUser._id }, // find excluding the current user
+    _id: { $ne: currentUser?._id }, // find excluding the current user
   });
 
   if (existingUsername) {
@@ -140,22 +140,24 @@ const updateUserDetailsFunction = async (
 
     // deleting the old file from cloudinary (only if the user had a profile)
 
-    if (currentUser.profilePic) {
-      const oldProfile = currentUser.profilePic; // the old file
+    if (currentUser?.profilePic) {
+      const oldProfile = currentUser?.profilePic; // the old file
       await deleteFromCloudinary(oldProfile);
     }
   }
 
   // updating the user
-  currentUser.firstName = firstName;
-  currentUser.lastName = lastName || "";
-  currentUser.username = username;
+  if (currentUser) {
+    currentUser.firstName = firstName;
+    currentUser.lastName = lastName || "";
+    currentUser.username = username;
 
-  if (profilePic) {
-    currentUser.profilePic = profilePic.url; // re-write the profile pic only if it is updated
+    if (profilePic) {
+      currentUser.profilePic = profilePic.url; // re-write the profile pic only if it is updated
+    }
   }
 
-  const newUser = await currentUser.save({ validateBeforeSave: false });
+  const newUser = await currentUser?.save({ validateBeforeSave: false });
 
   if (!newUser) {
     console.error("UPDATE USER DETAILS ERROR: problem updating!");
@@ -195,7 +197,7 @@ const updatePasswordFunction = async (
   }
 
   // verifying the old password
-  const user = await User.findById(req.user._id); // manually finding the document because the object in the request doesn't have the password field
+  const user = await User.findById(req.user?._id); // manually finding the document because the object in the request doesn't have the password field
   const passwordCorrect = await (user as UserContract).isPasswordCorrect(
     oldPassword
   );
@@ -286,7 +288,7 @@ const createUpdateEmailOtpFunction = async (
   }
 
   // checking the password
-  const user = await User.findById(req.user._id); // manually finding the document because the object in the request doesn't have the password field
+  const user = await User.findById(req.user?._id); // manually finding the document because the object in the request doesn't have the password field
   const passwordCorrect = await (user as UserContract).isPasswordCorrect(
     password
   );
@@ -452,7 +454,7 @@ const deleteUserAccountFunction = async (
   res: Response
 ): Promise<Response> => {
   // getting the user's details
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user?._id);
 
   if (!user) {
     console.error("USER DELETE ERROR: invalid user");
@@ -612,7 +614,7 @@ const completeCourseVideoController = async (
   res: Response
 ) => {
   const { videoId, courseId } = req.params;
-  const userId = req.user._id;
+  const userId = req.user?._id;
 
   // validate the IDs
   if (!videoId || !courseId || !userId) {
