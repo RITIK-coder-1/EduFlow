@@ -18,6 +18,7 @@ import {
 } from "../models/index.model.ts";
 import { Response, Request } from "express";
 import { CourseCategoryContract } from "../types/course.types.ts";
+import { UserContract } from "../types/user.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------
@@ -432,7 +433,7 @@ const deleteCourseAdminFunction = async (
 SYSTEM STATS CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const systemStatsFunction = async (req, res) => {
+const systemStatsFunction = async (req: Request, res: Response) => {
   try {
     const asyncTasks = [
       User.countDocuments({ accountType: { $ne: "Admin" } }),
@@ -446,7 +447,6 @@ const systemStatsFunction = async (req, res) => {
     ];
 
     // Fire all queries simultaneously
-
     const [
       userCount,
       studentCount,
@@ -457,7 +457,7 @@ const systemStatsFunction = async (req, res) => {
     ] = await Promise.all(asyncTasks);
 
     // total revenue on the platform
-    const totalRevenue = instructors
+    const totalRevenue = (instructors as UserContract[])
       .map((user) => user?.totalRevenue)
       .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
@@ -471,7 +471,7 @@ const systemStatsFunction = async (req, res) => {
         totalRevenue,
       })
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("SYSTEM STATS ERROR");
     throw new ApiError(500, "Failed to load system stats");
   }
