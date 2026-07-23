@@ -296,7 +296,7 @@ const deleteUserAccountAdminFunction = async (
   // if it's a teacher, delete all their courses
   if (user.accountType === "Instructor") {
     try {
-      user.createdCourses.forEach(async (id) => await deleteCourse(id));
+      user.createdCourses.forEach(async (id) => await deleteCourse(String(id)));
 
       console.log("Course successfully deleted!");
     } catch (error) {
