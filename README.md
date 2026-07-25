@@ -56,6 +56,7 @@ Experience the different roles within the ecosystem:
 
 | Layer | Technologies |
 | --- | --- |
+| **Primary Languages** | TypeScript, JavaScript |
 | **Frontend** | React 18, Tailwind CSS, Shadcn/UI, Redux Toolkit, RTK Query |
 | **Backend** | Node.js, Express.js, Nodemailer (OTP Service) |
 | **Database** | MongoDB + Mongoose ODM |
@@ -71,6 +72,7 @@ EduFlow prioritizes data integrity and user security through a rigorous onboardi
 - **Dual-Factor Verification:** Integrated **OTP email verification** via Nodemailer for registration and data updates to eliminate bot accounts.
 - **Role-Specific Requirements:** Instructors are mandated to provide a professional profile picture and age verification during signup.
 - **JWT Architecture:** Implemented secure state management using Access and Refresh tokens to maintain session persistence without compromising security.
+- **Type-Safe Backend Architecture:** Refactored the Node.js/Express backend to strict TypeScript, Mongoose model interfaces, and strict controller typing to eliminate runtime crashes and enforce contract safety across API routes.
 
 ---
 
