@@ -1,10 +1,10 @@
 /* ---------------------------------------------------------------------------------------
-userLocalStorage.js
+userLocalStorage.ts
 The middleware to manipulate the user value in the local storage for redux toolkit  
 ------------------------------------------------------------------------------------------ */
 
 import { createListenerMiddleware } from "@reduxjs/toolkit";
-import { disableUser, setUser } from "../features/authSlice";
+import { disableUser, setUser } from "../features/authSlice.js";
 
 const userListener = createListenerMiddleware();
 
