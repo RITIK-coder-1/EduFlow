@@ -3,6 +3,8 @@ queryResponses.ts
 This function provides the specific transformed responses for Redux Toolkit Query success and errors
 ------------------------------------------------------------------------------------------------- */
 
+import { ApiErrorResponse, ApiSuccessResponse } from "../types/index.types.ts";
+
 interface ResponseContract {
   data?: unknown;
   message: string;
@@ -10,7 +12,9 @@ interface ResponseContract {
 
 function queryResponses() {
   // success response
-  const transformResponse = (response): ResponseContract => {
+  const transformResponse = (
+    response: ApiSuccessResponse<unknown>
+  ): ResponseContract => {
     return {
       data: response?.data,
       message: response?.message,
@@ -18,9 +22,11 @@ function queryResponses() {
   };
 
   // error response
-  const transformErrorResponse = (response): ResponseContract => {
+  const transformErrorResponse = (
+    response: ApiErrorResponse
+  ): ResponseContract => {
     return {
-      message: response?.data?.message,
+      message: response?.message,
     };
   };
 
