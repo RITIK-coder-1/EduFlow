@@ -35,7 +35,7 @@ function useUserStatus(courseId: string) {
 
   // check if the user is enrolled in the course or not
   const isEnrolled = user?.enrolledCourses?.some(
-    (course) => course?._id === courseId
+    (course: CourseContract) => course?._id === courseId
   );
 
   return {

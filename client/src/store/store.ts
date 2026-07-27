@@ -1,12 +1,12 @@
 /* ----------------------------------------------------------------------------------------------
-store.js
+store.ts
 This file stores every single redux state 
 ------------------------------------------------------------------------------------------------- */
 
 import { configureStore } from "@reduxjs/toolkit";
 import apiSlice from "../api/base/apiSlice.js";
 import { authReducer } from "../features/index.features.js";
-import userListener from "@/middleware/userLocalStorage.js";
+import userListener from "../middleware/userLocalStorage.js";
 
 export const store = configureStore({
   reducer: {
@@ -18,3 +18,9 @@ export const store = configureStore({
       .concat(apiSlice.middleware)
       .prepend(userListener.middleware),
 });
+
+// extracting the RootState type dynamically from the store itself
+export type RootState = ReturnType<typeof store.getState>;
+
+// extracting AppDispatch for typing useDispatch as well
+export type AppDispatch = typeof store.dispatch;

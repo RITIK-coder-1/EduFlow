@@ -7,6 +7,7 @@ import { CourseContract } from "./index.types.ts";
 type AccountType = "Student" | "Instructor" | "Admin";
 
 export interface UserContract {
+  _id: string;
   firstName: string;
   lastName: string;
   username: string;
