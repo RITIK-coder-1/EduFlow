@@ -11,10 +11,19 @@ import {
 
 import { UserContract } from "./user.types.ts";
 
-export {
+import {
+  ApiSuccessResponse,
+  ApiErrorResponse,
+  BaseApiResponse,
+} from "./api.types.ts";
+
+export type {
   CourseContract,
   CourseCategoryContract,
   CourseSectionContract,
   CourseVideoContract,
   UserContract,
+  ApiSuccessResponse,
+  ApiErrorResponse,
+  BaseApiResponse,
 };

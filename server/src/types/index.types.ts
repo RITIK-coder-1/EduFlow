@@ -11,7 +11,12 @@ import type {
   CourseSectionContract,
   CourseVideoContract,
 } from "./course.types.ts";
-import type { TokenPayload } from "./api.types.ts";
+import type {
+  TokenPayload,
+  BaseApiResponse,
+  ApiErrorResponse,
+  ApiSuccessResponse,
+} from "./api.types.ts";
 
 export type {
   UserContract,
@@ -21,4 +26,7 @@ export type {
   CourseSectionContract,
   CourseVideoContract,
   TokenPayload,
+  BaseApiResponse,
+  ApiErrorResponse,
+  ApiSuccessResponse,
 };
