@@ -4,7 +4,11 @@ All the controllers for authentication
 ------------------------------------------------------------------------------------------ */
 
 import { User, OTP } from "../models/index.model.ts";
-import type { UserContract, TokenPayload } from "../types/index.types.ts";
+import type {
+  UserContract,
+  TokenPayload,
+  ApiSuccessResponse,
+} from "../types/index.types.ts";
 import {
   ApiError,
   ApiResponse,
@@ -41,7 +45,13 @@ interface RegisterRequestBody {
 const createRegisterOtpFunction = async (
   req: Request<{}, {}, RegisterRequestBody>,
   res: Response
-): Promise<Response> => {
+): Promise<
+  Response<
+    ApiSuccessResponse<{
+      profilePic: string;
+    }>
+  >
+> => {
   // Gathering all the important user data from the request object
   const { firstName, username, password, email, dateOfBirth, accountType } =
     req.body;
@@ -173,7 +183,7 @@ const createRegisterOtpFunction = async (
 const registerUserFunction = async (
   req: Request<{}, {}, RegisterRequestBody>,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<UserContract>>> => {
   // the frontend will temporarily save the user data and send it back for creation
   const {
     userOTP,
@@ -274,7 +284,14 @@ interface LoginRequestBody {
 const loginUserController = async (
   req: Request<{}, {}, LoginRequestBody>,
   res: Response
-): Promise<Response> => {
+): Promise<
+  Response<
+    ApiSuccessResponse<{
+      existingUser: UserContract;
+      accessToken: string;
+    }>
+  >
+> => {
   // getting data from the client request
   const { credential, password } = req.body;
 
@@ -334,7 +351,7 @@ LOGOUT USER CONTROLLER
 const logoutFunction = async (
   req: Request,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   const userId = req.user?._id;
 
   if (!userId) {
@@ -374,7 +391,7 @@ const logoutFunction = async (
     .status(200)
     .clearCookie("refreshToken", options)
     .clearCookie("accessToken", options)
-    .json(new ApiResponse(200, "User Logged Out Succesfully!", {}));
+    .json(new ApiResponse(200, "User Logged Out Succesfully!", null));
 };
 
 /* ---------------------------------------------------------------------------------------
@@ -384,7 +401,7 @@ NEW ACCESS TOKEN CONTROLLER
 const newAccessTokenFunction = async (
   req: Request,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   // Getting our refresh token from the cookies
   const incomingRefreshToken: string = req.cookies?.refreshToken;
 
@@ -431,7 +448,7 @@ const newAccessTokenFunction = async (
     .status(200)
     .cookie("refreshToken", refreshToken, options)
     .cookie("accessToken", accessToken, options)
-    .json(new ApiResponse(200, "Access Token Refreshed!", {}));
+    .json(new ApiResponse(200, "Access Token Refreshed!", null));
 };
 
 /* ---------------------------------------------------------------------------------------
