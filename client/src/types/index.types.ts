@@ -2,6 +2,16 @@
 index.types.ts
 ------------------------------------------------------------------------------------------ */
 
-import { CourseContract } from "./course.types.js";
+import {
+  CourseContract,
+  CourseCategoryContract,
+  CourseSectionContract,
+  CourseVideoContract,
+} from "./course.types.js";
 
-export { CourseContract };
+export {
+  CourseContract,
+  CourseCategoryContract,
+  CourseSectionContract,
+  CourseVideoContract,
+};
