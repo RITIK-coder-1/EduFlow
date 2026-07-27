@@ -18,7 +18,9 @@ import {
 } from "../models/index.model.ts";
 import type { Response, Request } from "express";
 import type {
+  ApiSuccessResponse,
   CourseCategoryContract,
+  CourseContract,
   UserContract,
 } from "../types/index.types.ts";
 
@@ -41,7 +43,7 @@ CREATE CATEGORY CONTROLLER
 const createCategoryFunction = async (
   req: Request<{}, {}, ManageCategoryContract>,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<CourseCategoryContract>>> => {
   // getting all the data
   const { name } = req.body;
 
@@ -94,7 +96,7 @@ UPDATE CATEGORY CONTROLLER
 const updateCategoryFunction = async (
   req: Request<ManageCategoryContract, {}, ManageCategoryContract>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<CourseCategoryContract>>> => {
   const { categoryId } = req.params;
   const { name } = req.body;
 
@@ -160,7 +162,7 @@ DELETE CATEGORY CONTROLLER
 const deleteCategoryFunction = async (
   req: Request<ManageCategoryContract>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   const { categoryId } = req.params;
 
   if (!categoryId) {
@@ -193,7 +195,7 @@ const deleteCategoryFunction = async (
   return res
     .status(204)
     .json(
-      new ApiResponse(204, "The category has been successfully deleted!", {})
+      new ApiResponse(204, "The category has been successfully deleted!", null)
     );
 };
 
@@ -209,7 +211,10 @@ const deleteCategoryFunction = async (
 SHOW ALL USERS CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const getAllUsersFunction = async (req: Request, res: Response) => {
+const getAllUsersFunction = async (
+  req: Request,
+  res: Response
+): Promise<Response<ApiSuccessResponse<UserContract[]>>> => {
   // For a real production app with thousands of users, I would implement the cursor-based pagination here. Since this is a demo, I am fetching all users for simplicity.
 
   try {
@@ -243,7 +248,7 @@ interface MinimalUser {
 const getUserAdminFunction = async (
   req: Request<MinimalUser>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<UserContract>>> => {
   const { userId } = req.params;
 
   if (!userId) {
@@ -274,7 +279,7 @@ DELETE A USER CONTROLLER
 const deleteUserAccountAdminFunction = async (
   req: Request<MinimalUser>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   // getting the user's details
   const userId = req.params.userId;
   const user = await User.findById(userId);
@@ -330,7 +335,7 @@ const deleteUserAccountAdminFunction = async (
 
   return res
     .status(204)
-    .json(new ApiResponse(204, "The user has been successfully deleted", {}));
+    .json(new ApiResponse(204, "The user has been successfully deleted", null));
 };
 
 /* ---------------------------------------------------------------------------------------
@@ -345,7 +350,10 @@ const deleteUserAccountAdminFunction = async (
 GET ALL COURSES CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const getAllCoursesAdminFunction = async (req: Request, res: Response) => {
+const getAllCoursesAdminFunction = async (
+  req: Request,
+  res: Response
+): Promise<Response<ApiSuccessResponse<CourseContract[]>>> => {
   try {
     const courses = await Course.find({}).populate("owner");
 
@@ -375,7 +383,7 @@ interface MinimalCourse {
 const getCourseAdminFunction = async (
   req: Request<MinimalCourse>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<CourseContract>>> => {
   const { courseId } = req.params;
 
   if (!courseId) {
@@ -404,14 +412,14 @@ DELETE A COURSE CONTROLLER
 const deleteCourseAdminFunction = async (
   req: Request<MinimalCourse>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   const courseId = req.params?.courseId;
   try {
     await deleteCourse(courseId);
     console.log("Course deleted by the admin!");
     return res
       .status(204)
-      .json(new ApiResponse(204, "Course successfully deleted!", {}));
+      .json(new ApiResponse(204, "Course successfully deleted!", null));
   } catch (error: unknown) {
     console.error(
       "COURSE DELETE ADMIN ERROR: There was a problem while deleting the course."
@@ -435,7 +443,21 @@ const deleteCourseAdminFunction = async (
 SYSTEM STATS CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const systemStatsFunction = async (req: Request, res: Response) => {
+const systemStatsFunction = async (
+  req: Request,
+  res: Response
+): Promise<
+  Response<
+    ApiSuccessResponse<{
+      userCount: number;
+      studentCount: number;
+      instructorCount: number;
+      courseCount: number;
+      categoryCount: number;
+      totalRevenue: number;
+    }>
+  >
+> => {
   try {
     const asyncTasks = [
       User.countDocuments({ accountType: { $ne: "Admin" } }),
