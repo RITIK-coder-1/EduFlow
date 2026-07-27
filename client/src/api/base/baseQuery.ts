@@ -1,17 +1,23 @@
 /* ----------------------------------------------------------------------------------------------
-baseQuery.js
+baseQuery.ts
 This base query file to set up the base url and to look for the token expiry 
 ------------------------------------------------------------------------------------------------- */
 
-import { disableUser } from "@/features/authSlice";
+import { disableUser } from "../../features/authSlice.ts";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { RootState } from "../../store/store.ts";
+import type {
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query";
 
 // the API base for every network call
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_RENDER_SERVER,
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
-    const token = getState().auth.token;
+    const token = (getState() as RootState).auth.accessToken;
     if (token) {
       headers.set("authorization", `Bearer ${token}`);
     }
@@ -20,7 +26,11 @@ const baseQuery = fetchBaseQuery({
 });
 
 // the wrapper to look for token expiration
-export const baseQueryWithReauth = async (args, api, extraOptions) => {
+export const baseQueryWithReauth: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
   if (
