@@ -1,10 +1,22 @@
 /* ----------------------------------------------------------------------------------------------
-filterCourse.js
+filterCourse.ts
 The utility to filter the course fields for display 
 ------------------------------------------------------------------------------------------------- */
 
-function filterCourses(courseArray) {
-  const courses = courseArray?.map((course) => {
+import { CourseContract } from "../types/index.types.ts";
+
+interface FilteredCourseContract {
+  courseId: string;
+  title: string;
+  desc: string;
+  img: string;
+  price: number;
+  instructorFirstName: string;
+  instructorLastName: string;
+}
+
+function filterCourses(courseArray: CourseContract[]) {
+  const courses: FilteredCourseContract[] = courseArray?.map((course) => {
     return {
       courseId: course._id,
       title: course?.title,
