@@ -1,15 +1,16 @@
 /* ----------------------------------------------------------------------------------------------
-useGetVideoData.js
+useGetVideoData.ts
 The hook to provide the important data for course videos
 ------------------------------------------------------------------------------------------------- */
 
-import { useGetCourseQuery } from "@/api/index.api";
+import { useGetCourseQuery } from "../api/index.api.js";
 import { useEffect, useState } from "react";
 
-function useGetVideoData(courseId, videoId) {
+function useGetVideoData(courseId: string, videoId: string) {
   // the course
-  const { data } = useGetCourseQuery({ courseId });
-  const course = data?.data;
+  const {
+    data: { course },
+  } = useGetCourseQuery({ courseId });
 
   // the video details to send
   const [videoData, setVideoData] = useState({
