@@ -3,7 +3,9 @@ queryResponses.ts
 This function provides the specific transformed responses for Redux Toolkit Query success and errors
 ------------------------------------------------------------------------------------------------- */
 
-import { ApiErrorResponse, ApiSuccessResponse } from "../types/index.types.ts";
+import { ApiSuccessResponse } from "../types/index.types.ts";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
 
 interface ResponseContract {
   data?: unknown;
@@ -23,10 +25,24 @@ function queryResponses() {
 
   // error response
   const transformErrorResponse = (
-    response: ApiErrorResponse
+    error:
+      | FetchBaseQueryError
+      | SerializedError
+      | { data?: { message?: string } }
   ): ResponseContract => {
+    let errorMessage = "An unexpected error occurred";
+
+    if ("data" in error && error.data && typeof error.data === "object") {
+      const serverError = error.data as { message?: string };
+      if (serverError.message) {
+        errorMessage = serverError.message;
+      }
+    } else if ("message" in error && error.message) {
+      errorMessage = error.message;
+    }
+
     return {
-      message: response?.message,
+      message: errorMessage,
     };
   };
 

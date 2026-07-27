@@ -23,8 +23,8 @@ const authApi = apiSlice.injectEndpoints({
         method: "POST",
         body: userData,
       }),
-      transformResponse: transformResponse,
-      transformErrorResponse: transformErrorResponse,
+      transformResponse,
+      transformErrorResponse,
     }),
     // VALIDATE THE OTP AND REGISTER THE USER
     register: builder.mutation({
@@ -33,8 +33,8 @@ const authApi = apiSlice.injectEndpoints({
         method: "POST",
         body: userData,
       }),
-      transformResponse: transformResponse,
-      transformErrorResponse: transformErrorResponse,
+      transformResponse,
+      transformErrorResponse,
       invalidatesTags: ["User", "Stats", "Course"],
     }),
 
@@ -45,8 +45,8 @@ const authApi = apiSlice.injectEndpoints({
         method: "POST",
         body: userData,
       }),
-      transformResponse: transformResponse,
-      transformErrorResponse: transformErrorResponse,
+      transformResponse,
+      transformErrorResponse,
       invalidatesTags: ["User", "Course"],
     }),
 
@@ -64,8 +64,8 @@ const authApi = apiSlice.injectEndpoints({
         url: "/auth/logout",
         method: "POST",
       }),
-      transformResponse: transformResponse,
-      transformErrorResponse: transformErrorResponse,
+      transformResponse,
+      transformErrorResponse,
       invalidatesTags: ["User", "Course"],
     }),
   }),
