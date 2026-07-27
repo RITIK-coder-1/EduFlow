@@ -8,7 +8,10 @@ import {
   transformResponse,
   transformErrorResponse,
 } from "../../utils/queryResponses.ts";
-import type { RegisterRequestBody } from "../../types/index.types.ts";
+import type {
+  RegisterRequestBody,
+  UserContract,
+} from "../../types/index.types.ts";
 
 // the API calls
 const authApi = apiSlice.injectEndpoints({
@@ -25,7 +28,7 @@ const authApi = apiSlice.injectEndpoints({
     }),
     // VALIDATE THE OTP AND REGISTER THE USER
     register: builder.mutation({
-      query: (userData) => ({
+      query: (userData: UserContract) => ({
         url: "/auth/register",
         method: "POST",
         body: userData,
@@ -37,7 +40,7 @@ const authApi = apiSlice.injectEndpoints({
 
     // VALIDATE THE OTP AND LOGIN THE USER
     login: builder.mutation({
-      query: (userData) => ({
+      query: (userData: { credential: string; password: string }) => ({
         url: "/auth/login",
         method: "POST",
         body: userData,
