@@ -26,6 +26,7 @@ import type {
   CourseContract,
   CourseSectionContract,
   CourseVideoContract,
+  ApiSuccessResponse,
 } from "../types/index.types.ts";
 import { Types } from "mongoose";
 
@@ -39,7 +40,7 @@ This is a function to fetch a single user's details
 const getUserFunction = async (
   req: Request,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<MinimalUser>>> => {
   const user = await User.findById(req.user?._id)
     .select("-password -refreshTokenString")
     .populate<{
@@ -75,7 +76,7 @@ This is a function to update a user's details including the profile picture (not
 const updateUserDetailsFunction = async (
   req: Request<{}, {}, MinimalUser>,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<UserContract>>> => {
   // gathering data to update
   const { firstName, lastName, username } = req.body; // (Account type and DOB can't be changed once created)
   const profilePicLocalPath = req.file?.path;
@@ -187,7 +188,7 @@ interface PasswordUpdateContract {
 const updatePasswordFunction = async (
   req: Request<{}, {}, PasswordUpdateContract>,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   // getting the old and the new passwords
   const { oldPassword, newPassword } = req.body;
 
@@ -243,7 +244,7 @@ const updatePasswordFunction = async (
   return res
     .status(200)
     .json(
-      new ApiResponse(200, "The password has been successfully updated!", {})
+      new ApiResponse(200, "The password has been successfully updated!", null)
     );
 };
 
