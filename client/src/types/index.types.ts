@@ -9,7 +9,7 @@ import {
   CourseVideoContract,
 } from "./course.types.js";
 
-import { UserContract } from "./user.types.ts";
+import { UserContract, ReduxUserStateContract } from "./user.types.ts";
 
 import {
   ApiSuccessResponse,
@@ -26,4 +26,5 @@ export type {
   ApiSuccessResponse,
   ApiErrorResponse,
   BaseApiResponse,
+  ReduxUserStateContract,
 };

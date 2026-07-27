@@ -22,3 +22,5 @@ export interface UserContract {
   totalRevenue: number;
   refreshTokenString?: string;
 }
+
+export type ReduxUserStateContract = Pick<UserContract, "_id" | "accountType">;
