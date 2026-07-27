@@ -2,6 +2,8 @@
 course.types.ts
 ------------------------------------------------------------------------------------------ */
 
+import { UserContract } from "./index.types.ts";
+
 /* ---------------------------------------------------------------------------------------
 COURSE INTERFACE 
 ------------------------------------------------------------------------------------------ */
@@ -17,7 +19,7 @@ export interface CourseContract {
   category: string;
   revenue: number;
   sections: CourseSectionContract[];
-  owner: string;
+  owner: UserContract;
   enrolledBy: string[];
 }
 

@@ -1,18 +1,19 @@
 /* ----------------------------------------------------------------------------------------------
-useUserStatus.js
+useUserStatus.ts
 The hook to provide the current status of the user 
 ------------------------------------------------------------------------------------------------- */
 
 import { useSelector } from "react-redux";
-import { useGetUserQuery, useGetCourseQuery } from "@/api/index.api";
+import { useGetUserQuery, useGetCourseQuery } from "../api/index.api.js";
+import { CourseContract } from "../types/index.types.ts";
 
-function useUserStatus(courseId) {
+function useUserStatus(courseId: string) {
   // the user
   const { data: userData } = useGetUserQuery();
   const user = userData?.data;
 
   // the course
-  let course = null;
+  let course: CourseContract | null = null;
   if (courseId) {
     // only if the courseID is provided
     const { data: courseData } = useGetCourseQuery({ courseId });
