@@ -58,7 +58,7 @@ GET COURSE CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
 interface MinimalCourse {
-  courseId?: string;
+  courseId: string;
 }
 
 const getCourseFunction = async (
