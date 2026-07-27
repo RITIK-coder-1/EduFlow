@@ -26,7 +26,7 @@ COURSE CATEGORY INTERFACE
 
 export interface CourseCategoryContract {
   name: string;
-  courses: string[];
+  courses: CourseContract[];
 }
 
 /* ---------------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ COURSE SECTION INTERFACE
 export interface CourseSectionContract {
   title: string;
   course: string;
-  courseVideos: string[];
+  courseVideos: CourseVideoContract[];
 }
 
 /* ---------------------------------------------------------------------------------------

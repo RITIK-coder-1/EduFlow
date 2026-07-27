@@ -5,6 +5,22 @@ The hook to provide the important data for course videos
 
 import { useGetCourseQuery } from "../api/index.api.js";
 import { useEffect, useState } from "react";
+import { CourseSectionContract } from "../types/index.types.js";
+
+/* ----------------------------------------------------------------------------------------------
+INTERFACE
+------------------------------------------------------------------------------------------------- */
+
+interface VideoDataContract {
+  courseTitle: string;
+  sectionTitle: string;
+  videoTitle: string;
+  videoUrl: string;
+}
+
+/* ----------------------------------------------------------------------------------------------
+FUNCTION
+------------------------------------------------------------------------------------------------- */
 
 function useGetVideoData(courseId: string, videoId: string) {
   // the course
@@ -13,7 +29,7 @@ function useGetVideoData(courseId: string, videoId: string) {
   } = useGetCourseQuery({ courseId });
 
   // the video details to send
-  const [videoData, setVideoData] = useState({
+  const [videoData, setVideoData] = useState<VideoDataContract>({
     courseTitle: course?.title,
     sectionTitle: "",
     videoTitle: "",
@@ -24,7 +40,7 @@ function useGetVideoData(courseId: string, videoId: string) {
     if (!course || !videoId) return;
 
     // returns an array of sections where one element has the video details if it matches the video the user wants to watch and the other elements are undefined
-    const sectionsArray = course?.sections?.flatMap((section) => {
+    const sectionsArray = course?.sections?.flatMap((section: CourseSectionContract) => {
       return section?.courseVideos?.flatMap((video) => {
         if (video?._id === videoId) {
           return {
