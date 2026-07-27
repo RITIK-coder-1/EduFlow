@@ -7,6 +7,7 @@ COURSE INTERFACE
 ------------------------------------------------------------------------------------------ */
 
 export interface CourseContract {
+  _id: string;
   title: string;
   description: string;
   price: number;
@@ -25,6 +26,7 @@ COURSE CATEGORY INTERFACE
 ------------------------------------------------------------------------------------------ */
 
 export interface CourseCategoryContract {
+  _id: string;
   name: string;
   courses: CourseContract[];
 }
@@ -34,6 +36,7 @@ COURSE SECTION INTERFACE
 ------------------------------------------------------------------------------------------ */
 
 export interface CourseSectionContract {
+  _id: string;
   title: string;
   course: string;
   courseVideos: CourseVideoContract[];
@@ -44,6 +47,7 @@ COURSE VIDEO INTERFACE
 ------------------------------------------------------------------------------------------ */
 
 export interface CourseVideoContract {
+  _id: string;
   title: string;
   videoUrl: string;
   duration: number;
