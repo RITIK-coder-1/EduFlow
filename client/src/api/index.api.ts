@@ -44,7 +44,7 @@ import {
   useDeleteVideoMutation,
   useCreateCourseMutation,
   useGetInstructorDataQuery,
-} from "./users/instructorApi.js";
+} from "./users/instructorApi.ts";
 
 import {
   useCreateCategoryMutation,
