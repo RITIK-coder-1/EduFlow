@@ -7,7 +7,7 @@ import {
   useRegisterMutation,
   useRegisterOtpMutation,
 } from "../../../api/index.api.js";
-import getFormData from "../../../utils/getFormData.js";
+import getFormData from "../../../utils/getFormData.ts";
 import {
   CommonButton,
   FieldInput,
