@@ -3,9 +3,9 @@ useUserStatus.ts
 The hook to provide the current status of the user 
 ------------------------------------------------------------------------------------------------- */
 
-import { useSelector } from "react-redux";
 import { useGetUserQuery, useGetCourseQuery } from "../api/index.api.js";
 import { CourseContract } from "../types/index.types.ts";
+import { useAppSelector } from "./useReduxHooks.ts";
 
 function useUserStatus(courseId: string) {
   // the user
@@ -25,10 +25,10 @@ function useUserStatus(courseId: string) {
   ------------------------------------------------------------------------------------------------- */
 
   // the authentication status of the user
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // for immediate access
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated); // for immediate access
 
   // the type of user
-  const accountType = useSelector((state) => state.auth.user?.accountType); // for immediate access
+  const accountType = useAppSelector((state) => state.auth.user?.accountType); // for immediate access
 
   // check if the user is the owner of the course
   const isOwner = user?._id === course?.owner?._id ? true : false;
