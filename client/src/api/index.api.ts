@@ -23,7 +23,7 @@ import {
   useCompleteCourseVideoMutation,
   useGetEnrolledCoursesQuery,
   useGetBulkCourseProgressQuery,
-} from "./users/userApi.js";
+} from "./users/userApi.ts";
 
 import {
   useGetAllTheCoursesQuery,

@@ -1,13 +1,22 @@
 /* ----------------------------------------------------------------------------------------------
-userApi.js
+userApi.ts
 This file does all the user API calls 
 ------------------------------------------------------------------------------------------------- */
 
-import apiSlice from "../base/apiSlice";
+import apiSlice from "../base/apiSlice.ts";
 import {
   transformResponse,
   transformErrorResponse,
-} from "../../utils/queryResponses";
+} from "../../utils/queryResponses.ts";
+import { UserContract } from "../../types/index.types.ts";
+
+type MinimalUser = Pick<UserContract, "firstName" | "lastName" | "username">;
+
+interface UpdateEmailContract {
+  newEmail: string;
+  password?: string;
+  userOtp?: string;
+}
 
 // the API calls
 const userApi = apiSlice.injectEndpoints({
@@ -22,7 +31,7 @@ const userApi = apiSlice.injectEndpoints({
 
     // UPDATE USER DETAILS
     updateUserDetails: builder.mutation({
-      query: (updatedData) => ({
+      query: (updatedData: MinimalUser) => ({
         url: "/users/profile",
         method: "PATCH",
         body: updatedData,
@@ -45,7 +54,7 @@ const userApi = apiSlice.injectEndpoints({
 
     // CREATE OTP TO UPDATE USER EMAIL
     updateUserEmailOtp: builder.mutation({
-      query: (updatedData) => ({
+      query: (updatedData: UpdateEmailContract) => ({
         url: "/users/profile/email",
         method: "POST",
         body: updatedData,
@@ -55,7 +64,7 @@ const userApi = apiSlice.injectEndpoints({
     }),
     // VALIDATE OTP AND UPDATE USER EMAIL
     updateUserEmail: builder.mutation({
-      query: (updatedData) => ({
+      query: (updatedData: UpdateEmailContract) => ({
         url: "/users/profile/email",
         method: "PATCH",
         body: updatedData,
@@ -78,7 +87,7 @@ const userApi = apiSlice.injectEndpoints({
 
     // UPDATE USER PASSWORD
     updateUserPassword: builder.mutation({
-      query: (updatedData) => ({
+      query: (updatedData: { oldPassword: string; newPassword: string }) => ({
         url: "/users/password",
         method: "PATCH",
         body: updatedData,
@@ -95,7 +104,7 @@ const userApi = apiSlice.injectEndpoints({
 
     // LAST COURSE VISITED
     lastCourseVisited: builder.mutation({
-      query: ({ courseId }) => ({
+      query: ({ courseId }: { courseId: string }) => ({
         url: "/users/enrolled-courses/last-visited",
         method: "PATCH",
         body: { courseId },
@@ -107,7 +116,8 @@ const userApi = apiSlice.injectEndpoints({
 
     // GET COURSE PROGRESS
     getCourseProgress: builder.query({
-      query: ({ courseId }) => `/users/enrolled-courses/${courseId}/progress`,
+      query: ({ courseId }: { courseId: string }) =>
+        `/users/enrolled-courses/${courseId}/progress`,
       providesTags: (result, error, { courseId }) => [
         { type: "Course", id: courseId },
       ],
@@ -120,7 +130,7 @@ const userApi = apiSlice.injectEndpoints({
         try {
           // Execute all requests in parallel
           const results = await Promise.all(
-            courseIds?.map((id) =>
+            courseIds?.map((id: string) =>
               baseQuery(`/users/enrolled-courses/${id}/progress`)
             )
           );
@@ -147,7 +157,11 @@ const userApi = apiSlice.injectEndpoints({
           );
 
           return {
-            data: { average: Math.ceil(average), totalLearningCredits, details: progressValues },
+            data: {
+              average: Math.ceil(average),
+              totalLearningCredits,
+              details: progressValues,
+            },
           };
         } catch (error) {
           return { error };
