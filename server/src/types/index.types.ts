@@ -16,6 +16,7 @@ import type {
   BaseApiResponse,
   ApiErrorResponse,
   ApiSuccessResponse,
+  RegisterRequestBody,
 } from "./api.types.ts";
 
 export type {
@@ -29,4 +30,5 @@ export type {
   BaseApiResponse,
   ApiErrorResponse,
   ApiSuccessResponse,
+  RegisterRequestBody,
 };

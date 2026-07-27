@@ -8,6 +8,7 @@ import type {
   UserContract,
   TokenPayload,
   ApiSuccessResponse,
+  RegisterRequestBody,
 } from "../types/index.types.ts";
 import {
   ApiError,
@@ -28,19 +29,6 @@ REGISTER USER CONTROLLERS
 ------------------------------------------------------------------------------------------ */
 
 // This function takes all the user data to register and sends an OTP to the email for verification purposes
-
-// Defining an interface for the Request Body
-interface RegisterRequestBody {
-  firstName: string;
-  lastName?: string;
-  username: string;
-  password: string;
-  email: string;
-  dateOfBirth: string;
-  accountType: "Instructor" | "Student";
-  userOTP?: string;
-  profilePic?: string;
-}
 
 const createRegisterOtpFunction = async (
   req: Request<{}, {}, RegisterRequestBody>,

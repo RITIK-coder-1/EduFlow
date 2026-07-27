@@ -1,20 +1,21 @@
 /* ----------------------------------------------------------------------------------------------
-authApi.js
+authApi.ts
 This file does all the auth related API calls 
 ------------------------------------------------------------------------------------------------- */
 
-import apiSlice from "../base/apiSlice";
+import apiSlice from "../base/apiSlice.js";
 import {
   transformResponse,
   transformErrorResponse,
-} from "../../utils/queryResponses";
+} from "../../utils/queryResponses.ts";
+import type { RegisterRequestBody } from "../../types/index.types.ts";
 
 // the API calls
 const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // CREATE REGISTER OTP
     registerOtp: builder.mutation({
-      query: (userData) => ({
+      query: (userData: RegisterRequestBody) => ({
         url: "/auth/register-otp",
         method: "POST",
         body: userData,
