@@ -16,7 +16,7 @@ export interface CourseContract {
   status: string;
   category: string;
   revenue: number;
-  sections: string[];
+  sections: CourseSectionContract[];
   owner: string;
   enrolledBy: string[];
 }
