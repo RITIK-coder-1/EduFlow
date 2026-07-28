@@ -8,7 +8,12 @@ import {
   transformResponse,
   transformErrorResponse,
 } from "../../utils/queryResponses.ts";
-import { UserContract } from "../../types/index.types.ts";
+import {
+  CourseContract,
+  ResponseContract,
+  UserContract,
+  CourseVideoContract,
+} from "../../types/index.types.ts";
 
 type MinimalUser = Pick<UserContract, "firstName" | "lastName" | "username">;
 
@@ -22,105 +27,139 @@ interface UpdateEmailContract {
 const userApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // GET THE USER PROFILE
-    getUser: builder.query({
+    getUser: builder.query<ResponseContract<MinimalUser>, void>({
       query: () => "/users/profile",
-      transformResponse,
+      transformResponse: transformResponse<MinimalUser>(),
       transformErrorResponse,
       providesTags: ["User", "Course"],
     }),
 
     // UPDATE USER DETAILS
-    updateUserDetails: builder.mutation({
-      query: (updatedData: MinimalUser) => ({
+    updateUserDetails: builder.mutation<
+      ResponseContract<UserContract>,
+      MinimalUser
+    >({
+      query: (updatedData) => ({
         url: "/users/profile",
         method: "PATCH",
         body: updatedData,
       }),
-      transformResponse,
+      transformResponse: transformResponse<UserContract>(),
       transformErrorResponse,
       invalidatesTags: ["User"],
     }),
 
     // DELETE USER ACCOUNT
-    deleteUserAccount: builder.mutation({
+    deleteUserAccount: builder.mutation<ResponseContract<null>, void>({
       query: () => ({
         url: "/users/profile",
         method: "DELETE",
       }),
-      transformResponse,
+      transformResponse: transformResponse<null>(),
       transformErrorResponse,
       invalidatesTags: ["User", "Stats"],
     }),
 
     // CREATE OTP TO UPDATE USER EMAIL
-    updateUserEmailOtp: builder.mutation({
-      query: (updatedData: UpdateEmailContract) => ({
+    updateUserEmailOtp: builder.mutation<
+      ResponseContract<UpdateEmailContract>,
+      UpdateEmailContract
+    >({
+      query: (updatedData) => ({
         url: "/users/profile/email",
         method: "POST",
         body: updatedData,
       }),
-      transformResponse,
+      transformResponse: transformResponse<UpdateEmailContract>(),
       transformErrorResponse,
     }),
     // VALIDATE OTP AND UPDATE USER EMAIL
-    updateUserEmail: builder.mutation({
-      query: (updatedData: UpdateEmailContract) => ({
+    updateUserEmail: builder.mutation<
+      ResponseContract<UserContract>,
+      UpdateEmailContract
+    >({
+      query: (updatedData) => ({
         url: "/users/profile/email",
         method: "PATCH",
         body: updatedData,
       }),
-      transformResponse,
+      transformResponse: transformResponse<UserContract>(),
       transformErrorResponse,
       invalidatesTags: ["User"],
     }),
 
     // DELETE USER PROFILE PIC
-    deleteUserProfilePic: builder.mutation({
+    deleteUserProfilePic: builder.mutation<
+      ResponseContract<UserContract>,
+      void
+    >({
       query: () => ({
         url: "/users/profile/pic",
         method: "DELETE",
       }),
-      transformResponse,
+      transformResponse: transformResponse<UserContract>(),
       transformErrorResponse,
       invalidatesTags: ["User"],
     }),
 
     // UPDATE USER PASSWORD
-    updateUserPassword: builder.mutation({
-      query: (updatedData: { oldPassword: string; newPassword: string }) => ({
+    updateUserPassword: builder.mutation<
+      ResponseContract<null>,
+      { oldPassword: string; newPassword: string }
+    >({
+      query: (updatedData) => ({
         url: "/users/password",
         method: "PATCH",
         body: updatedData,
       }),
-      transformResponse,
+      transformResponse: transformResponse<null>(),
       transformErrorResponse,
     }),
 
     // GET ENROLLED COURSES
-    getEnrolledCourses: builder.query({
-      query: () => "/users/enrolled-courses",
-      providesTags: ["Course"],
-    }),
+    getEnrolledCourses: builder.query<ResponseContract<CourseContract[]>, void>(
+      {
+        query: () => "/users/enrolled-courses",
+        providesTags: ["Course"],
+        transformResponse: transformResponse<CourseContract[]>(),
+        transformErrorResponse,
+      }
+    ),
 
     // LAST COURSE VISITED
-    lastCourseVisited: builder.mutation({
-      query: ({ courseId }: { courseId: string }) => ({
+    lastCourseVisited: builder.mutation<
+      ResponseContract<null>,
+      { courseId: string }
+    >({
+      query: ({ courseId }) => ({
         url: "/users/enrolled-courses/last-visited",
         method: "PATCH",
         body: { courseId },
       }),
-      transformResponse,
+      transformResponse: transformResponse<null>(),
       transformErrorResponse,
       invalidatesTags: ["User", "Course"],
     }),
 
     // GET COURSE PROGRESS
-    getCourseProgress: builder.query({
-      query: ({ courseId }: { courseId: string }) =>
-        `/users/enrolled-courses/${courseId}/progress`,
+    getCourseProgress: builder.query<
+      ResponseContract<{
+        completedVideos: CourseVideoContract[];
+        progress: number;
+        totalLearningCredits: number;
+      }>,
+      { courseId: string }
+    >({
+      query: ({ courseId }) => `/users/enrolled-courses/${courseId}/progress`,
       providesTags: (result, error, { courseId }) => [
         { type: "Course", id: courseId },
       ],
+      transformResponse: transformResponse<{
+        completedVideos: CourseVideoContract[];
+        progress: number;
+        totalLearningCredits: number;
+      }>(),
+      transformErrorResponse,
     }),
 
     // GET AVERAGE PROGRESS ACROSS ALL THE COURSES
@@ -171,12 +210,17 @@ const userApi = apiSlice.injectEndpoints({
     }),
 
     // COMPLETE A VIDEO
-    completeCourseVideo: builder.mutation({
+    completeCourseVideo: builder.mutation<
+      ResponseContract<null>,
+      { courseId: string; videoId: string }
+    >({
       query: ({ courseId, videoId }) => ({
         url: `/users/enrolled-courses/${courseId}/videos/${videoId}`,
         method: "PATCH",
       }),
       invalidatesTags: ["Course"],
+      transformResponse: transformResponse<null>(),
+      transformErrorResponse,
     }),
   }),
 });
