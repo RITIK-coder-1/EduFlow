@@ -1,9 +1,9 @@
 /* ----------------------------------------------------------------------------------------------
-UserProfilePic.jsx
+UserProfilePic.tsx
 The profile of the user
 ------------------------------------------------------------------------------------------------- */
 
-import { Image, Navlink, Logout } from "../index.components";
+import { Image, Navlink, Logout } from "../index.components.js";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,7 +15,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useGetUserQuery } from "@/api/index.api";
 
-function UserProfilePic({ isTopBar = false }) {
+interface UserProfilePicContract {
+  isTopBar: boolean;
+}
+
+function UserProfilePic({ isTopBar = false }: UserProfilePicContract) {
   const { data } = useGetUserQuery();
   const user = data?.data;
 

@@ -1,9 +1,9 @@
 /* ----------------------------------------------------------------------------------------------
-TopBar.jsx
+TopBar.tsx
 The static top bar for displaying the app logo and user profile 
 ------------------------------------------------------------------------------------------------- */
 
-import { Image, UserProfilePic } from "../index.components";
+import { Image, UserProfilePic } from "../index.components.js";
 
 function TopBar() {
   return (
