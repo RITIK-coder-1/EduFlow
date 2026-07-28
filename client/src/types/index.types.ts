@@ -16,6 +16,7 @@ import {
   ApiErrorResponse,
   RegisterRequestBody,
   BaseApiResponse,
+  ResponseContract
 } from "./api.types.ts";
 
 export type {
@@ -29,4 +30,5 @@ export type {
   BaseApiResponse,
   ReduxUserStateContract,
   RegisterRequestBody,
+  ResponseContract
 };

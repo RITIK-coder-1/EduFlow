@@ -3,28 +3,23 @@ queryResponses.ts
 This function provides the specific transformed responses for Redux Toolkit Query success and errors
 ------------------------------------------------------------------------------------------------- */
 
-import { ApiSuccessResponse } from "../types/index.types.ts";
+import { ApiSuccessResponse, ResponseContract } from "../types/index.types.ts";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
 
-interface ResponseContract {
-  data?: unknown;
-  message: string;
-}
-
 function queryResponses() {
   // success response
-  const transformResponse = (
-    response: ApiSuccessResponse<unknown>
-  ): ResponseContract => {
-    return {
-      data: response?.data,
-      message: response?.message,
+  const transformResponse =
+    <T>() =>
+    (response: ApiSuccessResponse<T>): ResponseContract<T> => {
+      return {
+        data: response?.data,
+        message: response?.message,
+      };
     };
-  };
 
   // error response
-  const transformErrorResponse = (
+  const transformErrorResponse = <T>(
     error:
       | FetchBaseQueryError
       | SerializedError

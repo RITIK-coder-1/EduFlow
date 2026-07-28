@@ -17,6 +17,12 @@ export interface ApiSuccessResponse<T> extends BaseApiResponse {
   data: T;
 }
 
+// RTKQ response contract for transforming data
+export interface ResponseContract<T = never> {
+  data?: T; // Only error responses won't provide the data so it should be never if none is provided
+  message: string;
+}
+
 // Defining an interface for the Request Body
 export interface RegisterRequestBody {
   firstName: string;
