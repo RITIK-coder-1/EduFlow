@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------------------------
-StudentAccordion.jsx
+StudentAccordion.tsx
 The custom accordion for students' interface (public course and video players)
 ------------------------------------------------------------------------------------------------- */
 
@@ -8,13 +8,24 @@ import {
   CourseCommonAccordionItem,
   CourseAccordionContent,
   CourseAccordionTrigger,
-} from "../index.components";
+} from "../index.components.js";
 import { Link, useParams } from "react-router-dom";
-import slugify from "@/utils/slugify";
+import slugify from "../../utils/slugify.ts";
 import { PlayCircle, ChevronRightIcon } from "lucide-react";
-import useUserStatus from "@/hooks/useUserStatus";
+import useUserStatus from "../../hooks/useUserStatus.ts";
+import { CourseSectionContract } from "../../types/course.types.ts";
 
-function StudentAccordion({ sections, courseId, videoLabel = "WATCH NOW" }) {
+interface StudentAccordionInterface {
+  sections: CourseSectionContract[];
+  courseId: string;
+  videoLabel?: string;
+}
+
+function StudentAccordion({
+  sections,
+  courseId,
+  videoLabel = "WATCH NOW",
+}: StudentAccordionInterface) {
   // the user stats
   const { isOwner, isEnrolled, accountType, isAuthenticated } =
     useUserStatus(courseId);
