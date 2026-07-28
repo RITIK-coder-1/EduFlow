@@ -207,34 +207,55 @@ const instructorApi = apiSlice.injectEndpoints({
     }),
 
     // GET INSTRUCTOR COURSES IMPORTANT INFORMATION (TO BE DONE: REFACTORING IN PROGRESS)
-    getInstructorData: builder.query({
+    getInstructorData: builder.query<
+      ResponseContract<{
+        totalStudents: number;
+        createdCourses: CourseContract[];
+      }>,
+      string
+    >({
       async queryFn(_, _queryApi, _extraOptions, baseQuery) {
         try {
-          const result = await baseQuery("/instructor/courses");
+          const { data, error } = await baseQuery("/instructor/courses");
 
           // Check if any request failed
-          // const errors = result?.error;
-          // if (errors?.length > 0) return { error: errors[0].error };
+          if (error) {
+            return { error };
+          }
 
           // the created courses
-          const createdCourses = result?.(
-            data as ApiSuccessResponse<CourseContract[]>
-          )?.data;
+          const createdCourseApi = data as ApiSuccessResponse<CourseContract[]>;
+          const createdCourses: CourseContract[] = createdCourseApi?.data ?? [];
+
           // the number of students enrolled of each course
           const numberOfStudents = createdCourses?.map(
             (course) => course?.enrolledBy?.length
           );
+
           // the total number of students
           const totalStudents = numberOfStudents?.reduce(
-            (acc, val) => acc + val,
+            (acc: number, val: number) => acc + val,
             0
           );
 
           return {
-            data: { totalStudents, createdCourses },
+            data: {
+              data: { totalStudents, createdCourses },
+              message: "Instructor course information fetched!",
+            },
           };
-        } catch (error: unknown) {
-          return { error };
+        } catch (error: any) {
+          return {
+            error: {
+              status: error?.status || "CUSTOM_ERROR",
+              data: {
+                message:
+                  error?.message ||
+                  "An error occurred fetching dashboard analytics",
+                success: false,
+              },
+            },
+          };
         }
       },
       providesTags: ["Course", "User"],
