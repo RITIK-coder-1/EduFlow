@@ -12,100 +12,126 @@ import {
   CourseContract,
   CourseSectionContract,
   CourseVideoContract,
-} from "../../types/course.types.ts";
-import { ApiSuccessResponse } from "../../types/api.types.ts";
+  ResponseContract,
+  ApiSuccessResponse,
+} from "../../types/index.types.ts";
+
+interface MinimalCourse {
+  title?: string;
+  description?: string;
+  price?: number;
+  category?: string;
+  sections?: CourseSectionContract[];
+  tags?: string[];
+  courseId?: string;
+  status?: string;
+}
+
+interface MinimalCourseVideoContract {
+  title: string;
+  sectionId?: string;
+  videoId?: string;
+  courseId?: string;
+}
+
+interface MinimalSectionContract {
+  title?: string;
+  courseId?: string;
+  sectionId?: string;
+}
 
 const instructorApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // CREATE A COURSE
-    createCourse: builder.mutation({
-      query: (courseData: CourseContract) => ({
+    createCourse: builder.mutation<
+      ResponseContract<CourseContract>,
+      MinimalCourse
+    >({
+      query: (courseData) => ({
         url: "/instructor/courses",
         method: "POST",
         body: courseData,
       }),
       transformErrorResponse,
-      transformResponse,
+      transformResponse: transformResponse<CourseContract>(),
       invalidatesTags: ["Course", "Stats", "Category"],
     }),
 
     // GET A PARTICULAR COURSE
-    getCourseInstructor: builder.query({
-      query: ({ courseId }: { courseId: string }) => `/instructor/${courseId}`,
+    getCourseInstructor: builder.query<
+      ResponseContract<CourseContract>,
+      MinimalCourse
+    >({
+      query: ({ courseId }) => `/instructor/${courseId}`,
       transformErrorResponse,
-      transformResponse,
+      transformResponse: transformResponse<CourseContract>(),
       providesTags: ["Course"],
     }),
 
     // UPDATE A COURSE
-    updateCourse: builder.mutation({
-      query: ({
-        courseDetails,
-        courseId,
-      }: {
-        courseDetails: CourseContract;
-        courseId: string;
-      }) => ({
+    updateCourse: builder.mutation<
+      ResponseContract<CourseContract>,
+      MinimalCourse
+    >({
+      query: ({ courseId, ...courseDetails }) => ({
         url: `/instructor/${courseId}`,
         method: "PATCH",
         body: courseDetails,
       }),
       transformErrorResponse,
-      transformResponse,
+      transformResponse: transformResponse<CourseContract>(),
       invalidatesTags: ["Course", "Category"],
     }),
 
     // DELETE A COURSE
-    deleteCourseInstructor: builder.mutation({
-      query: ({ courseId }: { courseId: string }) => ({
+    deleteCourseInstructor: builder.mutation<
+      ResponseContract<null>,
+      MinimalCourse
+    >({
+      query: ({ courseId }) => ({
         url: `/instructor/${courseId}`,
         method: "DELETE",
       }),
       transformErrorResponse,
-      transformResponse,
+      transformResponse: transformResponse<null>(),
       invalidatesTags: ["Course", "Stats", "Category"],
     }),
 
     // ADD A SECTION
-    addNewSection: builder.mutation({
-      query: ({
-        sectionData,
-        courseId,
-      }: {
-        sectionData: CourseSectionContract;
-        courseId: string;
-      }) => ({
+    addNewSection: builder.mutation<
+      ResponseContract<CourseContract>,
+      MinimalSectionContract
+    >({
+      query: ({ title, courseId }) => ({
         url: `/instructor/${courseId}/sections`,
         method: "POST",
-        body: sectionData,
+        body: { title },
       }),
       transformErrorResponse,
-      transformResponse,
+      transformResponse: transformResponse<CourseContract>(),
       invalidatesTags: ["Course"],
     }),
 
     // UPDATE A SECTION
-    updateSection: builder.mutation({
-      query: ({
-        updatedData,
-        courseId,
-        sectionId,
-      }: {
-        updatedData: CourseSectionContract;
-        courseId: string;
-        sectionId: string;
-      }) => ({
+    updateSection: builder.mutation<
+      ResponseContract<CourseSectionContract>,
+      MinimalSectionContract
+    >({
+      query: ({ title, courseId, sectionId }) => ({
         url: `/instructor/${courseId}/sections/${sectionId}`,
         method: "PATCH",
-        body: updatedData,
+        body: { title },
       }),
       transformErrorResponse,
-      transformResponse,
+      transformResponse: transformResponse<CourseSectionContract>(),
       invalidatesTags: ["Course"],
     }),
 
     // DELETE A SECTION
-    deleteSection: builder.mutation({
+    deleteSection: builder.mutation<
+      ResponseContract<null>,
+      MinimalSectionContract
+    >({
       query: ({
         courseId,
         sectionId,
@@ -117,80 +143,66 @@ const instructorApi = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
       transformErrorResponse,
-      transformResponse,
+      transformResponse: transformResponse<null>(),
       invalidatesTags: ["Course"],
     }),
 
     // ADD A NEW VIDEO
-    addNewVideo: builder.mutation({
-      query: ({
-        videoData,
-        courseId,
-        sectionId,
-      }: {
-        videoData: CourseVideoContract;
-        courseId: string;
-        sectionId: string;
-      }) => ({
+    addNewVideo: builder.mutation<
+      ResponseContract<CourseVideoContract>,
+      MinimalCourseVideoContract
+    >({
+      query: ({ title, courseId, sectionId }) => ({
         url: `/instructor/${courseId}/sections/${sectionId}/videos`,
         method: "POST",
-        body: videoData,
+        body: { title, sectionId },
       }),
       transformErrorResponse,
-      transformResponse,
+      transformResponse: transformResponse<CourseVideoContract>(),
       invalidatesTags: ["Course"],
     }),
 
     // UPDATE A VIDEO
-    updateVideo: builder.mutation({
-      query: ({
-        updatedData,
-        courseId,
-        sectionId,
-        videoId,
-      }: {
-        updatedData: CourseVideoContract;
-        courseId: string;
-        sectionId: string;
-        videoId: string;
-      }) => ({
+    updateVideo: builder.mutation<
+      ResponseContract<CourseVideoContract>,
+      MinimalCourseVideoContract
+    >({
+      query: ({ title, courseId, sectionId, videoId }) => ({
         url: `/instructor/${courseId}/sections/${sectionId}/videos/${videoId}`,
         method: "PATCH",
-        body: updatedData,
+        body: { title, videoId, sectionId },
       }),
       transformErrorResponse,
-      transformResponse,
+      transformResponse: transformResponse<CourseVideoContract>(),
       invalidatesTags: ["Course"],
     }),
 
     // DELETE A VIDEO
-    deleteVideo: builder.mutation({
-      query: ({
-        courseId,
-        sectionId,
-        videoId,
-      }: {
-        courseId: string;
-        sectionId: string;
-        videoId: string;
-      }) => ({
+    deleteVideo: builder.mutation<
+      ResponseContract<null>,
+      MinimalCourseVideoContract
+    >({
+      query: ({ courseId, sectionId, videoId }) => ({
         url: `/instructor/${courseId}/sections/${sectionId}/videos/${videoId}`,
         method: "DELETE",
       }),
       transformErrorResponse,
-      transformResponse,
+      transformResponse: transformResponse<null>(),
       invalidatesTags: ["Course"],
     }),
 
     // PUBLISH A COURSE
-    publishCourse: builder.mutation({
-      query: ({ status, courseId }: { status: string; courseId: string }) => ({
+    publishCourse: builder.mutation<
+      ResponseContract<CourseContract>,
+      MinimalCourse
+    >({
+      query: ({ status, courseId }) => ({
         url: `instructor/${courseId}/publish`,
         method: "PATCH",
         body: { status },
       }),
       transformErrorResponse,
-      transformResponse,
+      transformResponse: transformResponse<CourseContract>(),
       invalidatesTags: ["Course"],
     }),
 
@@ -205,7 +217,9 @@ const instructorApi = apiSlice.injectEndpoints({
           // if (errors?.length > 0) return { error: errors[0].error };
 
           // the created courses
-          const createdCourses = result?.(data as ApiSuccessResponse<CourseContract[]>)?.data;
+          const createdCourses = result?.(
+            data as ApiSuccessResponse<CourseContract[]>
+          )?.data;
           // the number of students enrolled of each course
           const numberOfStudents = createdCourses?.map(
             (course) => course?.enrolledBy?.length
