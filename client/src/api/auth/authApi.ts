@@ -35,31 +35,43 @@ const authApi = apiSlice.injectEndpoints({
       transformErrorResponse,
     }),
     // VALIDATE THE OTP AND REGISTER THE USER
-    register: builder.mutation({
-      query: (userData: UserContract) => ({
+    register: builder.mutation<
+      ResponseContract<UserContract>,
+      RegisterRequestBody
+    >({
+      query: (userData) => ({
         url: "/auth/register",
         method: "POST",
         body: userData,
       }),
-      transformResponse,
+      transformResponse: transformResponse<UserContract>(),
       transformErrorResponse,
       invalidatesTags: ["User", "Stats", "Course"],
     }),
 
     // VALIDATE THE OTP AND LOGIN THE USER
-    login: builder.mutation({
-      query: (userData: { credential: string; password: string }) => ({
+    login: builder.mutation<
+      ResponseContract<{
+        existingUser: UserContract;
+        accessToken: string;
+      }>,
+      { credential: string; password: string }
+    >({
+      query: (userData) => ({
         url: "/auth/login",
         method: "POST",
         body: userData,
       }),
-      transformResponse,
+      transformResponse: transformResponse<{
+        existingUser: UserContract;
+        accessToken: string;
+      }>(),
       transformErrorResponse,
       invalidatesTags: ["User", "Course"],
     }),
 
     // ISSUE A NEW TOKEN
-    newToken: builder.mutation({
+    newToken: builder.mutation<ResponseContract<null>, void>({
       query: () => ({
         url: "/auth/token",
         method: "POST",
@@ -67,12 +79,12 @@ const authApi = apiSlice.injectEndpoints({
     }),
 
     // LOGOUT THE USER
-    logout: builder.mutation({
+    logout: builder.mutation<ResponseContract<null>, void>({
       query: () => ({
         url: "/auth/logout",
         method: "POST",
       }),
-      transformResponse,
+      transformResponse: transformResponse<null>(),
       transformErrorResponse,
       invalidatesTags: ["User", "Course"],
     }),
