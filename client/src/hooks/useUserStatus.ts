@@ -7,7 +7,7 @@ import { useGetUserQuery, useGetCourseQuery } from "../api/index.api.js";
 import { CourseContract } from "../types/index.types.ts";
 import { useAppSelector } from "./useReduxHooks.ts";
 
-function useUserStatus(courseId: string) {
+function useUserStatus(courseId: string | void) {
   // the user
   const { data: userData } = useGetUserQuery();
   const user = userData?.data;
