@@ -13,7 +13,7 @@ function useUserStatus(courseId: string) {
   const user = userData?.data;
 
   // the course
-  let course: CourseContract | null = null;
+  let course: CourseContract | null | undefined = null;
   if (courseId) {
     // only if the courseID is provided
     const { data: courseData } = useGetCourseQuery({ courseId });

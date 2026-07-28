@@ -1,15 +1,11 @@
 /* ----------------------------------------------------------------------------------------------
-AppSidebar.jsx
+AppSidebar.tsx
 The navigation sidebar
 ------------------------------------------------------------------------------------------------- */
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroupLabel,
-} from "@/components/ui/sidebar";
-import { Navlink } from "../index.components";
-import useUserStatus from "@/hooks/useUserStatus";
+import { Sidebar, SidebarContent, SidebarGroupLabel } from "../ui/sidebar.jsx";
+import { Navlink } from "../index.components.js";
+import useUserStatus from "../../hooks/useUserStatus.ts";
 
 export function AppSidebar() {
   const { accountType } = useUserStatus();

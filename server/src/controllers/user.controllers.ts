@@ -30,7 +30,10 @@ import type {
 } from "../types/index.types.ts";
 import { Types } from "mongoose";
 
-type MinimalUser = Pick<UserContract, "firstName" | "lastName" | "username">;
+type MinimalUser = Pick<
+  UserContract,
+  "firstName" | "lastName" | "username"
+>;
 
 /* ---------------------------------------------------------------------------------------
 GET USER CONTROLLER
@@ -40,7 +43,7 @@ This is a function to fetch a single user's details
 const getUserFunction = async (
   req: Request,
   res: Response
-): Promise<Response<ApiSuccessResponse<MinimalUser>>> => {
+): Promise<Response<ApiSuccessResponse<UserContract>>> => {
   const user = await User.findById(req.user?._id)
     .select("-password -refreshTokenString")
     .populate<{

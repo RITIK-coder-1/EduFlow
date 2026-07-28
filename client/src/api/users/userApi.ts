@@ -34,9 +34,9 @@ type ProgressPayload = {
 const userApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // GET THE USER PROFILE
-    getUser: builder.query<ResponseContract<MinimalUser>, void>({
+    getUser: builder.query<ResponseContract<UserContract>, void>({
       query: () => "/users/profile",
-      transformResponse: transformResponse<MinimalUser>(),
+      transformResponse: transformResponse<UserContract>(),
       transformErrorResponse,
       providesTags: ["User", "Course"],
     }),
