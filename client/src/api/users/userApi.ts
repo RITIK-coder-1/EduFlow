@@ -13,6 +13,7 @@ import {
   ResponseContract,
   UserContract,
   CourseVideoContract,
+  ApiSuccessResponse,
 } from "../../types/index.types.ts";
 
 type MinimalUser = Pick<UserContract, "firstName" | "lastName" | "username">;
@@ -22,6 +23,12 @@ interface UpdateEmailContract {
   password?: string;
   userOtp?: string;
 }
+
+type ProgressPayload = {
+  completedVideos: CourseVideoContract[];
+  progress: number;
+  totalLearningCredits: number;
+};
 
 // the API calls
 const userApi = apiSlice.injectEndpoints({
@@ -163,7 +170,14 @@ const userApi = apiSlice.injectEndpoints({
     }),
 
     // GET AVERAGE PROGRESS ACROSS ALL THE COURSES
-    getBulkCourseProgress: builder.query({
+    getBulkCourseProgress: builder.query<
+      ResponseContract<{
+        average: number;
+        totalLearningCredits: number;
+        details: number[];
+      }>,
+      string[]
+    >({
       // I'm passing the entire array of enrolledCourses here
       async queryFn(courseIds, _queryApi, _extraOptions, baseQuery) {
         try {
@@ -175,35 +189,57 @@ const userApi = apiSlice.injectEndpoints({
           );
 
           // Check if any request failed
-          const errors = results?.filter((res) => res?.error);
-          if (errors?.length > 0) return { error: errors[0].error };
+          const firstErrorResult = results.find((res) => res.error);
+          if (firstErrorResult && firstErrorResult.error) {
+            return { error: firstErrorResult.error };
+          }
 
           // Calculating the average progress across all the courses
-          const progressValues = results?.map(
-            (res) => res?.data?.data?.progress
+          const progressValues = results?.map((res) => {
+            const apiData = res?.data as ApiSuccessResponse<ProgressPayload>;
+
+            return apiData?.data?.progress;
+          });
+          const total = progressValues?.reduce(
+            (acc, val) => (acc as number) + (val as number),
+            0
           );
-          const total = progressValues?.reduce((acc, val) => acc + val, 0);
           const average =
-            progressValues?.length > 0 ? total / progressValues?.length : 0;
+            progressValues?.length > 0
+              ? (total as number) / progressValues?.length
+              : 0;
 
           // Calculating the total credits across all the courses
-          const creditValues = results?.map(
-            (res) => res?.data?.data?.totalLearningCredits
-          );
+          const creditValues = results?.map((res) => {
+            const apiData = res?.data as ApiSuccessResponse<ProgressPayload>;
+
+            return apiData?.data?.totalLearningCredits;
+          });
           const totalLearningCredits = creditValues?.reduce(
-            (acc, val) => acc + val,
+            (acc, val) => (acc as number) + (val as number),
             0
           );
 
           return {
             data: {
-              average: Math.ceil(average),
-              totalLearningCredits,
-              details: progressValues,
+              data: {
+                average: Math.ceil(average),
+                totalLearningCredits,
+                details: progressValues,
+              },
+              message: "Course progress successfully fetched!",
             },
           };
-        } catch (error) {
-          return { error };
+        } catch (error: any) {
+          return {
+            error: {
+              status: error?.status || "CUSTOM_ERROR",
+              data: {
+                message: error?.message || "An unknown error occurred",
+                success: false,
+              },
+            },
+          };
         }
       },
       providesTags: ["Course"],
