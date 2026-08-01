@@ -1,11 +1,19 @@
 /* ----------------------------------------------------------------------------------------------
-Image.jsx
+Image.tsx
 Common component for displaying an image
 ------------------------------------------------------------------------------------------------- */
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
-function Image({ src, alt, title, size, className }) {
+interface ImageContract {
+  src: string;
+  alt: string;
+  title: string;
+  size?: string;
+  className?: string;
+}
+
+function Image({ src, alt, title, size, className }: ImageContract) {
   return (
     <Avatar
       size={size}

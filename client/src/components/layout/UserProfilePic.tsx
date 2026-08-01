@@ -30,7 +30,7 @@ function UserProfilePic({ isTopBar = false }: UserProfilePicContract) {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon-custom" className="rounded-full">
             <Image
-              src={user?.profilePic}
+              src={user?.profilePic || ""}
               alt={"user"}
               title="Click to visit your profile"
               className="w-18 h-18 md:w-20 md:h-20"
@@ -53,7 +53,7 @@ function UserProfilePic({ isTopBar = false }: UserProfilePicContract) {
     );
   } else {
     // Return the normal profile if not topbar
-    return <Image src={user?.profilePic} alt={"user"} title="Your profile" />;
+    return <Image src={user?.profilePic || ""} alt={"user"} title="Your profile" />;
   }
 }
 
