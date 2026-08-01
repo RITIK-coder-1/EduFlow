@@ -1,10 +1,27 @@
 /* ---------------------------------------------------------------------------------------
-FieldInput.jsx
+FieldInput.tsx
 The input field along with its label 
 ------------------------------------------------------------------------------------------ */
 
+import React from "react";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+
+interface FieldInputProps {
+  label?: React.ReactNode;
+  name: string;
+  inputType?: string;
+  placeholder?: string;
+  description?: React.ReactNode;
+  required?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
+  isLabel?: boolean;
+  min?: number | string;
+  value?: string | number;
+  useParentValue?: boolean;
+}
 
 function FieldInput({
   label,
@@ -20,7 +37,7 @@ function FieldInput({
   min,
   value = "",
   useParentValue = true,
-}) {
+}: FieldInputProps) {
   return (
     <Field>
       {isLabel && (
