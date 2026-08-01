@@ -3,18 +3,18 @@ userApi.ts
 This file does all the user API calls 
 ------------------------------------------------------------------------------------------------- */
 
-import apiSlice from "../base/apiSlice.ts";
+import apiSlice from "../base/apiSlice";
 import {
   transformResponse,
   transformErrorResponse,
-} from "../../utils/queryResponses.ts";
+} from "../../utils/queryResponses";
 import {
   CourseContract,
   ResponseContract,
   UserContract,
   CourseVideoContract,
   ApiSuccessResponse,
-} from "../../types/index.types.ts";
+} from "../../types/index.types";
 
 type MinimalUser = Pick<UserContract, "firstName" | "lastName" | "username">;
 

@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 
 interface InputFileProps {
   name: string;
-  label: React.ReactNode;
+  label?: React.ReactNode;
   description?: React.ReactNode;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;

@@ -6,9 +6,9 @@ Centralized exporting file for all the pages
 import Register from "./auth/register/Register.jsx";
 import Login from "./auth/login/Login.jsx";
 import Profile from "./account/Profile.jsx";
-import UpdateProfile from "./account/UpdateProfile.jsx";
-import UpdatePassword from "./account/UpdatePassword.jsx";
-import UpdateEmail from "./account/UpdateEmail.jsx";
+import UpdateProfile from "./account/UpdateProfile.js";
+import UpdatePassword from "./account/UpdatePassword.js";
+import UpdateEmail from "./account/UpdateEmail.js";
 import CreateCourse from "./course/CreateCourse.jsx";
 import UpdateCourse from "./course/UpdateCourse.jsx";
 import Home from "./common/Home.jsx";

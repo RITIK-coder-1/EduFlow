@@ -1,16 +1,14 @@
 /* ----------------------------------------------------------------------------------------------
-UpdateProfile.jsx
+UpdateProfile.tsx
 The page to update the user profile 
 ------------------------------------------------------------------------------------------------- */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent, SubmitEvent } from "react";
 import {
   useDeleteUserProfilePicMutation,
   useUpdateUserDetailsMutation,
   useGetUserQuery,
 } from "../../api/index.api";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../features/authSlice";
 import getFormData from "../../utils/getFormData";
 import {
   CommonButton,
@@ -22,8 +20,19 @@ import {
 } from "@/components/index.components";
 import { toast } from "sonner";
 import { TrashIcon } from "lucide-react";
+import { ApiErrorResponse } from "@/types/index.types";
 
 function UpdateProfile() {
+  /* ---------------------------------------------------------------------------------------
+  Interfaces
+  ------------------------------------------------------------------------------------------ */
+  interface UserDetailsContract {
+    firstName: string;
+    lastName: string;
+    username: string;
+    profilePic?: File | null;
+  }
+
   /* ---------------------------------------------------------------------------------------
   The Redux Toolkit Data
   ------------------------------------------------------------------------------------------ */
@@ -33,18 +42,17 @@ function UpdateProfile() {
   const user = data?.data;
   const [deleteProfilePic, { isLoading: isDeleteProfileLoading }] =
     useDeleteUserProfilePicMutation();
-  const dispatch = useDispatch();
 
   /* ---------------------------------------------------------------------------------------
   The user details 
   ------------------------------------------------------------------------------------------ */
-  const [userDetails, setUserDetails] = useState({
+  const [userDetails, setUserDetails] = useState<UserDetailsContract>({
     firstName: "",
     lastName: "",
     username: "",
   });
 
-  const [profilePic, setProfilePic] = useState(null);
+  const [profilePic, setProfilePic] = useState<File | null>(null);
 
   // setting the current value for better UX
   useEffect(() => {
@@ -60,37 +68,39 @@ function UpdateProfile() {
   ------------------------------------------------------------------------------------------ */
 
   // text value
-  const changeValue = (e) => {
+  const changeValue = (e: ChangeEvent<HTMLInputElement>) => {
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
   };
 
   // the profile pic
-  const updateProfilePic = (e) => {
-    setProfilePic(e.target.files[0]); // set the value of the profile pic as the file object
-    setUserDetails({ ...userDetails, profilePic: e.target.files[0] });
+  const updateProfilePic = (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0] ?? null; // checking for TS-specific configuration: if the value is null, return null
+
+    setProfilePic(selectedFile);
+    setUserDetails({ ...userDetails, profilePic: selectedFile });
   };
 
   /* ---------------------------------------------------------------------------------------
   The API call to update the details 
   ------------------------------------------------------------------------------------------ */
-  const updateDetails = async (e) => {
+  const updateDetails = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       // upload the simple object if the profile pic isn't updated
       if (!profilePic) {
-        const { data, message } = await update(userDetails).unwrap();
-        dispatch(setUser(data));
+        const { message } = await update(userDetails).unwrap();
         toast.success(message, { position: "top-right" });
       } else {
         // else upload a form data
         const formData = getFormData(userDetails);
-        const { data, message } = await update(formData).unwrap();
-        dispatch(setUser(data));
+        const { message } = await update(formData).unwrap();
         toast.success(message, { position: "top-right" });
       }
-    } catch (error) {
-      toast.error(error.message, { position: "top-right" });
+    } catch (error: unknown) {
+      toast.error((error as ApiErrorResponse).message, {
+        position: "top-right",
+      });
     }
   };
 
@@ -99,11 +109,12 @@ function UpdateProfile() {
   ------------------------------------------------------------------------------------------ */
   const deletePicFunction = async () => {
     try {
-      const { data, message } = await deleteProfilePic().unwrap();
-      dispatch(setUser(data));
+      const { message } = await deleteProfilePic().unwrap();
       toast.success(message, { position: "top-right" });
-    } catch (error) {
-      toast.error(error.message, { position: "top-right" });
+    } catch (error: unknown) {
+      toast.error((error as ApiErrorResponse).message, {
+        position: "top-right",
+      });
     }
   };
 

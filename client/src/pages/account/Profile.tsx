@@ -1,3 +1,8 @@
+/* ----------------------------------------------------------------------------------------------
+Profile.tsx
+User profile
+------------------------------------------------------------------------------------------------- */
+
 import UserProfilePic from "@/components/layout/UserProfilePic";
 import {
   CommonButton,
@@ -8,12 +13,12 @@ import {
 import { useDeleteUserAccountMutation, useGetUserQuery } from "@/api/index.api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useDispatch } from "react-redux";
 import { disableUser } from "@/features/authSlice";
+import { useAppDispatch } from "@/hooks/useReduxHooks";
 
 function Profile() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // the user info
   const { data, isLoading } = useGetUserQuery();
@@ -32,15 +37,12 @@ function Profile() {
   const deleteUserAccount = async () => {
     const deletePromise = deleteAccount().unwrap();
 
-    toast.promise(
-      deletePromise,
-      {
-        loading: "Deleting the account...",
-        success: "Account deleted successfully!",
-        error: "There was a problem while deleting the account.",
-      },
-      { position: "top-right" }
-    );
+    toast.promise(deletePromise, {
+      loading: "Deleting the account...",
+      success: "Account deleted successfully!",
+      error: "There was a problem while deleting the account.",
+      position: "top-right",
+    });
   };
 
   // navigate to the homepage once the account is deleted

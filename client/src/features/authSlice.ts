@@ -4,7 +4,7 @@ Global State Management for authentication
 ------------------------------------------------------------------------------------------------- */
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ReduxUserStateContract } from "../types/index.types.ts";
+import { ReduxUserStateContract } from "../types/index.types";
 
 /* ----------------------------------------------------------------------------------------------
 Interface

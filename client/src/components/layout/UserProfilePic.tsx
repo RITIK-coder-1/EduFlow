@@ -16,10 +16,14 @@ import {
 import { useGetUserQuery } from "@/api/index.api";
 
 interface UserProfilePicContract {
-  isTopBar: boolean;
+  isTopBar?: boolean;
+  className?: string;
 }
 
-function UserProfilePic({ isTopBar = false }: UserProfilePicContract) {
+function UserProfilePic({
+  isTopBar = false,
+  className,
+}: UserProfilePicContract) {
   const { data } = useGetUserQuery();
   const user = data?.data;
 
@@ -53,7 +57,14 @@ function UserProfilePic({ isTopBar = false }: UserProfilePicContract) {
     );
   } else {
     // Return the normal profile if not topbar
-    return <Image src={user?.profilePic || ""} alt={"user"} title="Your profile" />;
+    return (
+      <Image
+        src={user?.profilePic || ""}
+        alt={"user"}
+        title="Your profile"
+        className={className}
+      />
+    );
   }
 }
 
