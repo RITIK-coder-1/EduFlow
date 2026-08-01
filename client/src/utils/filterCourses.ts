@@ -5,7 +5,7 @@ The utility to filter the course fields for display
 
 import { CourseContract } from "../types/index.types.ts";
 
-interface FilteredCourseContract {
+export interface FilteredCourseContract {
   courseId: string;
   title: string;
   desc: string;
@@ -18,7 +18,7 @@ interface FilteredCourseContract {
 function filterCourses(courseArray: CourseContract[]) {
   const courses: FilteredCourseContract[] = courseArray?.map((course) => {
     return {
-      courseId: course._id,
+      courseId: course?._id,
       title: course?.title,
       desc: course?.description,
       img: course?.thumbnail,

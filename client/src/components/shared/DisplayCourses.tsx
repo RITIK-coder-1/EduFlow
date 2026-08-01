@@ -1,11 +1,28 @@
 /* ----------------------------------------------------------------------------------------------
-DisplayCourses.jsx
+DisplayCourses.tsx
 The component for displaying all the courses 
 ------------------------------------------------------------------------------------------------- */
 
-import { CourseCard, ProgressBar, SearchBar, SpinnerCustom } from "../index.components";
-import filterCourses from "@/utils/filterCourses";
+import React from "react";
+import {
+  CourseCard,
+  ProgressBar,
+  SearchBar,
+  SpinnerCustom,
+} from "../index.components";
+import filterCourses, { FilteredCourseContract } from "@/utils/filterCourses";
 import { useEffect, useState } from "react";
+import { CourseContract } from "@/types/course.types";
+
+interface DisplayCoursesProps {
+  heading: string;
+  label: string;
+  path: string;
+  displayInstructorName?: boolean;
+  courseData?: CourseContract[];
+  isProgress?: boolean;
+  isLoading: boolean;
+}
 
 function DisplayCourses({
   heading,
@@ -15,9 +32,11 @@ function DisplayCourses({
   courseData,
   isProgress,
   isLoading,
-}) {
+}: DisplayCoursesProps) {
   // the courses data to display on the page for simplicity
-  const [coursesDisplayData, setCoursesDisplayData] = useState([]);
+  const [coursesDisplayData, setCoursesDisplayData] = useState<
+    FilteredCourseContract[]
+  >([]);
 
   // whenever the value of the actual course data changes, display the filtered data according to it
   useEffect(() => {
@@ -31,7 +50,7 @@ function DisplayCourses({
   const [search, setSearch] = useState("");
 
   // the method to set the search value
-  const setSearchValue = (e) => {
+  const setSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
@@ -39,10 +58,10 @@ function DisplayCourses({
   const triggerSearch = () => {
     let results = courseData;
     // only if the search value is not empty
-    if (search) {
+    if (search && results) {
       const searchTerm = search.toLowerCase().trim();
 
-      results = courseData?.filter(
+      results = results?.filter(
         (course) =>
           // either the title matches or one of the tags
           course?.title?.toLowerCase().trim().includes(searchTerm) ||
@@ -52,7 +71,7 @@ function DisplayCourses({
       );
     }
 
-    const filteredCourses = filterCourses(results);
+    const filteredCourses = filterCourses(results || []);
     setCoursesDisplayData(filteredCourses);
   };
 
@@ -60,7 +79,7 @@ function DisplayCourses({
     <section className="w-full flex flex-col justify-center items-center gap-6">
       <h1 className="text-white text-6xl text-center">{heading}</h1>
       {isLoading ? (
-        <SpinnerCustom className="size-6"/>
+        <SpinnerCustom className="size-6" />
       ) : courseData?.length === 0 ? (
         // Special label for no courses
         <span className="text-foreground italic mt-5 md:text-lg">{label}</span>
@@ -90,7 +109,9 @@ function DisplayCourses({
                       key={course.courseId}
                       path={path.replace(":courseId", `${course.courseId}`)} // replace with the course id
                       displayInstructorName={displayInstructorName}
-                      instructor={`${course.instructorFirstName} ${course.instructorLastName}`}
+                      instructor={`${course.instructorFirstName ?? ""} ${
+                        course.instructorLastName ?? ""
+                      }`}
                     />
                     {/* display the progress bar whenever allowed */}
                     {isProgress && <ProgressBar courseId={course.courseId} />}

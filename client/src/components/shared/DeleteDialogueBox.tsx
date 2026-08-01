@@ -1,8 +1,9 @@
 /* ----------------------------------------------------------------------------------------------
-DeleteDialogueBox.jsx
+DeleteDialogueBox.tsx
 Warning dialogue for deleting important data 
 ------------------------------------------------------------------------------------------------- */
 
+import React from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,13 +18,27 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
-function DeleteDialogueBox({ label, description, onClick, triggerClass }) {
+interface DeleteDialogueBoxProps {
+  label: string;
+  description: string;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  triggerClass?: string;
+}
+
+function DeleteDialogueBox({
+  label,
+  description,
+  onClick,
+  triggerClass,
+}: DeleteDialogueBoxProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
           variant="outline"
-          className={`border-red-400 hover:bg-red-800 cursor-pointer w-full text-xs sm:w-24 md:text-sm md:w-30 ${triggerClass}`}
+          className={`border-red-400 hover:bg-red-800 cursor-pointer w-full text-xs sm:w-24 md:text-sm md:w-30 ${
+            triggerClass ?? ""
+          }`}
           title="Delete"
         >
           {label}
