@@ -1,9 +1,19 @@
 /* ----------------------------------------------------------------------------------------------
-CourseCard.jsx
+CourseCard.tsx
 The common course display card
 ------------------------------------------------------------------------------------------------- */
 
 import { Navlink } from "../index.components";
+
+interface CourseCardProps {
+  image: string;
+  title: string;
+  instructor?: string;
+  description: string;
+  price: number;
+  displayInstructorName?: boolean;
+  path: string;
+}
 
 function CourseCard({
   image,
@@ -13,7 +23,7 @@ function CourseCard({
   price,
   displayInstructorName = true,
   path,
-}) {
+}: CourseCardProps) {
   return (
     <Navlink to={path} className="w-full sm:w-64">
       <div
@@ -33,7 +43,7 @@ function CourseCard({
 
           <div className="w-full flex flex-col grow p-3">
             <div className="w-full flex flex-col gap-1">
-              {displayInstructorName && (
+              {displayInstructorName && instructor && (
                 <span className="text-md text-white/80">{instructor}</span>
               )}
 
