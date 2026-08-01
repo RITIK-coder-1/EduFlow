@@ -1,22 +1,33 @@
 /* ----------------------------------------------------------------------------------------------
-EnrollmentStats.jsx
-The enrollment stats of a course
+EnrolledmentStats.tsx
+The information about a user's enrollment status 
 ------------------------------------------------------------------------------------------------- */
 
 import React, { useState, useEffect } from "react";
-import {
-  useGetCourseInstructorQuery,
-} from "@/api/index.api";
+import { useGetCourseInstructorQuery } from "@/api/index.api";
 
-const EnrollmentStats = ({ courseId }) => {
+// the component props interface
+interface EnrollmentStatsProps {
+  courseId: string;
+}
+
+// the local state interface
+interface StatsState {
+  total: number;
+  rate: number;
+}
+
+const EnrollmentStats: React.FC<EnrollmentStatsProps> = ({ courseId }) => {
   const { data } = useGetCourseInstructorQuery({ courseId });
   const course = data?.data;
-  const [stats, setStats] = useState({ total: 0, rate: 0 });
+
+  // the useState hook
+  const [stats, setStats] = useState<StatsState>({ total: 0, rate: 0 });
 
   useEffect(() => {
     setStats({
-      total: course?.enrolledBy?.length,
-      rate: course?.revenue,
+      total: course?.enrolledBy?.length ?? 0, // Fallback to 0 if undefined
+      rate: course?.revenue ?? 0, // Fallback to 0 if undefined
     });
   }, [course]);
 
