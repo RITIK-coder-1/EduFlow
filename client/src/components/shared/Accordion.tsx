@@ -1,8 +1,9 @@
 /* ----------------------------------------------------------------------------------------------
-Accordion.jsx
+Accordion.tsx
 The custom accordion elements
 ------------------------------------------------------------------------------------------------- */
 
+import React from "react";
 import {
   Accordion,
   AccordionContent,
@@ -11,9 +12,13 @@ import {
 } from "@/components/ui/accordion";
 import { ChevronDownIcon } from "lucide-react";
 
+interface CourseCommonAccordionProps {
+  children: React.ReactNode;
+}
+
 // The accordion
 
-export function CourseCommonAccordion({ children }) {
+export function CourseCommonAccordion({ children }: CourseCommonAccordionProps) {
   return (
     <Accordion type="multiple" className="w-full">
       {children}
@@ -21,8 +26,13 @@ export function CourseCommonAccordion({ children }) {
   );
 }
 
+interface CourseCommonAccordionItemProps {
+  children: React.ReactNode;
+  value: string;
+}
+
 // The accordion item
-export function CourseCommonAccordionItem({ children, value }) {
+export function CourseCommonAccordionItem({ children, value }: CourseCommonAccordionItemProps) {
   return (
     <AccordionItem value={value} className="border border-white/5">
       {children}
@@ -30,10 +40,18 @@ export function CourseCommonAccordionItem({ children, value }) {
   );
 }
 
+interface CourseAccordionTriggerProps {
+  children: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+}
+
 // The accordion trigger
-export function CourseAccordionTrigger({ children, onClick }) {
+export function CourseAccordionTrigger({ children, onClick }: CourseAccordionTriggerProps) {
   return (
-    <AccordionTrigger className="w-full border-b rounded-none px-2 bg-white/3 border-white/5 text-md flex justify-between items-center">
+    <AccordionTrigger 
+      onClick={onClick}
+      className="w-full border-b rounded-none px-2 bg-white/3 border-white/5 text-md flex justify-between items-center"
+    >
       {/* The trigger title */}
       {children}
 
@@ -43,8 +61,13 @@ export function CourseAccordionTrigger({ children, onClick }) {
   );
 }
 
+interface CourseAccordionContentProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
 // The accordion content
-export function CourseAccordionContent({ children, className }) {
+export function CourseAccordionContent({ children, className = "" }: CourseAccordionContentProps) {
   return (
     <AccordionContent
       className={`w-full flex flex-col gap-7 justify-between items-center ${className}`}
