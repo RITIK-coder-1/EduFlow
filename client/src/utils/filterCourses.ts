@@ -3,7 +3,7 @@ filterCourse.ts
 The utility to filter the course fields for display 
 ------------------------------------------------------------------------------------------------- */
 
-import { CourseContract } from "../types/index.types.ts";
+import { CourseContract } from "../types/index.types";
 
 export interface FilteredCourseContract {
   courseId: string;
