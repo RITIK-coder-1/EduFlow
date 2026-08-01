@@ -2,7 +2,7 @@
 user.types.ts
 ------------------------------------------------------------------------------------------ */
 
-import { CourseContract } from "./index.types.ts";
+import { CourseContract } from "./index.types";
 
 type AccountType = "Student" | "Instructor" | "Admin";
 

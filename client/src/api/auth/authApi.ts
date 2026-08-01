@@ -3,16 +3,16 @@ authApi.ts
 This file does all the auth related API calls 
 ------------------------------------------------------------------------------------------------- */
 
-import apiSlice from "../base/apiSlice.js";
+import apiSlice from "../base/apiSlice";
 import {
   transformResponse,
   transformErrorResponse,
-} from "../../utils/queryResponses.ts";
+} from "../../utils/queryResponses";
 import type {
   RegisterRequestBody,
   ResponseContract,
   UserContract,
-} from "../../types/index.types.ts";
+} from "../../types/index.types";
 
 // the API calls
 const authApi = apiSlice.injectEndpoints({

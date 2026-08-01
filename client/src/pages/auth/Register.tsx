@@ -1,13 +1,13 @@
 /* ---------------------------------------------------------------------------------------
-Register.jsx
+Register.tsx
 The page to register a user
 ------------------------------------------------------------------------------------------ */
 import { useState } from "react";
 import {
   useRegisterMutation,
   useRegisterOtpMutation,
-} from "../../../api/index.api.js";
-import getFormData from "../../../utils/getFormData.ts";
+} from "../../api/index.api";
+import getFormData from "../../utils/getFormData";
 import {
   CommonButton,
   FieldInput,
@@ -17,7 +17,7 @@ import {
   DatePicker,
   OtpInput,
   SpinnerCustom,
-} from "../../../components/index.components.js";
+} from "../../components/index.components";
 import { NativeSelectOption } from "@/components/ui/native-select.jsx";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
