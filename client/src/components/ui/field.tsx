@@ -5,10 +5,7 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 
-function FieldSet({
-  className,
-  ...props
-}: React.ComponentProps<"fieldset">) {
+function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   return (
     <fieldset
       data-slot="field-set"
@@ -46,10 +43,7 @@ function FieldLegend({
   );
 }
 
-function FieldGroup({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="field-group"
@@ -90,11 +84,7 @@ interface FieldProps
   extends React.ComponentProps<"div">,
     VariantProps<typeof fieldVariants> {}
 
-function Field({
-  className,
-  orientation = "vertical",
-  ...props
-}: FieldProps) {
+function Field({ className, orientation = "vertical", ...props }: FieldProps) {
   return (
     <div
       role="group"
@@ -106,10 +96,7 @@ function Field({
   );
 }
 
-function FieldContent({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="field-content"
@@ -140,10 +127,7 @@ function FieldLabel({
   );
 }
 
-function FieldTitle({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="field-label"

@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------------------
-DatePicker.jsx
+DatePicker.tsx
 The component to choose the date of birth
 ------------------------------------------------------------------------------------------ */
 
@@ -13,12 +13,20 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-function DatePicker({ dateSelectionMethod, disabled = false }) {
+interface DatePickerProps {
+  dateSelectionMethod: (dateString: string) => void;
+  disabled?: boolean;
+}
+
+function DatePicker({
+  dateSelectionMethod,
+  disabled = false,
+}: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState();
+  const [date, setDate] = React.useState<Date | undefined>();
 
   return (
-    <Field className="mx-auto w-full" name="dateOfBirth">
+    <Field className="mx-auto w-full">
       <FieldLabel htmlFor="dateOfBirth">
         Date Of Birth <span className="text-destructive text-red-600">*</span>
       </FieldLabel>
@@ -43,9 +51,11 @@ function DatePicker({ dateSelectionMethod, disabled = false }) {
             defaultMonth={date}
             captionLayout="dropdown"
             onSelect={(newDate) => {
-              setDate(newDate);
-              setOpen(false);
-              dateSelectionMethod(newDate.toISOString()); // to pass the date selected by the user to the parent component
+              if (newDate) {
+                setDate(newDate);
+                setOpen(false);
+                dateSelectionMethod(newDate.toISOString()); // to pass the date selected by the user to the parent component
+              }
             }}
           />
         </PopoverContent>
