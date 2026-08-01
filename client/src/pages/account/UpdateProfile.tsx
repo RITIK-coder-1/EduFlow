@@ -93,7 +93,7 @@ function UpdateProfile() {
         toast.success(message, { position: "top-right" });
       } else {
         // else upload a form data
-        const formData = getFormData(userDetails);
+        const formData = getFormData<UserDetailsContract>(userDetails);
         const { message } = await update(formData).unwrap();
         toast.success(message, { position: "top-right" });
       }
