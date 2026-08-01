@@ -107,7 +107,7 @@ function SidebarProvider({
 
   const contextValue = React.useMemo(
     () => ({
-      state,
+      state: (open ? "expanded" : "collapsed") as "expanded" | "collapsed",
       open,
       setOpen,
       isMobile,
