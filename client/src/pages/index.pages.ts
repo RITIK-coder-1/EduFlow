@@ -3,8 +3,8 @@ index.pages.ts
 Centralized exporting file for all the pages
 ------------------------------------------------------------------------------------------------- */
 
-import Register from "./auth/register/Register";
-import Login from "./auth/login/Login";
+import Register from "./auth/Register";
+import Login from "./auth/Login";
 import Profile from "./account/Profile";
 import UpdateProfile from "./account/UpdateProfile";
 import UpdatePassword from "./account/UpdatePassword";
