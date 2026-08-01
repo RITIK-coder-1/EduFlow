@@ -30,7 +30,7 @@ function UpdateProfile() {
     firstName: string;
     lastName: string;
     username: string;
-    profilePic?: File | null;
+    profilePic: File | null;
   }
 
   /* ---------------------------------------------------------------------------------------
@@ -50,9 +50,10 @@ function UpdateProfile() {
     firstName: "",
     lastName: "",
     username: "",
+    profilePic: null,
   });
 
-  const [profilePic, setProfilePic] = useState<File | null>(null);
+  // const [profilePic, setProfilePic] = useState<File | null>(null);
 
   // setting the current value for better UX
   useEffect(() => {
@@ -60,6 +61,7 @@ function UpdateProfile() {
       firstName: user?.firstName || "", // || "" for avoiding the uncontrolled to controller bug
       lastName: user?.lastName || "",
       username: user?.username || "",
+      profilePic: null,
     });
   }, [user]);
 
@@ -76,7 +78,7 @@ function UpdateProfile() {
   const updateProfilePic = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] ?? null; // checking for TS-specific configuration: if the value is null, return null
 
-    setProfilePic(selectedFile);
+    // setProfilePic(selectedFile);
     setUserDetails({ ...userDetails, profilePic: selectedFile });
   };
 
@@ -88,7 +90,7 @@ function UpdateProfile() {
 
     try {
       // upload the simple object if the profile pic isn't updated
-      if (!profilePic) {
+      if (!userDetails.profilePic) {
         const { message } = await update(userDetails).unwrap();
         toast.success(message, { position: "top-right" });
       } else {

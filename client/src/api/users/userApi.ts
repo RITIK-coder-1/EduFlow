@@ -16,7 +16,9 @@ import {
   ApiSuccessResponse,
 } from "../../types/index.types";
 
-type MinimalUser = Pick<UserContract, "firstName" | "lastName" | "username">;
+type MinimalUser = Pick<UserContract, "firstName" | "lastName" | "username"> & {
+  profilePic: File | null;
+};
 
 interface UpdateEmailContract {
   newEmail: string;
@@ -44,7 +46,7 @@ const userApi = apiSlice.injectEndpoints({
     // UPDATE USER DETAILS
     updateUserDetails: builder.mutation<
       ResponseContract<UserContract>,
-      MinimalUser
+      MinimalUser | FormData
     >({
       query: (updatedData) => ({
         url: "/users/profile",
