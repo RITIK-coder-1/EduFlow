@@ -4,7 +4,7 @@ The profile of the user
 ------------------------------------------------------------------------------------------------- */
 
 import { Image, Navlink, Logout } from "../index.components.js";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.js";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu.js";
 import { useGetUserQuery } from "@/api/index.api";
 
 interface UserProfilePicContract {
