@@ -1,13 +1,17 @@
 /* ----------------------------------------------------------------------------------------------
-Spinner.jsx
+Spinner.tsx
 ------------------------------------------------------------------------------------------------- */
 
-import { Spinner } from "@/components/ui/spinner"
+import { Spinner } from "@/components/ui/spinner";
 
-export function SpinnerCustom({className}) {
+interface SpinnerContract {
+  className?: string;
+}
+
+export function SpinnerCustom({ className }: SpinnerContract) {
   return (
     <span className="flex items-center gap-4">
-      <Spinner className={className}/>
+      <Spinner className={className} />
     </span>
   );
 }
