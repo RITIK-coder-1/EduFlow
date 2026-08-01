@@ -7,12 +7,12 @@ import {
   ResponseContract,
   CourseContract,
   CourseCategoryContract,
-} from "../../types/index.types.ts";
-import apiSlice from "../base/apiSlice.ts";
+} from "../../types/index.types";
+import apiSlice from "../base/apiSlice";
 import {
   transformResponse,
   transformErrorResponse,
-} from "../../utils/queryResponses.ts";
+} from "../../utils/queryResponses";
 
 interface MinimalCourse {
   courseId: string;

@@ -1,15 +1,20 @@
 /* ----------------------------------------------------------------------------------------------
-EnrollCourse.jsx
+EnrollCourse.tsx
 The enrollment logic 
 ------------------------------------------------------------------------------------------------- */
 
+import React from "react";
 import { useEnrollCourseMutation } from "@/api/index.api";
 import { CommonButton, SpinnerCustom } from "@/components/index.components";
 import { useNavigate } from "react-router-dom";
 import useUserStatus from "@/hooks/useUserStatus";
 import { toast } from "sonner";
 
-const EnrollCourse = ({ courseId }) => {
+interface EnrollCourseProps {
+  courseId: string;
+}
+
+const EnrollCourse = ({ courseId }: EnrollCourseProps) => {
   const navigate = useNavigate();
 
   // the user stats
@@ -22,11 +27,16 @@ const EnrollCourse = ({ courseId }) => {
   // the enroll course API call
   const enrollIntoCourse = async () => {
     try {
-      const {message} = await enroll({ courseId }).unwrap();
-      toast.success(message, { position: "top-right" });
-    } catch (error) {
-      toast.error(error.message, { position: "top-right" });
-
+      const response = (await enroll({ courseId }).unwrap()) as {
+        message?: string;
+      };
+      toast.success(response?.message || "Successfully enrolled", {
+        position: "top-right",
+      });
+    } catch (error: any) {
+      toast.error(error?.message || "Failed to enroll", {
+        position: "top-right",
+      });
     }
   };
 
@@ -75,6 +85,8 @@ const EnrollCourse = ({ courseId }) => {
         );
     }
   }
+
+  return null;
 };
 
 export default EnrollCourse;

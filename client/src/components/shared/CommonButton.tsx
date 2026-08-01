@@ -9,7 +9,7 @@ type ButtonType = "button" | "submit" | "reset" | undefined;
 
 interface CommonButtonContract {
   type?: ButtonType;
-  label: string;
+  label: string | React.ReactNode;
   className?: string;
   title?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
