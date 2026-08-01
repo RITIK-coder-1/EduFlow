@@ -1,11 +1,26 @@
 /* ----------------------------------------------------------------------------------------------
-Navlink.jsx
+Navlink.tsx
 The common router navigation element 
 ------------------------------------------------------------------------------------------------- */
 
+import React from "react";
 import { NavLink } from "react-router-dom";
 
-function Navlink({ to, children, className, nonActiveColor = "text-white" }) {
+interface NavlinkProps {
+  to: string;
+  children:
+    | React.ReactNode
+    | ((props: { isActive: boolean }) => React.ReactNode);
+  className?: string;
+  nonActiveColor?: string;
+}
+
+function Navlink({
+  to,
+  children,
+  className,
+  nonActiveColor = "text-white",
+}: NavlinkProps) {
   return (
     <NavLink
       to={to}

@@ -1,9 +1,20 @@
 /* ---------------------------------------------------------------------------------------
-SelectInput.jsx
+SelectInput.tsx
 The select input element
 ------------------------------------------------------------------------------------------ */
 
+import React from "react";
 import { NativeSelect } from "@/components/ui/native-select";
+
+interface SelectInputProps {
+  name: string;
+  children: React.ReactNode;
+  required?: boolean;
+  disabled?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  value?: string | number;
+  className?: string;
+}
 
 function SelectInput({
   name,
@@ -12,8 +23,8 @@ function SelectInput({
   disabled = false,
   onChange,
   value,
-  className,
-}) {
+  className = "",
+}: SelectInputProps) {
   return (
     <NativeSelect
       name={name}

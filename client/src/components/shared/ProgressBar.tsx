@@ -1,11 +1,15 @@
 /* ----------------------------------------------------------------------------------------------
-ProgressBar.jsx
-The UI of the course progress 
+ProgressBar.tsx
+The UI of the course progress
 ------------------------------------------------------------------------------------------------- */
 
 import { useGetCourseProgressQuery } from "@/api/index.api";
 
-function ProgressBar({ courseId }) {
+interface ProgressBarProps {
+  courseId: string;
+}
+
+function ProgressBar({ courseId }: ProgressBarProps) {
   const { data } = useGetCourseProgressQuery({ courseId });
   const courseProgress = data?.data?.progress || 0;
   return (

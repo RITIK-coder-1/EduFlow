@@ -1,9 +1,19 @@
 /* ---------------------------------------------------------------------------------------
-FieldTextare.jsx
+FieldTextarea.tsx
 The common UI for text area 
 ------------------------------------------------------------------------------------------ */
 
+import React from "react";
 import { FieldLabel } from "../ui/field";
+
+interface FieldTextareaProps {
+  name: string;
+  label: React.ReactNode;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  placeholder?: string;
+  value?: string;
+  required?: boolean;
+}
 
 function FieldTextarea({
   name,
@@ -12,7 +22,7 @@ function FieldTextarea({
   placeholder,
   value,
   required = true,
-}) {
+}: FieldTextareaProps) {
   return (
     <div className="w-full flex flex-col justify-center items-start gap-3">
       <FieldLabel htmlFor={name}>

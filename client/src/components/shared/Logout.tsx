@@ -1,16 +1,20 @@
 /* ----------------------------------------------------------------------------------------------
-Logout.jsx
+Logout.tsx
 ------------------------------------------------------------------------------------------------- */
 
 import { useLogoutMutation } from "../../api/index.api";
-import { useDispatch } from "react-redux";
 import { disableUser } from "../../features/authSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useAppDispatch } from "@/hooks/useReduxHooks";
 
-function Logout({ className }) {
+interface LogoutProps {
+  className?: string;
+}
+
+function Logout({ className }: LogoutProps) {
   const [logout, { isLoading }] = useLogoutMutation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   /* ---------------------------------------------------------------------------------------
@@ -24,8 +28,10 @@ function Logout({ className }) {
       dispatch(disableUser());
       navigate("/");
       toast.success("Successfully logged out", { position: "bottom-right" });
-    } catch (error) {
-      toast.error(error.message, { position: "top-right" });
+    } catch (error: any) {
+      toast.error(error?.message || "Failed to log out", {
+        position: "top-right",
+      });
     }
   };
 

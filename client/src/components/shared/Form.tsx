@@ -1,9 +1,17 @@
 /* ---------------------------------------------------------------------------------------
-FieldInput.jsx
+FieldInput.tsx
 The form for entering data 
 ------------------------------------------------------------------------------------------ */
 
-function Form({ onSubmit, children, className }) {
+import React from "react";
+
+interface FormProps {
+  onSubmit: React.SubmitEventHandler<HTMLFormElement>;
+  children: React.ReactNode;
+  className?: string;
+}
+
+function Form({ onSubmit, children, className = "" }: FormProps) {
   return (
     <form
       onSubmit={onSubmit}

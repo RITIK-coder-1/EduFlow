@@ -1,16 +1,22 @@
 /* ---------------------------------------------------------------------------------------
-OtpInput.jsx
+OtpInput.tsx
 The input filed for OTPs
 ------------------------------------------------------------------------------------------ */
 
-import * as React from "react";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
-function OtpInput({ setterFunction, name, required, value }) {
+interface OtpInputProps {
+  setterFunction: (value: string) => void;
+  name?: string;
+  required?: boolean;
+  value?: string;
+}
+
+function OtpInput({ setterFunction, name, required, value }: OtpInputProps) {
   return (
     <div className="space-y-2 w-full">
       <InputOTP
