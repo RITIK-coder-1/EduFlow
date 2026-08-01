@@ -1,0 +1,97 @@
+/* ----------------------------------------------------------------------------------------------
+AddDialogueBox.tsx
+dialogue for adding new data 
+------------------------------------------------------------------------------------------------- */
+
+import React from "react";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogPortal,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Form, CommonButton } from "../index.components";
+
+interface AddDialogueBoxProps {
+  title: string;
+  label: string;
+  children: React.ReactNode;
+  onSubmit: (e: React.InputEvent<HTMLFormElement>) => void;
+  titleClass?: string;
+  onRemoval?: () => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  isLoading: boolean;
+}
+
+function AddDialogueBox({
+  title,
+  label,
+  children,
+  onSubmit,
+  titleClass,
+  onRemoval,
+  open,
+  setOpen,
+  isLoading,
+}: AddDialogueBoxProps) {
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
+        <Button
+          variant="outline"
+          className={`border-green-400 hover:bg-green-800 cursor-pointer w-26 text-xs sm:w-30 sm:text-sm ${
+            titleClass ?? ""
+          }`}
+          title="Add New Data"
+        >
+          {label}
+        </Button>
+      </AlertDialogTrigger>
+
+      <AlertDialogPortal>
+        <AlertDialogContent className="bg-linear-to-br from-white/10 via-black/40 to-green-900/30 backdrop-blur-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-2xl">
+              Add New {title}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="w-full" asChild>
+              <div className="w-full">
+                <Form
+                  className="flex flex-col gap-3 lg:w-full bg-transparent"
+                  onSubmit={onSubmit}
+                >
+                  {children}
+
+                  <AlertDialogFooter className="flex flex-row justify-center items-center">
+                    <AlertDialogCancel
+                      className="hover:bg-red-700 w-30"
+                      onClick={onRemoval}
+                      disabled={isLoading}
+                    >
+                      Cancel
+                    </AlertDialogCancel>
+                    <CommonButton
+                      label={isLoading ? "Processing..." : "Continue"}
+                      type="submit"
+                      className="bg-green-800 hover:bg-green-950 border border-white w-30 font-normal p-0 text-sm"
+                      disabled={isLoading}
+                    />
+                  </AlertDialogFooter>
+                </Form>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+        </AlertDialogContent>
+      </AlertDialogPortal>
+    </AlertDialog>
+  );
+}
+
+export default AddDialogueBox;
