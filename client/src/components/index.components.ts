@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------------------------
-index.components.js
+index.components.ts
 Centralized exporting file for all the components
 ------------------------------------------------------------------------------------------------- */
 
@@ -66,5 +66,5 @@ export {
   StudentAccordion,
   ProgressBar,
   SearchBar,
-  SpinnerCustom
+  SpinnerCustom,
 };
