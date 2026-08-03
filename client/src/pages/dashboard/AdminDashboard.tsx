@@ -1,8 +1,8 @@
 /* ----------------------------------------------------------------------------------------------
-AdminDashboard.jsx
+AdminDashboard.tsx
 ------------------------------------------------------------------------------------------------- */
 
-import React, { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState, ReactNode, SubmitEvent, MouseEvent } from "react";
 import {
   Users,
   BookOpen,
@@ -29,8 +29,19 @@ import {
   SpinnerCustom,
 } from "@/components/index.components";
 import { toast } from "sonner";
+import type { CourseCategoryContract, ApiErrorResponse } from "@/types/index.types";
 
 const AdminDashboard = () => {
+  /* ----------------------------------------------------------------------------------------------
+  The interfaces
+  ------------------------------------------------------------------------------------------------- */
+  interface StatItem {
+    label: string;
+    value: ReactNode;
+    icon: ReactNode;
+    color: string;
+  }
+
   /* ----------------------------------------------------------------------------------------------
   The tabs
   ------------------------------------------------------------------------------------------------- */
@@ -48,7 +59,9 @@ const AdminDashboard = () => {
   ------------------------------------------------------------------------------------------------- */
   const [category, setCategory] = useState("");
 
-  const [currentCategories, setCurrentCategories] = useState([]);
+  const [currentCategories, setCurrentCategories] = useState<
+    CourseCategoryContract[]
+  >([]);
 
   const [createCategory, { isLoading: isCreateCategoryLoading }] =
     useCreateCategoryMutation();
@@ -86,11 +99,13 @@ const AdminDashboard = () => {
 
   // set the current categories state
   useEffect(() => {
-    setCurrentCategories(categories);
+    if (categories) {
+      setCurrentCategories(categories);
+    }
   }, [categories]);
 
   // Data to display
-  const statsToDisplay = [
+  const statsToDisplay: StatItem[] = [
     {
       label: "Total Users",
       value: isStatsLoading ? <SpinnerCustom /> : stats?.userCount,
@@ -116,10 +131,10 @@ const AdminDashboard = () => {
   ------------------------------------------------------------------------------------------------- */
 
   // to set the new category
-  const addCategory = (e) => setCategory(e.target.value);
+  const addCategory = (e: ChangeEvent<HTMLInputElement>) => setCategory(e.target.value);
 
   // to set a category active to update
-  const activateTheCategory = (categoryId) => () => {
+  const activateTheCategory = (categoryId: string) => () => {
     if (activeCategory === categoryId) {
       setActiveCategory("");
     } else {
@@ -128,7 +143,7 @@ const AdminDashboard = () => {
   };
 
   // to update a category value
-  const updateCategoryValue = (id) => (e) => {
+  const updateCategoryValue = (id: string) => (e: ChangeEvent<HTMLInputElement>) => {
     try {
       currentCategories.forEach(async (category) => {
         if (category?._id === id) {
@@ -153,27 +168,31 @@ const AdminDashboard = () => {
           });
         }
       });
-    } catch (error) {
-      toast.error(error.message, { position: "top-right" });
+    } catch (error: unknown) {
+      toast.error((error as ApiErrorResponse).message, {
+        position: "top-right",
+      });
     }
   };
 
   // the API call to add a category
-  const createCategoryApiCall = async (e) => {
+  const createCategoryApiCall = async (e: SubmitEvent<HTMLElement>) => {
     e.preventDefault();
     try {
       const { message } = await createCategory({ name: category }).unwrap();
       setCategoryOpen(false);
       setCategory("");
       toast.success(message, { position: "top-right" });
-    } catch (error) {
-      toast.error(error.message, { position: "top-right" });
+    } catch (error: unknown) {
+      toast.error((error as ApiErrorResponse).message, {
+        position: "top-right",
+      });
     }
   };
 
   // Delete the user
-  const deleteUserApiCall = (userId) => {
-    return async (e) => {
+  const deleteUserApiCall = (userId: string) => {
+    return async (e: MouseEvent<HTMLElement>) => {
       e.preventDefault();
       const deletePromise = deleteUser(userId).unwrap();
 
@@ -183,15 +202,15 @@ const AdminDashboard = () => {
           loading: "Deleting the user...",
           success: "User deleted successfully!",
           error: "There was a problem while deleting the user.",
+          position: "top-right"
         },
-        { position: "top-right" }
       );
     };
   };
 
   // Delete the course
-  const deleteCourseApiCall = (courseId) => {
-    return async (e) => {
+  const deleteCourseApiCall = (courseId: string) => {
+    return async (e: MouseEvent<HTMLElement>) => {
       e.preventDefault();
       const deletePromise = deleteCourse(courseId).unwrap();
       toast.promise(
@@ -200,15 +219,15 @@ const AdminDashboard = () => {
           loading: "Deleting the course...",
           success: "Course deleted successfully!",
           error: "There was a problem while deleting the course.",
+          position: "top-right"
         },
-        { position: "top-right" }
       );
     };
   };
 
   // Delete the Category
-  const deleteCategoryApiCall = (categoryId) => {
-    return async (e) => {
+  const deleteCategoryApiCall = (categoryId: string) => {
+    return async (e: MouseEvent<HTMLElement>) => {
       e.preventDefault();
       const deletePromise = deleteCategory(categoryId).unwrap();
       toast.promise(
@@ -217,8 +236,8 @@ const AdminDashboard = () => {
           loading: "Deleting the category...",
           success: "Category deleted successfully!",
           error: "There was a problem while deleting the category.",
+          position: "top-right"
         },
-        { position: "top-right" }
       );
     };
   };
@@ -379,7 +398,7 @@ const AdminDashboard = () => {
               </div>
             ) : (
               <div className="w-full overflow-x-auto">
-                <table className="w-full text-left min-w-[800px]">
+                <table className="w-full text-left min-w-200">
                   <thead>
                     <tr className="text-gray-500 text-sm border-b border-gray-800">
                       <th className="pb-4 font-medium w-[25%]">TITLE</th>
@@ -398,7 +417,7 @@ const AdminDashboard = () => {
                         className="text-sm group hover:bg-[#1e293b] transition-colors"
                       >
                         <td className="py-4">
-                          <div className="font-medium text-gray-200 truncate max-w-[200px]">
+                          <div className="font-medium text-gray-200 truncate max-w-50">
                             {course?.title}
                           </div>
                         </td>
@@ -408,7 +427,9 @@ const AdminDashboard = () => {
                         <td className="py-4 text-gray-400">
                           {course?.enrolledBy?.length}
                         </td>
-                        <td className="py-4 text-gray-400">{`${course?.price ? `₹${course?.price}` : "Free"}`}</td>
+                        <td className="py-4 text-gray-400">{`${
+                          course?.price ? `₹${course?.price}` : "Free"
+                        }`}</td>
                         <td className="py-4 text-gray-200">
                           ₹{course?.revenue}
                         </td>
@@ -491,7 +512,6 @@ const AdminDashboard = () => {
                         <RefreshCw
                           size={18}
                           className="cursor-pointer text-blue-500 hover:text-blue-600"
-                          title="Update"
                           onClick={activateTheCategory(category?._id)}
                         />
                         <DeleteDialogueBox

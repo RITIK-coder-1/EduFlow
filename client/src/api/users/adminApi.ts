@@ -8,12 +8,12 @@ import {
   CourseContract,
   ResponseContract,
   UserContract,
-} from "../../types/index.types.ts";
-import apiSlice from "../base/apiSlice.ts";
+} from "../../types/index.types";
+import apiSlice from "../base/apiSlice";
 import {
   transformResponse,
   transformErrorResponse,
-} from "../../utils/queryResponses.ts";
+} from "../../utils/queryResponses";
 
 interface SystemStats {
   userCount: number;
@@ -29,7 +29,7 @@ const adminApi = apiSlice.injectEndpoints({
     // CREATE CATEGORY
     createCategory: builder.mutation<
       ResponseContract<CourseCategoryContract>,
-      CourseCategoryContract
+      Pick<CourseCategoryContract, "name">
     >({
       query: (categoryData) => ({
         url: "/admin/categories",

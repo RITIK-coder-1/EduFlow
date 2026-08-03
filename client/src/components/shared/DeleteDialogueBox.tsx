@@ -19,7 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 interface DeleteDialogueBoxProps {
-  label: string;
+  label: string | React.ReactNode;
   description: string;
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   triggerClass?: string;

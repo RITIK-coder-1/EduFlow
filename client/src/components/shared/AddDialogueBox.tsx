@@ -20,9 +20,9 @@ import { Form, CommonButton } from "../index.components";
 
 interface AddDialogueBoxProps {
   title: string;
-  label: string;
+  label: string | React.ReactNode;
   children: React.ReactNode;
-  onSubmit: (e: React.InputEvent<HTMLFormElement>) => void;
+  onSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
   titleClass?: string;
   onRemoval?: () => void;
   open: boolean;
