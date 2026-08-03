@@ -7,17 +7,20 @@ import {
   CourseCategoryContract,
   CourseSectionContract,
   CourseVideoContract,
-} from "./course.types.js";
+  MinimalCourse,
+  MinimalCourseVideoContract,
+  MinimalSectionContract,
+} from "./course.types";
 
-import { UserContract, ReduxUserStateContract } from "./user.types.ts";
+import { UserContract, ReduxUserStateContract } from "./user.types";
 
 import {
   ApiSuccessResponse,
   ApiErrorResponse,
   RegisterRequestBody,
   BaseApiResponse,
-  ResponseContract
-} from "./api.types.ts";
+  ResponseContract,
+} from "./api.types";
 
 export type {
   CourseContract,
@@ -30,5 +33,8 @@ export type {
   BaseApiResponse,
   ReduxUserStateContract,
   RegisterRequestBody,
-  ResponseContract
+  ResponseContract,
+  MinimalCourse,
+  MinimalCourseVideoContract,
+  MinimalSectionContract,
 };

@@ -39,7 +39,7 @@ function CreateCourse() {
   ------------------------------------------------------------------------------------------ */
 
   // the course data
-  const [courseData, setCourseData] = useState({
+  const [courseData, setCourseData] = useState<MinimalCourse>({
     title: "",
     description: "",
     price: 0,

@@ -2,7 +2,7 @@
 course.types.ts
 ------------------------------------------------------------------------------------------ */
 
-import { UserContract } from "./index.types.ts";
+import { UserContract } from "./index.types";
 
 /* ---------------------------------------------------------------------------------------
 COURSE INTERFACE 
@@ -54,4 +54,32 @@ export interface CourseVideoContract {
   videoUrl: string;
   duration: number;
   courseSection: string;
+}
+
+/* ---------------------------------------------------------------------------------------
+MINIMAL INTERFACES 
+------------------------------------------------------------------------------------------ */
+
+export interface MinimalCourse {
+  title?: string;
+  description?: string;
+  price?: number;
+  category?: string;
+  sections?: CourseSectionContract[];
+  tags?: string[];
+  courseId?: string;
+  status?: string;
+}
+
+export interface MinimalCourseVideoContract {
+  title: string;
+  sectionId?: string;
+  videoId?: string;
+  courseId?: string;
+}
+
+export interface MinimalSectionContract {
+  title?: string;
+  courseId?: string;
+  sectionId?: string;
 }

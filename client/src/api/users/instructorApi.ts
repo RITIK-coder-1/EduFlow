@@ -14,31 +14,10 @@ import {
   CourseVideoContract,
   ResponseContract,
   ApiSuccessResponse,
+  MinimalCourse,
+  MinimalCourseVideoContract,
+  MinimalSectionContract,
 } from "../../types/index.types";
-
-interface MinimalCourse {
-  title?: string;
-  description?: string;
-  price?: number;
-  category?: string;
-  sections?: CourseSectionContract[];
-  tags?: string[];
-  courseId?: string;
-  status?: string;
-}
-
-interface MinimalCourseVideoContract {
-  title: string;
-  sectionId?: string;
-  videoId?: string;
-  courseId?: string;
-}
-
-interface MinimalSectionContract {
-  title?: string;
-  courseId?: string;
-  sectionId?: string;
-}
 
 const instructorApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
