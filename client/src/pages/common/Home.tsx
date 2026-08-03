@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------------------------
-Home.jsx
+Home.tsx
 The landing page of the application 
 ------------------------------------------------------------------------------------------------- */
 
@@ -12,25 +12,54 @@ import {
 import filterCourses from "@/utils/filterCourses";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { useEffect } from "react";
+import { useEffect, ReactNode } from "react";
+
+// interfaces for component props and data structures
+interface SectionProps {
+  children: ReactNode;
+  className?: string;
+}
+
+interface SpanProps {
+  children: ReactNode;
+  className?: string;
+}
+
+interface SecondHeadingProps {
+  children: ReactNode;
+  className?: string;
+}
+
+interface Brand {
+  id: number;
+  name: string;
+}
+
+interface Testimonial {
+  id: number;
+  name: string;
+  role: string;
+  image: string;
+  text: string;
+}
 
 function Home() {
   // the local component for recurring elements
-  const Section = ({ children, className = "" }) => (
+  const Section = ({ children, className = "" }: SectionProps) => (
     <section
       className={`w-full flex flex-col justify-center items-center gap-4 mt-5 p-2 ${className}`}
     >
       {children}
     </section>
   );
-  const Span = ({ children, className = "" }) => (
+  const Span = ({ children, className = "" }: SpanProps) => (
     <span
       className={`text-center text-xs text-white/80 md:text-sm ${className}`}
     >
       {children}
     </span>
   );
-  const SecondHeading = ({ children, className = "" }) => (
+  const SecondHeading = ({ children, className = "" }: SecondHeadingProps) => (
     <h2 className={`text-center font-bold sm:text-lg md:text-xl ${className}`}>
       {children}
     </h2>
@@ -39,7 +68,6 @@ function Home() {
     <div
       className="flex items-center justify-center w-auto gap-1 font-bold md:text-lg md:gap-2"
       title="EduFlow"
-      alt="Company Logo"
     >
       <img
         src="LMS.png"
@@ -51,7 +79,7 @@ function Home() {
   );
 
   // the brand partners
-  const brands = [
+  const brands: Brand[] = [
     { id: 1, name: "Microsoft Logo.png" },
     { id: 2, name: "Facebook Logo.png" },
     { id: 3, name: "Samsung Logo.png" },
@@ -60,12 +88,12 @@ function Home() {
 
   // the courses to display
   const { data, isLoading } = useGetAllTheCoursesQuery();
-  const courses = data?.data.slice(0, 4); // only 4 courses
+  const courses = data?.data?.slice(0, 4); // only 4 courses
   const filteredCourses = filterCourses(courses); // filter the data to showcase
 
   // the toast if the server takes time to wake up
   useEffect(() => {
-    let timer;
+    let timer: NodeJS.Timeout | undefined = undefined;
 
     if (isLoading) {
       timer = setTimeout(() => {
@@ -84,7 +112,7 @@ function Home() {
   }, [isLoading]);
 
   // the testimonials
-  const testimonials = [
+  const testimonials: Testimonial[] = [
     {
       id: 1,
       name: "Alex Johnson",
@@ -157,6 +185,7 @@ function Home() {
             {brands.map((brand) => (
               <img
                 src={brand.name}
+                alt={brand.name}
                 className="w-23 sm:w-28 md:w-36"
                 key={brand.id}
               />
@@ -177,7 +206,7 @@ function Home() {
           {isLoading ? (
             <SpinnerCustom className="size-10" />
           ) : (
-            filteredCourses?.map((course) => (
+            filteredCourses?.map((course: any) => (
               <CourseCard
                 key={course?.courseId}
                 image={course?.img}
@@ -280,7 +309,7 @@ function Home() {
           </div>
         </div>
 
-        {/* Coyright */}
+        {/* Copyright */}
         <div className="w-full px-8">
           <hr className="w-full" />
         </div>

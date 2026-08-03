@@ -15,7 +15,9 @@ export interface FilteredCourseContract {
   instructorLastName: string;
 }
 
-function filterCourses(courseArray: CourseContract[]) {
+function filterCourses(courseArray: CourseContract[] | undefined) {
+  if (!courseArray) return [];
+
   const courses: FilteredCourseContract[] = courseArray?.map((course) => {
     return {
       courseId: course?._id,
