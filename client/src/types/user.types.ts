@@ -18,7 +18,7 @@ export interface UserContract {
   profilePic: string;
   createdCourses: CourseContract[];
   enrolledCourses: CourseContract[];
-  lastCourseVisited: CourseContract | null;
+  lastCourseVisited: CourseContract | null | string;
   totalRevenue: number;
   refreshTokenString?: string;
 }

@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------------------------
-StudentDashboard.jsx
+StudentDashboard.tsx
 ------------------------------------------------------------------------------------------------- */
 
 import {
@@ -13,31 +13,43 @@ import {
   SpinnerCustom,
 } from "@/components/index.components";
 import { Link } from "react-router-dom";
+import { ReactNode } from "react";
+import { UserContract, CourseContract } from "@/types/index.types";
+
+// interface for stats data structures
+interface StatItem {
+  label: string;
+  value: ReactNode;
+}
 
 function StudentDashboard() {
   // the user
   const { data: userData, isLoading: isUserLoading } = useGetUserQuery();
-  const user = userData?.data;
+  const user: UserContract | undefined = userData?.data;
 
   // the progress of the user across all the courses
   const enrolledCoursesIds = user?.enrolledCourses?.map(
-    (course) => course?._id
+    (course) => (course as CourseContract)?._id
   );
   const { data: userProgressData, isLoading: isProgressLoading } =
-    useGetBulkCourseProgressQuery(enrolledCoursesIds);
-  const averageProgress = userProgressData?.average; // the average progress
-  const totalLearningCredits = userProgressData?.totalLearningCredits; // the total credits
+    useGetBulkCourseProgressQuery(enrolledCoursesIds || []);
+  const averageProgress = userProgressData?.data?.average as number; // the average progress
+  const totalLearningCredits = userProgressData?.data
+    ?.totalLearningCredits as number; // the total credits
 
   // the last course visited
-  const lastCourseId = user?.lastCourseVisited;
+  let lastCourseId = user?.lastCourseVisited;
+  if (!lastCourseId) {
+    lastCourseId = "";
+  }
   const { data: courseData, isLoading: isCourseLoading } = useGetCourseQuery({
-    courseId: lastCourseId,
+    courseId: lastCourseId as string,
   });
   const lastCourse = courseData?.data;
 
   // user stats
-  const stats = [
-    { label: "Enrolled Courses", value: user?.enrolledCourses?.length },
+  const stats: StatItem[] = [
+    { label: "Enrolled Courses", value: user?.enrolledCourses?.length ?? 0 },
     {
       label: "Average Progress",
       value: isProgressLoading ? (
@@ -45,7 +57,7 @@ function StudentDashboard() {
           <SpinnerCustom className="size-7" />
         </div>
       ) : (
-        `${averageProgress}%`
+        `${averageProgress ?? 0}%`
       ),
     },
     {
@@ -55,7 +67,7 @@ function StudentDashboard() {
           <SpinnerCustom className="size-7" />
         </div>
       ) : (
-        totalLearningCredits
+        totalLearningCredits ?? 0
       ),
     },
   ];
@@ -101,7 +113,7 @@ function StudentDashboard() {
                   Instructor: {lastCourse?.owner?.firstName}{" "}
                   {lastCourse?.owner?.lastName}
                 </p>
-                <ProgressBar courseId={lastCourseId} />
+                <ProgressBar courseId={lastCourseId as string} />
               </div>
               <Link
                 to={`/app/courses/${lastCourseId}`}
@@ -127,7 +139,7 @@ function StudentDashboard() {
             <p className="text-gray-400 text-sm mb-1 uppercase tracking-wider">
               {stat.label}
             </p>
-            <p className="text-3xl font-bold">{stat.value}</p>
+            <div className="text-3xl font-bold">{stat.value}</div>
           </div>
         ))}
       </div>
@@ -136,7 +148,7 @@ function StudentDashboard() {
       <section className="w-full">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold">Your Enrolled Courses</h3>
-          {user?.enrolledCourses?.length > 0 ? (
+          {(user?.enrolledCourses?.length ?? 0) > 0 ? (
             <Link
               className="text-purple-400 hover:text-purple-300 text-sm"
               to="/app/enrolled-courses"
@@ -153,7 +165,7 @@ function StudentDashboard() {
           )}
         </div>
         {/* the enrolled courses */}
-        {user?.enrolledCourses?.length > 0 ? (
+        {(user?.enrolledCourses?.length ?? 0) > 0 ? (
           <div className="flex justify-end items-center flex-col-reverse sm:flex-row-reverse gap-6 w-full">
             {enrolledCoursesToDisplay?.map((course) => (
               <Link
@@ -164,7 +176,8 @@ function StudentDashboard() {
                 <div className="bg-[#1e293b] rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500 transition-colors cursor-pointer w-full">
                   <div className="h-32 bg-gray-800">
                     <img
-                      src={course?.thumbnail || null}
+                      src={course?.thumbnail || ""}
+                      alt={course?.title || "Course thumbnail"}
                       className="w-full h-full object-cover"
                     />
                   </div>
