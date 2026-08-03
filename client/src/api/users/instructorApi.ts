@@ -3,18 +3,18 @@ instructorApi.ts
 This file does all the instructor API calls 
 ------------------------------------------------------------------------------------------------- */
 
-import apiSlice from "../base/apiSlice.ts";
+import apiSlice from "../base/apiSlice";
 import {
   transformErrorResponse,
   transformResponse,
-} from "../../utils/queryResponses.ts";
+} from "../../utils/queryResponses";
 import {
   CourseContract,
   CourseSectionContract,
   CourseVideoContract,
   ResponseContract,
   ApiSuccessResponse,
-} from "../../types/index.types.ts";
+} from "../../types/index.types";
 
 interface MinimalCourse {
   title?: string;
