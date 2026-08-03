@@ -1,7 +1,6 @@
 /* ----------------------------------------------------------------------------------------------
-InstructorDashboard.jsx
+InstructorDashboard.tsx
 ------------------------------------------------------------------------------------------------- */
-import React from "react";
 import {
   PlusCircle,
   Users,
@@ -12,6 +11,7 @@ import {
 import { Link } from "react-router-dom";
 import { useGetInstructorDataQuery, useGetUserQuery } from "@/api/index.api";
 import { SpinnerCustom } from "@/components/index.components";
+import type { CourseContract } from "@/types/index.types";
 
 function InstructorDashboard() {
   // instructor data
@@ -20,8 +20,8 @@ function InstructorDashboard() {
   const { data: userData, isLoading: isUserDataLoading } = useGetUserQuery();
   const user = userData?.data;
 
-  const createdCourses = instructorData?.createdCourses; // created courses
-  const totalStudents = instructorData?.totalStudents; // total students
+  const createdCourses = instructorData?.data?.createdCourses; // created courses
+  const totalStudents = instructorData?.data?.totalStudents; // total students
   const totalRevenue = user?.totalRevenue; // the total revenue
 
   // stats
@@ -47,7 +47,7 @@ function InstructorDashboard() {
   ];
 
   // display only the last three created courses
-  const diplayCourses = createdCourses?.slice(-3).toReversed();
+  const diplayCourses = createdCourses?.slice(-3).reverse();
 
   return (
     <div className="min-h-screen w-full bg-[#020617] text-gray-100 p-8 font-sans">
@@ -121,7 +121,7 @@ function InstructorDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {diplayCourses?.map((course) => (
+                {diplayCourses?.map((course: CourseContract) => (
                   <tr
                     key={course?._id}
                     className="hover:bg-gray-800/30 transition-colors"

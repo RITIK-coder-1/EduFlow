@@ -191,7 +191,7 @@ const instructorApi = apiSlice.injectEndpoints({
         totalStudents: number;
         createdCourses: CourseContract[];
       }>,
-      string
+      void
     >({
       async queryFn(_, _queryApi, _extraOptions, baseQuery) {
         try {
