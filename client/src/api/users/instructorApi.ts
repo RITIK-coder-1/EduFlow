@@ -24,7 +24,7 @@ const instructorApi = apiSlice.injectEndpoints({
     // CREATE A COURSE
     createCourse: builder.mutation<
       ResponseContract<CourseContract>,
-      MinimalCourse
+      FormData
     >({
       query: (courseData) => ({
         url: "/instructor/courses",

@@ -22,10 +22,38 @@ import { NativeSelectOption } from "@/components/ui/native-select";
 import { FieldDescription, FieldLabel } from "@/components/ui/field";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import type { MinimalCourse, ApiErrorResponse } from "@/types/index.types";
+import type {
+  ChangeEvent,
+  SubmitEvent,
+  SetStateAction,
+  Dispatch,
+  FocusEvent,
+} from "react";
 
 function CreateCourse() {
   // navigation
   const navigate = useNavigate();
+
+  /* ---------------------------------------------------------------------------------------
+  The structures 
+  ------------------------------------------------------------------------------------------ */
+
+  type TagsAndSectionsArrayValue = {
+    id: string;
+    value: string;
+  };
+
+  type TagsAndSectionsUI = {
+    forField: string;
+    label: string;
+    inputType: string[];
+    inputSetterFunction: Dispatch<SetStateAction<string[]>>;
+    arrayType: TagsAndSectionsArrayValue[];
+    arraySetterFunction: Dispatch<SetStateAction<TagsAndSectionsArrayValue[]>>;
+    placeholder: string;
+    title: string;
+  };
 
   /* ---------------------------------------------------------------------------------------
   The Redux Toolkit Data
@@ -47,34 +75,43 @@ function CreateCourse() {
   });
 
   // the course tags
-  const [courseTags, setCourseTags] = useState([]);
+  const [courseTags, setCourseTags] = useState<TagsAndSectionsArrayValue[]>([
+    { id: "", value: "" },
+  ]);
 
   // the course sections
-  const [courseSections, setCourseSections] = useState([]);
+  const [courseSections, setCourseSections] = useState<
+    TagsAndSectionsArrayValue[]
+  >([{ id: "", value: "" }]);
 
   // the number of input count for adding more tags
-  const [numberOfTagsInputs, setNumberOfTagsInputs] = useState([
+  const [numberOfTagsInputs, setNumberOfTagsInputs] = useState<string[]>([
     crypto.randomUUID(),
   ]); // storing unique ids for keys
 
   // the number of input count for adding more sections
-  const [numberOfSectionsInputs, setNumberOfSectionsInputs] = useState([
-    crypto.randomUUID(),
-  ]);
+  const [numberOfSectionsInputs, setNumberOfSectionsInputs] = useState<
+    string[]
+  >([crypto.randomUUID()]);
 
   // the thumbnail
-  const [thumbnail, setThumbnail] = useState("");
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
 
   /* ---------------------------------------------------------------------------------------
   The course data and file setting methods
   ------------------------------------------------------------------------------------------ */
 
   // setting the value of the course object
-  const setValue = (e) =>
-    setCourseData({ ...courseData, [e.target.name]: e.target.value });
+  const setValue = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => setCourseData({ ...courseData, [e.target.name]: e.target.value });
 
   // to set the thumbnail
-  const setThumbnailImage = (e) => setThumbnail(e.target.files[0]);
+  const setThumbnailImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const targetImage = e.target.files?.[0] ?? null;
+
+    setThumbnail(targetImage);
+  };
 
   // as soon as the categories are fetched, set the default value of the category field to send to the server
   useEffect(() => {
@@ -90,36 +127,54 @@ function CreateCourse() {
   ------------------------------------------------------------------------------------------ */
 
   // to add a new input field
-  const addNewInput = (inputSetterFunction, inputType) => () =>
-    inputSetterFunction([...inputType, crypto.randomUUID()]);
+  const addNewInput =
+    (
+      inputSetterFunction: Dispatch<SetStateAction<string[]>>,
+      inputType: string[]
+    ) =>
+    () =>
+      inputSetterFunction([...inputType, crypto.randomUUID()]);
 
   // to remove any unwanted input field
   const deleteInput =
-    (id, inputSetterFunction, inputType, arraySetterFunction, arrayType) =>
+    (
+      id: string,
+      inputSetterFunction: Dispatch<SetStateAction<string[]>>,
+      inputType: string[],
+      arraySetterFunction: Dispatch<
+        SetStateAction<TagsAndSectionsArrayValue[]>
+      >,
+      arrayType: TagsAndSectionsArrayValue[]
+    ) =>
     () => {
       inputSetterFunction(inputType.filter((ele) => ele !== id));
       arraySetterFunction(arrayType.filter((ele) => ele.id !== id));
     };
 
   // to add a new value to the array (tags or sections)
-  const addNewValueToArray = (id, arraySetterFunction) => (e) => {
-    const newValue = e.target.value;
-    if (newValue.trim() !== "") {
-      arraySetterFunction((prevArray) => {
-        // Check if the ID already exists in the current state
-        const exists = prevArray.some((ele) => ele.id === id);
-        if (exists) {
-          // If it exists, update just that specific object
-          return prevArray.map((ele) =>
-            ele.id === id ? { ...ele, value: newValue } : ele
-          );
-        } else {
-          // If it doesn't exist, append the new object
-          return [...prevArray, { id: id, value: newValue }];
-        }
-      });
-    }
-  };
+  const addNewValueToArray =
+    (
+      id: string,
+      arraySetterFunction: Dispatch<SetStateAction<TagsAndSectionsArrayValue[]>>
+    ) =>
+    (e: FocusEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      if (newValue.trim() !== "") {
+        arraySetterFunction((prevArray) => {
+          // Check if the ID already exists in the current state
+          const exists = prevArray.some((ele) => ele.id === id);
+          if (exists) {
+            // If it exists, update just that specific object
+            return prevArray.map((ele) =>
+              ele.id === id ? { ...ele, value: newValue } : ele
+            );
+          } else {
+            // If it doesn't exist, append the new object
+            return [...prevArray, { id: id, value: newValue }];
+          }
+        });
+      }
+    };
 
   /* ---------------------------------------------------------------------------------------
   The common UI for displaying getting the tags and sections values 
@@ -134,7 +189,7 @@ function CreateCourse() {
     arraySetterFunction,
     placeholder,
     title,
-  }) => {
+  }: TagsAndSectionsUI) => {
     return (
       <div className="w-full flex flex-col gap-2">
         <FieldLabel htmlFor={forField}>
@@ -183,7 +238,7 @@ function CreateCourse() {
   /* ---------------------------------------------------------------------------------------
   The API call to create the course
   ------------------------------------------------------------------------------------------ */
-  const createCourse = async (e) => {
+  const createCourse = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -200,7 +255,11 @@ function CreateCourse() {
       formData.append("sections", JSON.stringify(sections));
 
       // setting the thumbnail
-      formData.append("thumbnail", thumbnail);
+      if (thumbnail) {
+        formData.append("thumbnail", thumbnail);
+      } else {
+        formData.append("thumbnail", "");
+      }
 
       const { data, message } = await create(formData).unwrap();
 
@@ -208,8 +267,10 @@ function CreateCourse() {
 
       // navigate to the course page once it's created
       navigate(`/app/created-courses/${data?._id}`);
-    } catch (error) {
-      toast.error(error.message, { position: "top-right" });
+    } catch (error: unknown) {
+      toast.error((error as ApiErrorResponse).message, {
+        position: "top-right",
+      });
     }
   };
 
