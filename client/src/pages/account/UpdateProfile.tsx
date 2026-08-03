@@ -53,8 +53,6 @@ function UpdateProfile() {
     profilePic: null,
   });
 
-  // const [profilePic, setProfilePic] = useState<File | null>(null);
-
   // setting the current value for better UX
   useEffect(() => {
     setUserDetails({

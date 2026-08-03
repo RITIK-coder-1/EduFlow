@@ -33,5 +33,5 @@ export interface RegisterRequestBody {
   dateOfBirth: string;
   accountType: "Instructor" | "Student";
   userOTP?: string;
-  profilePic: File | null;
+  profilePic?: File | null | string;
 }

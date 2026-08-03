@@ -22,7 +22,7 @@ const authApi = apiSlice.injectEndpoints({
       ResponseContract<{
         profilePic: string;
       }>,
-      RegisterRequestBody
+      RegisterRequestBody | FormData
     >({
       query: (userData) => ({
         url: "/auth/register-otp",
