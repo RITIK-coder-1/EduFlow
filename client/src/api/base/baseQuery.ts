@@ -14,7 +14,8 @@ import type {
 
 // the API base for every network call
 const baseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_RENDER_SERVER,
+  // baseUrl: import.meta.env.VITE_RENDER_SERVER, // TEMPORARY: TESTING ONLY
+  baseUrl: "http://localhost:3001/api/v1",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;

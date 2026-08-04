@@ -4,7 +4,11 @@ The hook to provide the current status of the user
 ------------------------------------------------------------------------------------------------- */
 
 import { useGetUserQuery, useGetCourseQuery } from "../api/index.api";
-import type { CourseContract, UserRoles } from "../types/index.types";
+import type {
+  CourseContract,
+  UserRoles,
+  UserContract,
+} from "../types/index.types";
 import { useAppSelector } from "./useReduxHooks";
 
 interface UserStatus {
@@ -16,8 +20,7 @@ interface UserStatus {
 
 function useUserStatus(courseId: string | void): UserStatus {
   // the user
-  const { data: userData } = useGetUserQuery();
-  const user = userData?.data;
+  let user: UserContract | undefined = undefined;
 
   // the course
   let course: CourseContract | null | undefined = null;
@@ -25,6 +28,8 @@ function useUserStatus(courseId: string | void): UserStatus {
     // only if the courseID is provided
     const { data: courseData } = useGetCourseQuery({ courseId });
     course = courseData?.data;
+    const { data: userData } = useGetUserQuery(); // call the API only if the course information is asked to prevent unwanted calls 
+    user = userData?.data; // I have not saved all the user data in the redux state, so I'm calling the API
   }
 
   /* ----------------------------------------------------------------------------------------------
