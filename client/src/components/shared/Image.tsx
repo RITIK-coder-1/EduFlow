@@ -7,8 +7,8 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 interface ImageContract {
   src: string;
-  alt: string;
-  title: string;
+  alt?: string;
+  title?: string;
   size?: string;
   className?: string;
 }

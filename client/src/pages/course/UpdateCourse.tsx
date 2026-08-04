@@ -1,9 +1,9 @@
 /* ----------------------------------------------------------------------------------------------
-UpdateCourse.jsx
+UpdateCourse.tsx
 The page to update a course 
 ------------------------------------------------------------------------------------------------- */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, SubmitEvent } from "react";
 import {
   useUpdateCourseMutation,
   useGetAllCategoriesQuery,
@@ -24,6 +24,7 @@ import { NativeSelectOption } from "@/components/ui/native-select";
 import { FieldLabel } from "@/components/ui/field";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+import type { MinimalCourse, ApiErrorResponse } from "@/types/index.types";
 
 function UpdateCourse() {
   const { courseId } = useParams();
@@ -40,7 +41,7 @@ function UpdateCourse() {
   /* ---------------------------------------------------------------------------------------
   The states  
   ------------------------------------------------------------------------------------------ */
-  const [courseDetails, setCourseDetails] = useState({
+  const [courseDetails, setCourseDetails] = useState<MinimalCourse>({
     title: "",
     description: "",
     price: 0,
@@ -48,7 +49,7 @@ function UpdateCourse() {
     category: "",
     thumbnail: "",
   });
-  const [newThumbnail, setNewThumbnail] = useState(null);
+  const [newThumbnail, setNewThumbnail] = useState<File | null>(null);
 
   useEffect(() => {
     setCourseDetails({
@@ -61,14 +62,14 @@ function UpdateCourse() {
     });
   }, [course]);
 
-  console.log(courseDetails.price);
-
   /* ---------------------------------------------------------------------------------------
   The course data setting methods
   ------------------------------------------------------------------------------------------ */
 
   // text value
-  const changeValue = (e) => {
+  const changeValue = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setCourseDetails(
       e.target.name === "price" && e.target.value.trim() === ""
         ? { ...courseDetails, price: 0 } // default back to 0 for empty price
@@ -77,36 +78,43 @@ function UpdateCourse() {
   };
 
   // the file
-  const updateThumbnail = (e) => {
-    setNewThumbnail(e.target.files[0]); // set the value of the profile pic as the file object
-    setCourseDetails({ ...courseDetails, thumbnail: e.target.files[0] });
+  const updateThumbnail = (e: ChangeEvent<HTMLInputElement>) => {
+    const newThumbnail = e.target.files?.[0] ?? null;
+
+    setNewThumbnail(newThumbnail); // set the value of the profile pic as the file object
+    setCourseDetails({ ...courseDetails, thumbnail: newThumbnail });
   };
 
   /* ---------------------------------------------------------------------------------------
   The API call to update the course
   ------------------------------------------------------------------------------------------ */
-  const updateCourse = async (e) => {
+  const updateCourse = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const courseId = course._id;
+      const courseId = course?._id;
       // upload the simple object if the thumbnail isn't updated
       if (!newThumbnail) {
-        const { message } = await update({ courseDetails, courseId }).unwrap();
+        const { message } = await update({
+          ...courseDetails,
+          courseId,
+        }).unwrap();
         toast.success(message, { position: "top-right" });
       } else {
         // else upload a form data
         const formData = getFormData(courseDetails);
 
         const { message } = await update({
-          courseDetails: formData,
+          ...formData,
           courseId,
         }).unwrap();
 
         toast.success(message, { position: "top-right" });
       }
-    } catch (error) {
-      toast.error(error.message, { position: "top-right" });
+    } catch (error: unknown) {
+      toast.error((error as ApiErrorResponse).message, {
+        position: "top-right",
+      });
     }
   };
 
@@ -115,7 +123,7 @@ function UpdateCourse() {
   ) : (
     <Form onSubmit={updateCourse} className="mb-5">
       {/* The thumbnail  */}
-      <Image src={course?.thumbnail} alt="Course Thumbnail" />{" "}
+      <Image src={course?.thumbnail || ""} alt="Course Thumbnail" />{" "}
       {/* Setting the thumbnail from the course directly instead of the courseDetails state so that it doesn't get removed temporarily once the user selects a different image to upload */}
       <InputFile
         name="thumbnail"

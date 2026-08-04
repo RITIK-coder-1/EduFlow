@@ -50,7 +50,7 @@ const instructorApi = apiSlice.injectEndpoints({
     // UPDATE A COURSE
     updateCourse: builder.mutation<
       ResponseContract<CourseContract>,
-      MinimalCourse
+      MinimalCourse | FormData
     >({
       query: ({ courseId, ...courseDetails }) => ({
         url: `/instructor/${courseId}`,

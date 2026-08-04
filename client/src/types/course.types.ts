@@ -77,6 +77,7 @@ export interface MinimalCourse {
   tags?: string[];
   courseId?: string;
   status?: string;
+  thumbnail?: File | null | string;
 }
 
 export interface MinimalCourseVideoContract {
