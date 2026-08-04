@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------------------------
-PublicCourse.jsx
+PublicCourse.tsx
 The page for displaying a course publicly 
 ------------------------------------------------------------------------------------------------- */
 
@@ -13,12 +13,13 @@ import {
 } from "@/components/index.components";
 import { useLastCourseVisitedMutation } from "@/api/users/userApi";
 import { useEffect } from "react";
-import { toast } from "sonner";
 
 function PublicCourse() {
   // the data
   const { courseId } = useParams();
-  const { data, isLoading: isCourseLoading } = useGetCourseQuery({ courseId });
+  const { data, isLoading: isCourseLoading } = useGetCourseQuery({
+    courseId,
+  } as { courseId: string });
   const course = data?.data; // course
   const sections = course?.sections; // sections
 
@@ -31,7 +32,7 @@ function PublicCourse() {
   useEffect(() => {
     const courseFunc = async () => {
       try {
-        await lastCourseVisited({ courseId }).unwrap();
+        await lastCourseVisited({ courseId } as { courseId: string }).unwrap();
       } catch (error) {}
     };
     courseFunc();
@@ -48,7 +49,7 @@ function PublicCourse() {
           <div className="w-full rounded-sm overflow-hidden shadow-md shadow-black md:w-136 sm:ml-5 md:ml-0">
             {/* Thumbnail */}
             <img
-              src={course?.thumbnail || null}
+              src={course?.thumbnail || ""}
               className="h-64 w-full object-cover"
             />
 
@@ -63,7 +64,7 @@ function PublicCourse() {
               </span>
 
               {/* Enroll now */}
-              <EnrollCourse courseId={courseId} />
+              <EnrollCourse courseId={courseId as string} />
 
               {/* Course specifics */}
               <span className="text-xl">What is in the course?</span>
@@ -114,7 +115,10 @@ function PublicCourse() {
               <span className="text-foreground text-2xl">Course Structure</span>
 
               {/* The accordion */}
-              <StudentAccordion sections={sections} courseId={courseId} />
+              <StudentAccordion
+                sections={sections || []}
+                courseId={courseId as string}
+              />
             </div>
           </div>
         </div>
