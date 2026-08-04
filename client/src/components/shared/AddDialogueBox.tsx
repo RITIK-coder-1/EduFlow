@@ -26,7 +26,9 @@ interface AddDialogueBoxProps {
   titleClass?: string;
   onRemoval?: () => void;
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setOpen: (
+    open: boolean
+  ) => void | React.Dispatch<React.SetStateAction<string | null>>;
   isLoading: boolean;
 }
 

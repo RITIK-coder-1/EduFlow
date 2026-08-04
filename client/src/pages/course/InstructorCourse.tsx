@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------------------------
-InstructorCourse.jsx
+InstructorCourse.tsx
 The page for displaying a course for instructors
 ------------------------------------------------------------------------------------------------- */
 
@@ -29,14 +29,20 @@ import {
   CourseCommonAccordionItem,
   SpinnerCustom,
 } from "../../components/index.components";
-import { useEffect } from "react";
-import { useState } from "react";
+import {
+  useEffect,
+  MouseEvent,
+  SubmitEvent,
+  useState,
+  ChangeEvent,
+} from "react";
 import getFormData from "@/utils/getFormData";
 import { MdOutlineSystemUpdateAlt, MdDelete } from "react-icons/md";
 import { SelectInput } from "../../components/index.components";
 import { NativeSelectOption } from "@/components/ui/native-select";
 import { usePublishCourseMutation } from "@/api/users/instructorApi";
 import { toast } from "sonner";
+import { CourseSectionContract, ApiErrorResponse } from "@/types/index.types";
 
 function InstructorCourse() {
   const navigate = useNavigate();
@@ -70,36 +76,48 @@ function InstructorCourse() {
     usePublishCourseMutation();
 
   /* ----------------------------------------------------------------------------------------------
+    Interfaces
+  ------------------------------------------------------------------------------------------------- */
+  interface NewVideoData {
+    title: string;
+    courseVideo?: File | null;
+    sectionId?: string;
+    videoId?: string;
+  }
+
+  /* ----------------------------------------------------------------------------------------------
     The states
   ------------------------------------------------------------------------------------------------- */
 
   // for updating the current sections
-  const [sectionData, setSectionData] = useState([]);
+  const [sectionData, setSectionData] = useState<CourseSectionContract[]>([]);
 
   useEffect(() => {
-    setSectionData(course?.sections);
+    if (course?.sections) {
+      setSectionData(course?.sections);
+    }
   }, [course]);
 
   // for creating a new section (title)
   const [newSectionData, setNewSectionData] = useState("");
 
   // to add a new video
-  const [videoData, setVideoData] = useState({
+  const [videoData, setVideoData] = useState<NewVideoData>({
     title: "",
     courseVideo: null,
     sectionId: "",
   });
 
   // to update a video
-  const [updatedVideoData, setUpdatedVideoData] = useState({
+  const [updatedVideoData, setUpdatedVideoData] = useState<NewVideoData>({
     title: "",
     videoId: "",
   });
 
   // state to control the dialog box of adding a new video
-  const [videoOpen, setVideoOpen] = useState(null);
+  const [videoOpen, setVideoOpen] = useState<string | null>(null);
   // state to control the dialog box of adding a new section
-  const [sectionOpen, setSectionOpen] = useState(null);
+  const [sectionOpen, setSectionOpen] = useState<string | null>(null);
 
   // state to track the current section that is getting manipulated (for loading spinner)
   const [currentSectionManipulation, setCurrentSectionManipulation] =
@@ -112,8 +130,8 @@ function InstructorCourse() {
   ------------------------------------------------------------------------------------------------- */
 
   // update the section state data
-  const updateSectionData = (id) => {
-    return (e) => {
+  const updateSectionData = (id: string) => {
+    return (e: ChangeEvent<HTMLInputElement>) => {
       e.stopPropagation();
       sectionData.map((section) => {
         if (section?._id === id) {
@@ -128,13 +146,13 @@ function InstructorCourse() {
   };
 
   // set the title of the new section
-  const setSectionTitle = (e) => {
+  const setSectionTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setNewSectionData(e.target.value);
   };
 
   // set the new video data to be uploaded
-  const setDataForVideoUpload = (id) => {
-    return (e) => {
+  const setDataForVideoUpload = (id: string) => {
+    return (e: ChangeEvent<HTMLInputElement>) => {
       setVideoData({
         ...videoData,
         [e.target.name]: e.target.value,
@@ -144,13 +162,14 @@ function InstructorCourse() {
   };
 
   // set the course video
-  const setVideoFileForUpload = (e) => {
-    setVideoData({ ...videoData, courseVideo: e.target?.files[0] });
+  const setVideoFileForUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const targetVideo = e.target.files?.[0] ?? null;
+    setVideoData({ ...videoData, courseVideo: targetVideo });
   };
 
   // update the course video
-  const setVideoDataForUpdate = (id) => {
-    return (e) => {
+  const setVideoDataForUpdate = (id: string) => {
+    return (e: ChangeEvent<HTMLInputElement>) => {
       setUpdatedVideoData({
         ...updatedVideoData,
         title: e.target.value,
@@ -178,7 +197,7 @@ function InstructorCourse() {
   ------------------------------------------------------------------------------------------------- */
 
   // update section API call for server
-  const updateSectionCall = (id) => {
+  const updateSectionCall = (id: string) => {
     return () => {
       setCurrentSectionManipulation(id);
       sectionData.forEach(async (section) => {
@@ -186,13 +205,15 @@ function InstructorCourse() {
           try {
             // call the API only for the targetted section
             const { message } = await updateSection({
-              updatedData: section,
+              title: section?.title,
               sectionId: id,
               courseId,
             }).unwrap();
             toast.success(message, { position: "top-right" });
-          } catch (error) {
-            toast.error(error.message, { position: "top-right" });
+          } catch (error: unknown) {
+            toast.error((error as ApiErrorResponse).message, {
+              position: "top-right",
+            });
           }
         }
       });
@@ -200,8 +221,8 @@ function InstructorCourse() {
   };
 
   // delete a section
-  const deleteSectionCall = (id) => {
-    return async (e) => {
+  const deleteSectionCall = (id: string) => {
+    return async (e: MouseEvent<HTMLButtonElement>) => {
       setCurrentSectionManipulation(id);
       e.stopPropagation();
       const deletePromise = deleteSection({
@@ -209,89 +230,96 @@ function InstructorCourse() {
         sectionId: id,
       }).unwrap();
 
-      toast.promise(
-        deletePromise,
-        {
-          loading: "Deleting the section...",
-          success: "Section deleted successfully!",
-          error: (error) => `${error.message}`,
-        },
-        { position: "top-right" }
-      );
+      toast.promise(deletePromise, {
+        loading: "Deleting the section...",
+        success: "Section deleted successfully!",
+        error: (error) => `${error.message}`,
+        position: "top-right",
+      });
     };
   };
 
   // add a section
-  const addSectionCall = async (e) => {
+  const addSectionCall = async (e: SubmitEvent<HTMLFormElement>) => {
     e.stopPropagation();
     e.preventDefault();
 
     try {
       const { message } = await addSection({
-        sectionData: { title: newSectionData },
+        title: newSectionData,
         courseId,
       }).unwrap();
-      setSectionOpen(false);
+      setSectionOpen(null);
       setNewSectionData("");
       toast.success(message, { position: "top-right" });
-    } catch (error) {
-      toast.error(error.message, { position: "top-right" });
+    } catch (error: unknown) {
+      toast.error((error as ApiErrorResponse).message, {
+        position: "top-right",
+      });
     }
   };
 
   // upload a new video
-  const uploadNewVideo = (id) => {
-    return async (e) => {
+  const uploadNewVideo = (id: string) => {
+    return async (e: SubmitEvent<HTMLElement>) => {
       e.stopPropagation();
       e.preventDefault();
 
       try {
-        const videoFormData = getFormData({ ...videoData, sectionId: id });
+        const videoFormData = getFormData<NewVideoData>({
+          ...videoData,
+          sectionId: id,
+        });
         const { message } = await addVideo({
-          videoData: videoFormData,
+          title: videoFormData.get("title") as string,
           courseId,
           sectionId: id,
         }).unwrap();
-        setVideoOpen(false);
+        setVideoOpen(null);
         setVideoData({ title: "", courseVideo: null, sectionId: "" });
         toast.success(message, { position: "top-right" });
-      } catch (error) {
-        toast.error(error.message, { position: "top-right" });
+      } catch (error: unknown) {
+        toast.error((error as ApiErrorResponse).message, {
+          position: "top-right",
+        });
       }
     };
   };
 
   // update a video
-  const updateVideoApiCall = (sectionId) => {
+  const updateVideoApiCall = (sectionId: string) => {
     return async () => {
-      setCurrentVideoManipulation(updatedVideoData.videoId);
+      setCurrentVideoManipulation(updatedVideoData?.videoId || "");
       try {
         const { message } = await updateVideo({
-          updatedData: updatedVideoData,
-          courseId,
+          ...updatedVideoData,
           sectionId,
-          videoId: updatedVideoData.videoId,
+          courseId,
         }).unwrap();
         toast.success(message, { position: "top-right" });
-      } catch (error) {
-        toast.error(error.message, { position: "top-right" });
+      } catch (error: unknown) {
+        toast.error((error as ApiErrorResponse).message, {
+          position: "top-right",
+        });
       }
     };
   };
 
   // delete a video
-  const deleteVideoApiCall = (sectionId, videoId) => {
+  const deleteVideoApiCall = (sectionId: string, videoId: string) => {
     return async () => {
       setCurrentVideoManipulation(videoId);
       try {
         await deleteVideo({
           courseId,
           sectionId,
-          videoId: videoId,
+          videoId,
         }).unwrap();
         toast.success("The video has been deleted!", { position: "top-right" });
-      } catch (error) {
-        toast.error(error.message, { position: "top-right" });
+      } catch (error: unknown) {
+        toast.error((error as ApiErrorResponse).message, {
+          position: "top-right",
+        });
       }
     };
   };
@@ -302,19 +330,18 @@ function InstructorCourse() {
       courseId,
     }).unwrap();
 
-    toast.promise(
-      deletePromise,
-      {
-        loading: "Deleting the course...",
-        success: "Course deleted successfully!",
-        error: (error) => `${error.message}`,
-      },
-      { position: "top-right" }
-    );
+    toast.promise(deletePromise, {
+      loading: "Deleting the course...",
+      success: "Course deleted successfully!",
+      error: (error) => `${error.message}`,
+      position: "top-right",
+    });
   };
 
   // publish the course
-  const publishCourseCall = async (e) => {
+  const publishCourseCall = async (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     if (e.target.value === "Published") {
       try {
         const { message } = await publishCourse({
@@ -322,8 +349,10 @@ function InstructorCourse() {
           courseId,
         }).unwrap();
         toast.success(message, { position: "top-right" });
-      } catch (error) {
-        toast.error(error.message, { position: "top-right" });
+      } catch (error: unknown) {
+        toast.error((error as ApiErrorResponse).message, {
+          position: "top-right",
+        });
       }
     }
   };
@@ -345,7 +374,7 @@ function InstructorCourse() {
             <div className="w-full rounded-sm overflow-hidden shadow-md shadow-black ">
               {/* Thumbnail */}
               <img
-                src={course?.thumbnail || null}
+                src={course?.thumbnail || ""}
                 className="h-64 w-full object-cover"
               />
 
@@ -371,7 +400,7 @@ function InstructorCourse() {
                 )}
               </div>
             </div>
-            <EnrollmentStats courseId={courseId} />
+            <EnrollmentStats courseId={courseId || ""} />
           </div>
 
           <div className="w-full h-auto flex flex-col gap-2">
@@ -440,7 +469,11 @@ function InstructorCourse() {
               <CourseCommonAccordion>
                 {sectionData
                   ?.slice() // a shallow copy to avoid mutating original state
-                  .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)) // sorting by the data to avoid displacements
+                  .sort(
+                    (a, b) =>
+                      new Date(a.createdAt as string).getTime() -
+                      new Date(b.createdAt as string).getTime()
+                  ) // sorting by the data to avoid displacements
                   ?.map((section) => (
                     <CourseCommonAccordionItem
                       value={section._id}
@@ -558,8 +591,8 @@ function InstructorCourse() {
                   title="Section"
                   titleClass="w-full border-2 text-sm sm:w-56 sm:text-md"
                   onRemoval={clearNewSectionData}
-                  open={sectionOpen}
-                  setOpen={setSectionOpen}
+                  open={!!sectionOpen}
+                  setOpen={() => setSectionOpen}
                   isLoading={isAddSectionLoading}
                 >
                   <FieldInput

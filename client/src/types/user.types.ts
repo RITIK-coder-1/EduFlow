@@ -21,6 +21,8 @@ export interface UserContract {
   lastCourseVisited: CourseContract | null | string;
   totalRevenue: number;
   refreshTokenString?: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 
 export type ReduxUserStateContract = Pick<UserContract, "_id" | "accountType">;

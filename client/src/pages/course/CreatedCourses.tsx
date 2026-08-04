@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------------------------
-CreatedCourses.jsx
+CreatedCourses.tsx
 The page for displaying all the created courses of an instructor
 ------------------------------------------------------------------------------------------------- */
 
@@ -12,7 +12,7 @@ import {
 
 function CreatedCourses() {
   const { data, isLoading } = useGetInstructorDataQuery();
-  const courses = data?.createdCourses;
+  const courses = data?.data?.createdCourses;
 
   return (
     <>

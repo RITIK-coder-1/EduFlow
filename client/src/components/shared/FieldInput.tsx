@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 
 interface FieldInputProps {
   label?: React.ReactNode;
-  name: string;
+  name?: string;
   inputType?: string;
   placeholder?: string;
   description?: React.ReactNode;

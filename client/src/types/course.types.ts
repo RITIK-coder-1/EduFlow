@@ -21,6 +21,8 @@ export interface CourseContract {
   sections: CourseSectionContract[];
   owner: UserContract;
   enrolledBy: string[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 /* ---------------------------------------------------------------------------------------
@@ -31,6 +33,8 @@ export interface CourseCategoryContract {
   _id: string;
   name: string;
   courses: CourseContract[];
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 
 /* ---------------------------------------------------------------------------------------
@@ -42,6 +46,8 @@ export interface CourseSectionContract {
   title: string;
   course: string;
   courseVideos: CourseVideoContract[];
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 
 /* ---------------------------------------------------------------------------------------
@@ -54,6 +60,8 @@ export interface CourseVideoContract {
   videoUrl: string;
   duration: number;
   courseSection: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 
 /* ---------------------------------------------------------------------------------------
@@ -72,7 +80,7 @@ export interface MinimalCourse {
 }
 
 export interface MinimalCourseVideoContract {
-  title: string;
+  title?: string;
   sectionId?: string;
   videoId?: string;
   courseId?: string;

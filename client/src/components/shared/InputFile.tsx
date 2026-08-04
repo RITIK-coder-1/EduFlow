@@ -8,7 +8,7 @@ import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
 interface InputFileProps {
-  name: string;
+  name?: string;
   label?: React.ReactNode;
   description?: React.ReactNode;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
