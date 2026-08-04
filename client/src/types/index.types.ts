@@ -12,7 +12,7 @@ import {
   MinimalSectionContract,
 } from "./course.types";
 
-import { UserContract, ReduxUserStateContract } from "./user.types";
+import { UserContract, ReduxUserStateContract, UserRoles } from "./user.types";
 
 import {
   ApiSuccessResponse,
@@ -37,4 +37,5 @@ export type {
   MinimalCourse,
   MinimalCourseVideoContract,
   MinimalSectionContract,
+  UserRoles
 };

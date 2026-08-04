@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------------------------
-PrivateLayout.jsx
+PrivateLayout.tsx
 It contains the routing for every single private page that requires authentication
 It also renders the public course pages to visit without logging in 
 ------------------------------------------------------------------------------------------------- */
@@ -9,8 +9,9 @@ import { Outlet, useLocation } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import useUserStatus from "./hooks/useUserStatus";
 import { Navigate } from "react-router-dom";
+import type { UserRoles } from "./types/index.types";
 
-function PrivateLayout({ allowedRoles }) {
+function PrivateLayout({ allowedRoles }: { allowedRoles: UserRoles[] }) {
   const { isAuthenticated, accountType } = useUserStatus();
   const location = useLocation();
 

@@ -26,3 +26,6 @@ export interface UserContract {
 }
 
 export type ReduxUserStateContract = Pick<UserContract, "_id" | "accountType">;
+
+export type UserRoles = "Student" | "Instructor" | "Admin";
+

@@ -4,10 +4,17 @@ The hook to provide the current status of the user
 ------------------------------------------------------------------------------------------------- */
 
 import { useGetUserQuery, useGetCourseQuery } from "../api/index.api";
-import type { CourseContract } from "../types/index.types";
+import type { CourseContract, UserRoles } from "../types/index.types";
 import { useAppSelector } from "./useReduxHooks";
 
-function useUserStatus(courseId: string | void) {
+interface UserStatus {
+  isAuthenticated: boolean;
+  isOwner: boolean;
+  isEnrolled: boolean;
+  accountType: UserRoles;
+}
+
+function useUserStatus(courseId: string | void): UserStatus {
   // the user
   const { data: userData } = useGetUserQuery();
   const user = userData?.data;
@@ -28,7 +35,8 @@ function useUserStatus(courseId: string | void) {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated); // for immediate access
 
   // the type of user
-  const accountType = useAppSelector((state) => state.auth.user?.accountType); // for immediate access
+  const accountType =
+    useAppSelector((state) => state.auth.user?.accountType) || "Student"; // for immediate access
 
   // check if the user is the owner of the course
   const isOwner = user?._id === course?.owner?._id ? true : false;
@@ -40,8 +48,8 @@ function useUserStatus(courseId: string | void) {
 
   return {
     isAuthenticated,
-    isOwner,
-    isEnrolled,
+    isOwner: isOwner || false,
+    isEnrolled: isEnrolled || false,
     accountType,
   };
 }

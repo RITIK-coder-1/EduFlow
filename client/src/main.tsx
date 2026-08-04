@@ -6,11 +6,11 @@ This is the main component that wraps the app inside the html
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import { store } from "./store/store.js";
+import { store } from "./store/store";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./styles/App.css";
-import PublicLayout from "./PublicLayout.tsx";
-import PrivateLayout from "./PrivateLayout.tsx";
+import PublicLayout from "./PublicLayout";
+import PrivateLayout from "./PrivateLayout";
 import {
   Home,
   Register,
