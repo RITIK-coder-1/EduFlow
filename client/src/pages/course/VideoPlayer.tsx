@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------------------------
-VideoPlayer.jsx
+VideoPlayer.tsx
 The page for playing a course video 
 ------------------------------------------------------------------------------------------------- */
 
@@ -16,39 +16,56 @@ import {
   CommonButton,
   ProgressBar,
   SpinnerCustom,
+  VideoError,
 } from "@/components/index.components";
 import useUserStatus from "@/hooks/useUserStatus";
 import { toast } from "sonner";
+import { ApiErrorResponse } from "@/types/index.types";
 
 function VideoPlayer() {
   // the data
   const { courseId, videoId } = useParams();
   const [completeVideo, { isLoading: isCompleteVideoLoading }] =
     useCompleteCourseVideoMutation();
-  const { data: courseData } = useGetCourseQuery({ courseId });
+  const { data: courseData } = useGetCourseQuery({ courseId } as {
+    courseId: string;
+  });
   const course = courseData?.data; // course
   const sections = course?.sections; // sections
 
   // the video details
-  const { courseTitle, sectionTitle, videoTitle, videoUrl } = useGetVideoData(
-    courseId,
-    videoId
-  );
+  const videoData = useGetVideoData(courseId as string, videoId as string);
+
+  // handling the null case first
+  if (!videoData) {
+    return <VideoError courseId={courseId as string} />;
+  }
+
+  // safely destructuring now that TypeScript knows it is not null
+  const { courseTitle, sectionTitle, videoTitle, videoUrl } = videoData;
 
   // the course completed videos
   const { data: courseProgressData } = useGetCourseProgressQuery({
     courseId,
     videoId,
+  } as {
+    courseId: string;
+    videoId: string;
   });
   const completedVideos = courseProgressData?.data?.completedVideos;
 
   // the API call to complete the video
   const completeVideoApiCall = async () => {
     try {
-      const { message } = await completeVideo({ courseId, videoId }).unwrap();
+      const { message } = await completeVideo({ courseId, videoId } as {
+        courseId: string;
+        videoId: string;
+      }).unwrap();
       toast.success(message, { position: "top-right" });
-    } catch (error) {
-      toast.error(error.message, { position: "top-right" });
+    } catch (error: unknown) {
+      toast.error((error as ApiErrorResponse).message, {
+        position: "top-right",
+      });
     }
   };
 
@@ -83,12 +100,14 @@ function VideoPlayer() {
             <ReactPlayer
               width="100%"
               height="100%"
-              src={videoUrl || null}
+              src={videoUrl || ""}
               controls
               playing={true}
-              onEnded={
-                !isOwner && accountType !== "Admin" && completeVideoApiCall
-              } // autocomplete the video when the video ends for students
+              onEnded={() => {
+                if (!isOwner && accountType !== "Admin") {
+                  completeVideoApiCall();
+                }
+              }} // autocomplete the video when the video ends for students
             />
           </div>
 
@@ -140,7 +159,7 @@ function VideoPlayer() {
             <h3 className="text-lg font-semibold mb-2">Course Content</h3>
             {/* Progress Bar Component */}
             {!isOwner && accountType !== "Admin" && (
-              <ProgressBar courseId={courseId} />
+              <ProgressBar courseId={courseId as string} />
             )}
           </div>
 
@@ -158,8 +177,8 @@ function VideoPlayer() {
             </div>
             {/* The accordion */}
             <StudentAccordion
-              courseId={courseId}
-              sections={sections}
+              courseId={courseId as string}
+              sections={sections || []}
               videoLabel="PLAY"
             />
           </div>

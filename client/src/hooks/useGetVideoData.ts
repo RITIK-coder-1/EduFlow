@@ -28,7 +28,7 @@ function useGetVideoData(
 ): VideoDataContract | null {
   // the course
   const { data } = useGetCourseQuery({ courseId });
-  const course = data?.course;
+  const course = data?.data;
 
   // using useMemo to trigger a re-render only when the dependencies change
   const videoData = useMemo(() => {

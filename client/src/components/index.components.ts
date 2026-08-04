@@ -35,6 +35,7 @@ import StudentAccordion from "./layout/StudentAccordion";
 import ProgressBar from "./shared/ProgressBar";
 import SearchBar from "./shared/SearchBar";
 import { SpinnerCustom } from "./shared/Spinner";
+import VideoError from "./shared/VideoError";
 
 export {
   Logout,
@@ -67,4 +68,5 @@ export {
   ProgressBar,
   SearchBar,
   SpinnerCustom,
+  VideoError
 };
