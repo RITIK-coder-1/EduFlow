@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------------------------
-main.jsx
+main.tsx
 This is the main component that wraps the app inside the html 
 ------------------------------------------------------------------------------------------------- */
 
@@ -9,8 +9,8 @@ import { Provider } from "react-redux";
 import { store } from "./store/store.js";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./styles/App.css";
-import PublicLayout from "./PublicLayout.jsx";
-import PrivateLayout from "./PrivateLayout.jsx";
+import PublicLayout from "./PublicLayout.tsx";
+import PrivateLayout from "./PrivateLayout.tsx";
 import {
   Home,
   Register,
@@ -28,9 +28,9 @@ import {
   PublicCourse,
   VideoPlayer,
   NotFound,
-} from "./pages/index.pages.js";
-import ExploreCourses from "./pages/common/ExploreCourses.jsx";
-import { Toaster } from "@/components/ui/sonner"
+} from "./pages/index.pages";
+import ExploreCourses from "./pages/common/ExploreCourses";
+import { Toaster } from "@/components/ui/sonner";
 
 const myRouter = createBrowserRouter([
   /* ----------------------------------------------------------------------------------------------
@@ -181,7 +181,8 @@ const myRouter = createBrowserRouter([
   },
 ]);
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("root")!).render(
+  // "!" id root exists explicitly
   <StrictMode>
     <Provider store={store}>
       <RouterProvider router={myRouter} />

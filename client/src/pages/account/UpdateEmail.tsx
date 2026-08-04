@@ -89,48 +89,47 @@ function UpdateEmail() {
         });
       }
     }
-
-    return (
-      <Form onSubmit={update}>
-        {/* The new email */}
-        <FieldInput
-          label="New Email"
-          name="newEmail"
-          inputType="email"
-          placeholder="New Email"
-          onChange={setValue}
-          disabled={isOtp}
-          value={userData?.newEmail}
-        />
-
-        {/* Password */}
-        <FieldInput
-          label="Password"
-          name="password"
-          inputType="password"
-          placeholder="Password"
-          onChange={setValue}
-          disabled={isOtp}
-          value={userData?.password}
-        />
-
-        {/* OTP */}
-        {isOtp && (
-          <OtpInput
-            name="userOtp"
-            required={isOtp}
-            setterFunction={setOtpFunction}
-            value={userOtp}
-          />
-        )}
-        <CommonButton
-          type="submit"
-          label={
-            isOtpLoading || isUpdateLoading ? <SpinnerCustom /> : "Update Email"
-          }
-        />
-      </Form>
-    );
   };
+  return (
+    <Form onSubmit={update}>
+      {/* The new email */}
+      <FieldInput
+        label="New Email"
+        name="newEmail"
+        inputType="email"
+        placeholder="New Email"
+        onChange={setValue}
+        disabled={isOtp}
+        value={userData?.newEmail}
+      />
+
+      {/* Password */}
+      <FieldInput
+        label="Password"
+        name="password"
+        inputType="password"
+        placeholder="Password"
+        onChange={setValue}
+        disabled={isOtp}
+        value={userData?.password}
+      />
+
+      {/* OTP */}
+      {isOtp && (
+        <OtpInput
+          name="userOtp"
+          required={isOtp}
+          setterFunction={setOtpFunction}
+          value={userOtp}
+        />
+      )}
+      <CommonButton
+        type="submit"
+        label={
+          isOtpLoading || isUpdateLoading ? <SpinnerCustom /> : "Update Email"
+        }
+      />
+    </Form>
+  );
 }
 export default UpdateEmail;

@@ -138,129 +138,129 @@ function Register() {
     if (isSuccess) {
       navigate("/login", { replace: true });
     }
-
-    return (
-      // the form element
-      <Form onSubmit={handleSubmit} className="mb-2">
-        {/* First Name */}
-        <FieldInput
-          label="First Name"
-          name="firstName"
-          onChange={setRegisteringData}
-          disabled={isOtp}
-          placeholder="Ritik"
-          value={userData.firstName}
-        />
-
-        {/* Account type */}
-        <SelectInput
-          disabled={isOtp}
-          onChange={setRegisteringData}
-          name={"accountType"}
-        >
-          <NativeSelectOption value="" className="text-foreground">
-            Choose Account Type
-          </NativeSelectOption>
-          <NativeSelectOption value="Student">Student</NativeSelectOption>
-          <NativeSelectOption value="Instructor">Instructor</NativeSelectOption>
-        </SelectInput>
-
-        {/* Last Name */}
-        <FieldInput
-          label="Last Name"
-          name="lastName"
-          onChange={setRegisteringData}
-          disabled={isOtp}
-          placeholder="Mahapatra"
-          required={false}
-          value={userData.lastName}
-        />
-
-        {/* Username */}
-        <FieldInput
-          label="Username"
-          name="username"
-          onChange={setRegisteringData}
-          disabled={isOtp}
-          description="Enter a unique username (Must be more than 6 characters)"
-          placeholder="ritik123"
-          value={userData.username}
-        />
-
-        {/* Email */}
-        <FieldInput
-          label="Email"
-          name="email"
-          inputType="email"
-          onChange={setRegisteringData}
-          disabled={isOtp}
-          placeholder="ritik@gmail.com"
-          value={userData.email}
-        />
-
-        {/* Password */}
-        <FieldInput
-          label="Password"
-          name="password"
-          inputType="password"
-          onChange={setRegisteringData}
-          disabled={isOtp}
-          description="At least 10 characters"
-          placeholder="••••••••••••••••"
-          value={userData.password}
-        />
-
-        {/* DOB */}
-        <DatePicker disabled={isOtp} dateSelectionMethod={selectDate} />
-
-        {/* Profile pic */}
-        <InputFile
-          label="Upload Profile"
-          name="profilePic"
-          description="Important: Instructors are required to upload a profile picture."
-          disabled={isOtp}
-          onChange={fileData}
-          required={userData.accountType === "Instructor" ? true : false}
-          accept="image/*"
-        />
-
-        {/* OTP */}
-        <div className={isOtp ? "visible" : "hidden"}>
-          <OtpInput
-            setterFunction={otpCodeFunction}
-            name="userOTP"
-            required={isOtp}
-            value={userData.userOTP}
-          />
-        </div>
-
-        <div className="flex flex-col gap-2 lg:flex-row">
-          {/* Submit */}
-          <CommonButton
-            type="submit"
-            label={
-              isCreateOtpLoading || isRegisterUserLoading ? (
-                <SpinnerCustom />
-              ) : isOtp ? (
-                "Register"
-              ) : (
-                "Submit"
-              )
-            }
-          />
-
-          {/* Re-register */}
-          <CommonButton
-            label="Re-submit"
-            onClick={reRegister}
-            className={`${
-              isOtp ? "visible" : "hidden"
-            } bg-blue-950 hover:bg-blue-900`}
-          />
-        </div>
-      </Form>
-    );
   };
+
+  return (
+    // the form element
+    <Form onSubmit={handleSubmit} className="mb-2">
+      {/* First Name */}
+      <FieldInput
+        label="First Name"
+        name="firstName"
+        onChange={setRegisteringData}
+        disabled={isOtp}
+        placeholder="Ritik"
+        value={userData.firstName}
+      />
+
+      {/* Account type */}
+      <SelectInput
+        disabled={isOtp}
+        onChange={setRegisteringData}
+        name={"accountType"}
+      >
+        <NativeSelectOption value="" className="text-foreground">
+          Choose Account Type
+        </NativeSelectOption>
+        <NativeSelectOption value="Student">Student</NativeSelectOption>
+        <NativeSelectOption value="Instructor">Instructor</NativeSelectOption>
+      </SelectInput>
+
+      {/* Last Name */}
+      <FieldInput
+        label="Last Name"
+        name="lastName"
+        onChange={setRegisteringData}
+        disabled={isOtp}
+        placeholder="Mahapatra"
+        required={false}
+        value={userData.lastName}
+      />
+
+      {/* Username */}
+      <FieldInput
+        label="Username"
+        name="username"
+        onChange={setRegisteringData}
+        disabled={isOtp}
+        description="Enter a unique username (Must be more than 6 characters)"
+        placeholder="ritik123"
+        value={userData.username}
+      />
+
+      {/* Email */}
+      <FieldInput
+        label="Email"
+        name="email"
+        inputType="email"
+        onChange={setRegisteringData}
+        disabled={isOtp}
+        placeholder="ritik@gmail.com"
+        value={userData.email}
+      />
+
+      {/* Password */}
+      <FieldInput
+        label="Password"
+        name="password"
+        inputType="password"
+        onChange={setRegisteringData}
+        disabled={isOtp}
+        description="At least 10 characters"
+        placeholder="••••••••••••••••"
+        value={userData.password}
+      />
+
+      {/* DOB */}
+      <DatePicker disabled={isOtp} dateSelectionMethod={selectDate} />
+
+      {/* Profile pic */}
+      <InputFile
+        label="Upload Profile"
+        name="profilePic"
+        description="Important: Instructors are required to upload a profile picture."
+        disabled={isOtp}
+        onChange={fileData}
+        required={userData.accountType === "Instructor" ? true : false}
+        accept="image/*"
+      />
+
+      {/* OTP */}
+      <div className={isOtp ? "visible" : "hidden"}>
+        <OtpInput
+          setterFunction={otpCodeFunction}
+          name="userOTP"
+          required={isOtp}
+          value={userData.userOTP}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2 lg:flex-row">
+        {/* Submit */}
+        <CommonButton
+          type="submit"
+          label={
+            isCreateOtpLoading || isRegisterUserLoading ? (
+              <SpinnerCustom />
+            ) : isOtp ? (
+              "Register"
+            ) : (
+              "Submit"
+            )
+          }
+        />
+
+        {/* Re-register */}
+        <CommonButton
+          label="Re-submit"
+          onClick={reRegister}
+          className={`${
+            isOtp ? "visible" : "hidden"
+          } bg-blue-950 hover:bg-blue-900`}
+        />
+      </div>
+    </Form>
+  );
 }
 
 export default Register;
