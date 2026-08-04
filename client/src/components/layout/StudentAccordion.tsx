@@ -13,7 +13,7 @@ import { Link, useParams } from "react-router-dom";
 import slugify from "../../utils/slugify";
 import { PlayCircle, ChevronRightIcon } from "lucide-react";
 import useUserStatus from "../../hooks/useUserStatus";
-import type { CourseSectionContract } from "../../types/index.types";
+import type { CourseSectionContract, UserRoles } from "../../types/index.types";
 
 interface StudentAccordionInterface {
   sections: CourseSectionContract[];
@@ -26,9 +26,19 @@ function StudentAccordion({
   courseId,
   videoLabel = "WATCH NOW",
 }: StudentAccordionInterface) {
-  // the user stats
-  const { isOwner, isEnrolled, accountType, isAuthenticated } =
-    useUserStatus(courseId);
+  // the user stats: I'm creating additional variables to keep track of these states regardless of user API call
+  let isOwnerCheck: boolean = false;
+  let isEnrolledCheck: boolean = false;
+  let accountTypeCheck: UserRoles | undefined = undefined;
+
+  const { isAuthenticated } = useUserStatus();
+
+  if (isAuthenticated) {
+    const { isOwner, isEnrolled, accountType } = useUserStatus(courseId); // call the user API only if they are authenticated
+    isOwnerCheck = isOwner;
+    isEnrolledCheck = isEnrolled;
+    accountTypeCheck = accountType;
+  }
 
   // the video Id
   const { videoId } = useParams();
@@ -54,11 +64,11 @@ function StudentAccordion({
                       !isAuthenticated
                         ? "/login"
                         : // link only if the user is an admin or the student is enrolled or don't
-                        accountType === "Admin"
+                        accountTypeCheck === "Admin"
                         ? `/app/courses/${courseId}/watch/${
                             video?._id
                           }/${slugify(video?.title)}`
-                        : !isOwner && !isEnrolled
+                        : !isOwnerCheck && !isEnrolledCheck
                         ? ""
                         : `/app/courses/${courseId}/watch/${
                             video?._id
@@ -86,9 +96,9 @@ function StudentAccordion({
                         {/* If the student isn't enrolled, ask them to enroll */}
                         {!isAuthenticated
                           ? "Login To Watch"
-                          : accountType === "Admin"
+                          : accountTypeCheck === "Admin"
                           ? "WATCH"
-                          : !isOwner && !isEnrolled
+                          : !isOwnerCheck && !isEnrolledCheck
                           ? "Enroll To Watch"
                           : videoLabel}
                       </span>
