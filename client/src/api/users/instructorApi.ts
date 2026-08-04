@@ -22,10 +22,7 @@ import {
 const instructorApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // CREATE A COURSE
-    createCourse: builder.mutation<
-      ResponseContract<CourseContract>,
-      FormData
-    >({
+    createCourse: builder.mutation<ResponseContract<CourseContract>, FormData>({
       query: (courseData) => ({
         url: "/instructor/courses",
         method: "POST",
@@ -52,11 +49,24 @@ const instructorApi = apiSlice.injectEndpoints({
       ResponseContract<CourseContract>,
       MinimalCourse | FormData
     >({
-      query: ({ courseId, ...courseDetails }) => ({
-        url: `/instructor/${courseId}`,
-        method: "PATCH",
-        body: courseDetails,
-      }),
+      query: (arg) => {
+        // If it is FormData, extract the ID from FormData or pass it along
+        if (arg instanceof FormData) {
+          const courseId = arg.get("courseId");
+          return {
+            url: `/instructor/${courseId}`,
+            method: "PATCH",
+            body: arg, // Pass the whole FormData as the body
+          };
+        }
+
+        const { courseId, ...courseDetails } = arg;
+        return {
+          url: `/instructor/${courseId}`,
+          method: "PATCH",
+          body: courseDetails,
+        };
+      },
       transformErrorResponse,
       transformResponse: transformResponse<CourseContract>(),
       invalidatesTags: ["Course", "Category"],
