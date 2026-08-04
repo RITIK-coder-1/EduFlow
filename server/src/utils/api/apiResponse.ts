@@ -3,7 +3,7 @@ apiResponse.ts
 This is a class to send specific API JSON objects on success 
 ------------------------------------------------------------------------------------------ */
 
-import { ApiSuccessResponse } from "../../types/index.types.ts";
+import type { ApiSuccessResponse } from "../../types/index.types.ts";
 
 class ApiResponse<T> implements ApiSuccessResponse<T> {
   statusCode: number;
