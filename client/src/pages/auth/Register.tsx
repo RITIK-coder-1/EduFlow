@@ -2,7 +2,7 @@
 Register.tsx
 The page to register a user
 ------------------------------------------------------------------------------------------ */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ChangeEvent, SubmitEvent } from "react";
 import {
   useRegisterMutation,
@@ -134,11 +134,14 @@ function Register() {
       }
     }
 
-    // navigate to the dashboard once the user successfully registers
-    if (isSuccess) {
-      navigate("/login", { replace: true });
-    }
   };
+
+  // navigate to the dashboard once user is registered
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/app/dashboard", { replace: true });
+    }
+  }, [isSuccess]);
 
   return (
     // the form element

@@ -3,7 +3,7 @@ Login.tsx
 The page to login a user
 ------------------------------------------------------------------------------------------ */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ChangeEvent, SubmitEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../api/index.api";
@@ -60,7 +60,6 @@ function Login() {
   /* ---------------------------------------------------------------------------------------
   sending data to the server
   ------------------------------------------------------------------------------------------ */
-
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -85,12 +84,14 @@ function Login() {
         position: "top-right",
       });
     }
+  };
 
-    // navigate to the dashboard once login is successful
+  // navigate to the dashboard once login is successful
+  useEffect(() => {
     if (isSuccess) {
       navigate("/app/dashboard", { replace: true });
     }
-  };
+  }, [isSuccess]);
 
   return (
     <Form onSubmit={handleSubmit} className="my-20">
