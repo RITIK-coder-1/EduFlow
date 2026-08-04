@@ -13,8 +13,8 @@ import {
   SpinnerCustom,
 } from "@/components/index.components";
 import { Link } from "react-router-dom";
-import { ReactNode } from "react";
-import { UserContract, CourseContract } from "@/types/index.types";
+import type { ReactNode } from "react";
+import type { UserContract, CourseContract } from "@/types/index.types";
 
 // interface for stats data structures
 interface StatItem {

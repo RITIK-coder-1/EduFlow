@@ -3,9 +3,9 @@ baseQuery.ts
 This base query file to set up the base url and to look for the token expiry 
 ------------------------------------------------------------------------------------------------- */
 
-import { disableUser } from "../../features/authSlice.ts";
+import { disableUser } from "../../features/authSlice";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { RootState } from "../../store/store.ts";
+import { RootState } from "../../store/store";
 import type {
   BaseQueryFn,
   FetchArgs,

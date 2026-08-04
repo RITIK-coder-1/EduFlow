@@ -12,7 +12,8 @@ import {
 import filterCourses from "@/utils/filterCourses";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { useEffect, ReactNode } from "react";
+import { useEffect } from "react";
+import type { ReactNode } from "react";
 
 // interfaces for component props and data structures
 interface SectionProps {

@@ -3,7 +3,8 @@ Login.tsx
 The page to login a user
 ------------------------------------------------------------------------------------------ */
 
-import { useState, SubmitEvent, ChangeEvent } from "react";
+import { useState } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../api/index.api";
 import { useAppDispatch } from "@/hooks/useReduxHooks";
@@ -15,7 +16,7 @@ import {
   SpinnerCustom,
 } from "@/components/index.components";
 import { toast } from "sonner";
-import { ApiErrorResponse } from "@/types/api.types";
+import type { ApiErrorResponse } from "@/types/api.types";
 
 function Login() {
   /* ---------------------------------------------------------------------------------------

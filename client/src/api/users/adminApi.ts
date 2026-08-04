@@ -3,7 +3,7 @@ adminApi.ts
 This file does all the admin API calls 
 ------------------------------------------------------------------------------------------------- */
 
-import {
+import type {
   CourseCategoryContract,
   CourseContract,
   ResponseContract,

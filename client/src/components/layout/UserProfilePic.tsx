@@ -3,8 +3,8 @@ UserProfilePic.tsx
 The profile of the user
 ------------------------------------------------------------------------------------------------- */
 
-import { Image, Navlink, Logout } from "../index.components.js";
-import { Button } from "@/components/ui/button.js";
+import { Image, Navlink, Logout } from "../index.components";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu.js";
+} from "@/components/ui/dropdown-menu";
 import { useGetUserQuery } from "@/api/index.api";
 
 interface UserProfilePicContract {

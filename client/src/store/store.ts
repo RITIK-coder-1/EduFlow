@@ -4,9 +4,9 @@ This file stores every single redux state
 ------------------------------------------------------------------------------------------------- */
 
 import { configureStore } from "@reduxjs/toolkit";
-import apiSlice from "../api/base/apiSlice.js";
-import { authReducer } from "../features/index.features.js";
-import userListener from "../middleware/userLocalStorage.js";
+import apiSlice from "../api/base/apiSlice";
+import { authReducer } from "../features/index.features";
+import userListener from "../middleware/userLocalStorage";
 
 export const store = configureStore({
   reducer: {

@@ -3,9 +3,9 @@ useGetVideoData.ts
 The hook to provide the important data for course videos
 ------------------------------------------------------------------------------------------------- */
 
-import { useGetCourseQuery } from "../api/index.api.js";
+import { useGetCourseQuery } from "../api/index.api";
 import { useMemo } from "react";
-import { CourseVideoContract } from "../types/index.types.js";
+import type { CourseVideoContract } from "../types/index.types";
 
 /* ----------------------------------------------------------------------------------------------
 INTERFACE

@@ -3,9 +3,9 @@ useUserStatus.ts
 The hook to provide the current status of the user 
 ------------------------------------------------------------------------------------------------- */
 
-import { useGetUserQuery, useGetCourseQuery } from "../api/index.api.js";
-import { CourseContract } from "../types/index.types.ts";
-import { useAppSelector } from "./useReduxHooks.ts";
+import { useGetUserQuery, useGetCourseQuery } from "../api/index.api";
+import type { CourseContract } from "../types/index.types";
+import { useAppSelector } from "./useReduxHooks";
 
 function useUserStatus(courseId: string | void) {
   // the user

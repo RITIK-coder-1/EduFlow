@@ -3,7 +3,8 @@ UpdatePassword.tsx
 The page to update the user password 
 ------------------------------------------------------------------------------------------------- */
 
-import { useState, ChangeEvent, SubmitEvent } from "react";
+import { useState } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
 import { useUpdateUserPasswordMutation } from "../../api/index.api";
 import {
   Form,
@@ -12,7 +13,7 @@ import {
   SpinnerCustom,
 } from "@/components/index.components";
 import { toast } from "sonner";
-import { ApiErrorResponse } from "@/types/index.types";
+import type { ApiErrorResponse } from "@/types/index.types";
 
 function UpdatePassword() {
   /* ---------------------------------------------------------------------------------------

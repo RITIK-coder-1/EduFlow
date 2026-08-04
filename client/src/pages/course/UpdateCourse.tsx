@@ -3,7 +3,8 @@ UpdateCourse.tsx
 The page to update a course 
 ------------------------------------------------------------------------------------------------- */
 
-import { useState, useEffect, ChangeEvent, SubmitEvent } from "react";
+import { useState, useEffect } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
 import {
   useUpdateCourseMutation,
   useGetAllCategoriesQuery,

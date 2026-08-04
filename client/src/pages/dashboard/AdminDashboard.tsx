@@ -2,7 +2,8 @@
 AdminDashboard.tsx
 ------------------------------------------------------------------------------------------------- */
 
-import { ChangeEvent, useEffect, useState, ReactNode, SubmitEvent, MouseEvent } from "react";
+import { useState, useEffect } from "react";
+import type { ChangeEvent, SubmitEvent, ReactNode, MouseEvent } from "react";
 import {
   Users,
   BookOpen,

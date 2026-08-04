@@ -3,7 +3,7 @@ queryResponses.ts
 This function provides the specific transformed responses for Redux Toolkit Query success and errors
 ------------------------------------------------------------------------------------------------- */
 
-import { ApiSuccessResponse, ResponseContract } from "../types/index.types.ts";
+import type { ApiSuccessResponse, ResponseContract } from "../types/index.types";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
 

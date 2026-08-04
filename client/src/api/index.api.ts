@@ -23,14 +23,14 @@ import {
   useCompleteCourseVideoMutation,
   useGetEnrolledCoursesQuery,
   useGetBulkCourseProgressQuery,
-} from "./users/userApi.ts";
+} from "./users/userApi";
 
 import {
   useGetAllTheCoursesQuery,
   useGetCourseQuery,
   useEnrollCourseMutation,
   useGetAllCategoriesQuery,
-} from "./courses/courseApi.js";
+} from "./courses/courseApi";
 
 import {
   useGetCourseInstructorQuery,
@@ -44,7 +44,7 @@ import {
   useDeleteVideoMutation,
   useCreateCourseMutation,
   useGetInstructorDataQuery,
-} from "./users/instructorApi.ts";
+} from "./users/instructorApi";
 
 import {
   useCreateCategoryMutation,
@@ -57,7 +57,7 @@ import {
   useGetCourseAdminQuery,
   useDeleteCourseAdminMutation,
   useGetSystemStatsQuery,
-} from "./users/adminApi.js";
+} from "./users/adminApi";
 
 export {
   useRegisterOtpMutation,

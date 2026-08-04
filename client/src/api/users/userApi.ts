@@ -8,7 +8,7 @@ import {
   transformResponse,
   transformErrorResponse,
 } from "../../utils/queryResponses";
-import {
+import type {
   CourseContract,
   ResponseContract,
   UserContract,

@@ -29,20 +29,15 @@ import {
   CourseCommonAccordionItem,
   SpinnerCustom,
 } from "../../components/index.components";
-import {
-  useEffect,
-  MouseEvent,
-  SubmitEvent,
-  useState,
-  ChangeEvent,
-} from "react";
+import type { MouseEvent, SubmitEvent, ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 import getFormData from "@/utils/getFormData";
 import { MdOutlineSystemUpdateAlt, MdDelete } from "react-icons/md";
 import { SelectInput } from "../../components/index.components";
 import { NativeSelectOption } from "@/components/ui/native-select";
 import { usePublishCourseMutation } from "@/api/users/instructorApi";
 import { toast } from "sonner";
-import { CourseSectionContract, ApiErrorResponse } from "@/types/index.types";
+import type { CourseSectionContract, ApiErrorResponse } from "@/types/index.types";
 
 function InstructorCourse() {
   const navigate = useNavigate();

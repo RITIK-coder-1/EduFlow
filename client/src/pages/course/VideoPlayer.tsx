@@ -20,7 +20,7 @@ import {
 } from "@/components/index.components";
 import useUserStatus from "@/hooks/useUserStatus";
 import { toast } from "sonner";
-import { ApiErrorResponse } from "@/types/index.types";
+import type { ApiErrorResponse } from "@/types/index.types";
 
 function VideoPlayer() {
   // the data

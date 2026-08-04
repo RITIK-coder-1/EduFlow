@@ -3,7 +3,8 @@ UpdateProfile.tsx
 The page to update the user profile 
 ------------------------------------------------------------------------------------------------- */
 
-import { useEffect, useState, ChangeEvent, SubmitEvent } from "react";
+import { useState, useEffect } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
 import {
   useDeleteUserProfilePicMutation,
   useUpdateUserDetailsMutation,
@@ -20,7 +21,7 @@ import {
 } from "@/components/index.components";
 import { toast } from "sonner";
 import { TrashIcon } from "lucide-react";
-import { ApiErrorResponse } from "@/types/index.types";
+import type { ApiErrorResponse } from "@/types/index.types";
 
 function UpdateProfile() {
   /* ---------------------------------------------------------------------------------------

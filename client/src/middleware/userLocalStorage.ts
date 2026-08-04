@@ -4,7 +4,7 @@ The middleware to manipulate the user value in the local storage for redux toolk
 ------------------------------------------------------------------------------------------ */
 
 import { createListenerMiddleware } from "@reduxjs/toolkit";
-import { disableUser, setUser } from "../features/authSlice.js";
+import { disableUser, setUser } from "../features/authSlice";
 
 const userListener = createListenerMiddleware();
 

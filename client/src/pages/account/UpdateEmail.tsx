@@ -3,7 +3,8 @@ UpdateEmail.tsx
 The page to update the user email 
 ------------------------------------------------------------------------------------------------- */
 
-import { ChangeEvent, useState, SubmitEvent } from "react";
+import { useState } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
 import {
   useUpdateUserEmailMutation,
   useUpdateUserEmailOtpMutation,
@@ -17,7 +18,7 @@ import {
 } from "@/components/index.components";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { ApiErrorResponse } from "@/types/index.types";
+import type { ApiErrorResponse } from "@/types/index.types";
 
 function UpdateEmail() {
   const navigate = useNavigate();

@@ -8,12 +8,12 @@ import {
   CourseCommonAccordionItem,
   CourseAccordionContent,
   CourseAccordionTrigger,
-} from "../index.components.js";
+} from "../index.components";
 import { Link, useParams } from "react-router-dom";
-import slugify from "../../utils/slugify.ts";
+import slugify from "../../utils/slugify";
 import { PlayCircle, ChevronRightIcon } from "lucide-react";
-import useUserStatus from "../../hooks/useUserStatus.ts";
-import { CourseSectionContract } from "../../types/course.types.ts";
+import useUserStatus from "../../hooks/useUserStatus";
+import type { CourseSectionContract } from "../../types/index.types";
 
 interface StudentAccordionInterface {
   sections: CourseSectionContract[];

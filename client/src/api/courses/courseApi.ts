@@ -3,7 +3,7 @@ courseApi.ts
 This file does all the course related PUBLIC API calls 
 ------------------------------------------------------------------------------------------------- */
 
-import {
+import type {
   ResponseContract,
   CourseContract,
   CourseCategoryContract,

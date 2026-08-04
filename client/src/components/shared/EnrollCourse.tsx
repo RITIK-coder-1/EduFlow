@@ -3,7 +3,6 @@ EnrollCourse.tsx
 The enrollment logic 
 ------------------------------------------------------------------------------------------------- */
 
-import React from "react";
 import { useEnrollCourseMutation } from "@/api/index.api";
 import { CommonButton, SpinnerCustom } from "@/components/index.components";
 import { useNavigate } from "react-router-dom";

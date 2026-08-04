@@ -3,7 +3,7 @@ DisplayCourses.tsx
 The component for displaying all the courses 
 ------------------------------------------------------------------------------------------------- */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   CourseCard,
   ProgressBar,
@@ -11,8 +11,7 @@ import {
   SpinnerCustom,
 } from "../index.components";
 import filterCourses, { FilteredCourseContract } from "@/utils/filterCourses";
-import { useEffect, useState } from "react";
-import { CourseContract } from "@/types/course.types";
+import type { CourseContract } from "@/types/course.types";
 
 interface DisplayCoursesProps {
   heading: string;

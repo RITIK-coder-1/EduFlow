@@ -2,7 +2,8 @@
 Register.tsx
 The page to register a user
 ------------------------------------------------------------------------------------------ */
-import { useState, ChangeEvent, SubmitEvent } from "react";
+import { useState } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
 import {
   useRegisterMutation,
   useRegisterOtpMutation,
@@ -21,7 +22,10 @@ import {
 import { NativeSelectOption } from "@/components/ui/native-select.jsx";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { ApiErrorResponse, RegisterRequestBody } from "@/types/index.types";
+import type {
+  ApiErrorResponse,
+  RegisterRequestBody,
+} from "@/types/index.types";
 
 function Register() {
   // navigation
