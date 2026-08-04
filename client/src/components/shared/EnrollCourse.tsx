@@ -16,9 +16,8 @@ interface EnrollCourseProps {
 const EnrollCourse = ({ courseId }: EnrollCourseProps) => {
   const navigate = useNavigate();
 
-  // the user stats
-  const { isAuthenticated, isOwner, isEnrolled, accountType } =
-    useUserStatus(courseId);
+  // the user authenticated stats
+  const { isAuthenticated } = useUserStatus();
 
   // the enroll course mutation
   const [enroll, { isLoading }] = useEnrollCourseMutation();
@@ -51,7 +50,10 @@ const EnrollCourse = ({ courseId }: EnrollCourseProps) => {
     );
   }
 
-  if (isAuthenticated && accountType !== "Admin") {
+  // call the user API only if the user is logged in
+  const { accountType, isOwner, isEnrolled } = useUserStatus(courseId);
+
+  if (accountType !== "Admin") {
     switch (isOwner) {
       // if the user is the instructor themselves, forward them to the edit page
       case true:

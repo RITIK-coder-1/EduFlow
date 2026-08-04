@@ -15,7 +15,7 @@ interface UserStatus {
   isAuthenticated: boolean;
   isOwner: boolean;
   isEnrolled: boolean;
-  accountType: UserRoles;
+  accountType: UserRoles | undefined;
 }
 
 function useUserStatus(courseId: string | void): UserStatus {
@@ -41,7 +41,7 @@ function useUserStatus(courseId: string | void): UserStatus {
 
   // the type of user
   const accountType =
-    useAppSelector((state) => state.auth.user?.accountType) || "Student"; // for immediate access
+    useAppSelector((state) => state.auth.user?.accountType); // for immediate access
 
   // check if the user is the owner of the course
   const isOwner = user?._id === course?.owner?._id ? true : false;

@@ -13,6 +13,7 @@ import {
 } from "@/components/index.components";
 import { useLastCourseVisitedMutation } from "@/api/users/userApi";
 import { useEffect } from "react";
+import useUserStatus from "@/hooks/useUserStatus";
 
 function PublicCourse() {
   // the data
@@ -28,15 +29,21 @@ function PublicCourse() {
   const instructorLastName = course?.owner?.lastName;
 
   // add this as the last course visited
+  const { isAuthenticated } = useUserStatus();
   const [lastCourseVisited] = useLastCourseVisitedMutation();
-  useEffect(() => {
-    const courseFunc = async () => {
-      try {
-        await lastCourseVisited({ courseId } as { courseId: string }).unwrap();
-      } catch (error) {}
-    };
-    courseFunc();
-  }, []);
+  if (isAuthenticated) {
+    // add this to last course visited only if the user is authenticated
+    useEffect(() => {
+      const courseFunc = async () => {
+        try {
+          await lastCourseVisited({ courseId } as {
+            courseId: string;
+          }).unwrap();
+        } catch (error) {}
+      };
+      courseFunc();
+    }, [isAuthenticated]);
+  }
 
   return (
     <>
