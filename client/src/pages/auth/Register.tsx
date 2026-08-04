@@ -139,7 +139,7 @@ function Register() {
   // navigate to the dashboard once user is registered
   useEffect(() => {
     if (isSuccess) {
-      navigate("/app/dashboard", { replace: true });
+      navigate("/login", { replace: true });
     }
   }, [isSuccess]);
 
