@@ -54,7 +54,7 @@ function InstructorCourse() {
   const course = data?.data;
 
   // the methods
-  const [deleteCourse, { isSuccess, isLoading: isDeleteCourseLoading }] =
+  const [deleteCourse, { isSuccess }] =
     useDeleteCourseInstructorMutation();
 
   const [addSection, { isLoading: isAddSectionLoading }] =
