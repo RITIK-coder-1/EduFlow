@@ -30,7 +30,7 @@ import {
   SpinnerCustom,
 } from "@/components/index.components";
 import { toast } from "sonner";
-import type { CourseCategoryContract, ApiErrorResponse, UserContract, CourseContract } from "@/types/index.types";
+import type { CourseCategoryContract, ApiErrorResponse } from "@/types/index.types";
 
 const AdminDashboard = () => {
   /* ----------------------------------------------------------------------------------------------
@@ -336,7 +336,7 @@ const AdminDashboard = () => {
 
                 {/* Body */}
                 <div className="divide-y divide-gray-800">
-                  {users?.map((user: UserContract) => (
+                  {users?.map((user) => (
                     <div
                       key={user?._id}
                       className="flex flex-col md:flex-row md:items-center py-4 gap-4 md:gap-0 hover:bg-[#1e293b] transition-colors group"
@@ -412,7 +412,7 @@ const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-800">
-                    {courses?.map((course: CourseContract) => (
+                    {courses?.map((course) => (
                       <tr
                         key={course?._id}
                         className="text-sm group hover:bg-[#1e293b] transition-colors"
