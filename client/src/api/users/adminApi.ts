@@ -129,7 +129,7 @@ const adminApi = apiSlice.injectEndpoints({
     // SYSTEM STATS
     getSystemStats: builder.query<ResponseContract<SystemStats>, void>({
       query: () => "/admin/stats",
-      providesTags: ["Stats"],
+      providesTags: ["Stats", "User", "Course"],
       transformResponse: transformResponse<SystemStats>(),
       transformErrorResponse,
     }),
