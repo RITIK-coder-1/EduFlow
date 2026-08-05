@@ -37,7 +37,10 @@ import { SelectInput } from "../../components/index.components";
 import { NativeSelectOption } from "@/components/ui/native-select";
 import { usePublishCourseMutation } from "@/api/users/instructorApi";
 import { toast } from "sonner";
-import type { CourseSectionContract, ApiErrorResponse } from "@/types/index.types";
+import type {
+  CourseSectionContract,
+  ApiErrorResponse,
+} from "@/types/index.types";
 
 function InstructorCourse() {
   const navigate = useNavigate();
@@ -54,8 +57,7 @@ function InstructorCourse() {
   const course = data?.data;
 
   // the methods
-  const [deleteCourse, { isSuccess }] =
-    useDeleteCourseInstructorMutation();
+  const [deleteCourse, { isSuccess }] = useDeleteCourseInstructorMutation();
 
   const [addSection, { isLoading: isAddSectionLoading }] =
     useAddNewSectionMutation();
@@ -265,11 +267,8 @@ function InstructorCourse() {
           ...videoData,
           sectionId: id,
         });
-        const { message } = await addVideo({
-          title: videoFormData.get("title") as string,
-          courseId,
-          sectionId: id,
-        }).unwrap();
+        videoFormData.append("courseId", courseId as string);
+        const { message } = await addVideo(videoFormData).unwrap();
         setVideoOpen(null);
         setVideoData({ title: "", courseVideo: null, sectionId: "" });
         toast.success(message, { position: "top-right" });

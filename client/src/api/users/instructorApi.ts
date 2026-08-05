@@ -139,13 +139,17 @@ const instructorApi = apiSlice.injectEndpoints({
     // ADD A NEW VIDEO
     addNewVideo: builder.mutation<
       ResponseContract<CourseVideoContract>,
-      MinimalCourseVideoContract
+      FormData
     >({
-      query: ({ title, courseId, sectionId }) => ({
-        url: `/instructor/${courseId}/sections/${sectionId}/videos`,
-        method: "POST",
-        body: { title, sectionId },
-      }),
+      query: (arg) => {
+        const courseId = arg.get("courseId");
+        const sectionId = arg.get("sectionId");
+        return {
+          url: `/instructor/${courseId}/sections/${sectionId}/videos`,
+          method: "POST",
+          body: arg,
+        };
+      },
       transformErrorResponse,
       transformResponse: transformResponse<CourseVideoContract>(),
       invalidatesTags: ["Course"],
