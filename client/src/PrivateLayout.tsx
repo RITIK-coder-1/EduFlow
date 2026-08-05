@@ -11,7 +11,11 @@ import useUserStatus from "./hooks/useUserStatus";
 import { Navigate } from "react-router-dom";
 import type { UserRoles } from "./types/index.types";
 
-function PrivateLayout({ allowedRoles }: { allowedRoles: UserRoles[] }) {
+function PrivateLayout({
+  allowedRoles,
+}: {
+  allowedRoles: (UserRoles | undefined)[];
+}) {
   const { isAuthenticated, accountType } = useUserStatus();
   const location = useLocation();
 

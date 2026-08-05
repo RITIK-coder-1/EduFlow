@@ -28,7 +28,7 @@ function useUserStatus(courseId: string | void): UserStatus {
     // only if the courseID is provided
     const { data: courseData } = useGetCourseQuery({ courseId });
     course = courseData?.data;
-    const { data: userData } = useGetUserQuery(); // call the API only if the course information is asked to prevent unwanted calls 
+    const { data: userData } = useGetUserQuery(); // call the API only if the course information is asked to prevent unwanted calls
     user = userData?.data; // I have not saved all the user data in the redux state, so I'm calling the API
   }
 
@@ -40,8 +40,9 @@ function useUserStatus(courseId: string | void): UserStatus {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated); // for immediate access
 
   // the type of user
-  const accountType =
-    useAppSelector((state) => state.auth.user?.accountType); // for immediate access
+  const accountType = useAppSelector(
+    (state) => state.auth.user?.accountType
+  ); // for immediate access
 
   // check if the user is the owner of the course
   const isOwner = user?._id === course?.owner?._id ? true : false;

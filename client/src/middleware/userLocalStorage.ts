@@ -12,7 +12,11 @@ const userListener = createListenerMiddleware();
 userListener.startListening({
   actionCreator: setUser,
   effect: (action) => {
-    localStorage.setItem("user", JSON.stringify(action.payload));
+    localStorage.setItem("user", JSON.stringify(action.payload.user));
+    localStorage.setItem(
+      "accessToken",
+      JSON.stringify(action.payload.accessToken)
+    );
   },
 });
 
