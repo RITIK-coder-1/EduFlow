@@ -26,10 +26,14 @@ import type {
   CourseContract,
   CourseSectionContract,
   CourseVideoContract,
+  ApiSuccessResponse,
 } from "../types/index.types.ts";
 import { Types } from "mongoose";
 
-type MinimalUser = Pick<UserContract, "firstName" | "lastName" | "username">;
+type MinimalUser = Pick<
+  UserContract,
+  "firstName" | "lastName" | "username"
+>;
 
 /* ---------------------------------------------------------------------------------------
 GET USER CONTROLLER
@@ -39,7 +43,7 @@ This is a function to fetch a single user's details
 const getUserFunction = async (
   req: Request,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<UserContract>>> => {
   const user = await User.findById(req.user?._id)
     .select("-password -refreshTokenString")
     .populate<{
@@ -75,7 +79,7 @@ This is a function to update a user's details including the profile picture (not
 const updateUserDetailsFunction = async (
   req: Request<{}, {}, MinimalUser>,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<UserContract>>> => {
   // gathering data to update
   const { firstName, lastName, username } = req.body; // (Account type and DOB can't be changed once created)
   const profilePicLocalPath = req.file?.path;
@@ -187,7 +191,7 @@ interface PasswordUpdateContract {
 const updatePasswordFunction = async (
   req: Request<{}, {}, PasswordUpdateContract>,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   // getting the old and the new passwords
   const { oldPassword, newPassword } = req.body;
 
@@ -243,7 +247,7 @@ const updatePasswordFunction = async (
   return res
     .status(200)
     .json(
-      new ApiResponse(200, "The password has been successfully updated!", {})
+      new ApiResponse(200, "The password has been successfully updated!", null)
     );
 };
 
@@ -262,7 +266,7 @@ interface UpdateEmailContract {
 const createUpdateEmailOtpFunction = async (
   req: Request<{}, {}, UpdateEmailContract>,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<UpdateEmailContract>>> => {
   // getting the new email to update and the password for security
   const { newEmail, password } = req.body;
 
@@ -341,7 +345,7 @@ const createUpdateEmailOtpFunction = async (
 const updateEmailFunction = async (
   req: Request<{}, {}, UpdateEmailContract>,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<UserContract>>> => {
   // getting the otp
   const { userOtp, newEmail } = req.body;
 
@@ -400,7 +404,7 @@ This will be available only on the interface of students
 const deleteProfilePicFunction = async (
   req: Request,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<UserContract>>> => {
   // getting the user profile
   const user = req.user;
 
@@ -452,7 +456,7 @@ DELETE THE USER ACCOUNT CONTROLLER
 const deleteUserAccountFunction = async (
   req: Request,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   // getting the user's details
   const user = await User.findById(req.user?._id);
 
@@ -524,7 +528,7 @@ const deleteUserAccountFunction = async (
     .clearCookie("refreshToken", options)
     .clearCookie("accessToken", options)
     .json(
-      new ApiResponse(204, "Your account has been successfully deleted", {})
+      new ApiResponse(204, "Your account has been successfully deleted", null)
     );
 };
 
@@ -539,7 +543,7 @@ interface MinimalCourse {
 const lastCourseVisitedController = async (
   req: Request<{}, {}, MinimalCourse>,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   const { courseId } = req.body;
   const userId = req.user?._id;
 
@@ -561,7 +565,7 @@ const lastCourseVisitedController = async (
     console.log("course added to last visited");
   }
 
-  return res.status(200).json(new ApiResponse(200, "", {}));
+  return res.status(200).json(new ApiResponse(200, "", null));
 };
 
 /* ---------------------------------------------------------------------------------------
@@ -570,7 +574,7 @@ GET ALL ENROLLED COURSES
 const getEnrolledCoursesFunction = async (
   req: Request,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<CourseContract[]>>> => {
   const userId = req.user?._id;
 
   if (!userId) {
@@ -612,7 +616,7 @@ interface MinimalCourseVideo {
 const completeCourseVideoController = async (
   req: Request<MinimalCourseVideo>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   const { videoId, courseId } = req.params;
   const userId = req.user?._id;
 
@@ -646,10 +650,11 @@ const completeCourseVideoController = async (
     );
 
     console.log("Video completed!");
-    return res
-      .status(200)
-      .json(new ApiResponse(200, "The video is completed!", {}));
   }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "The video is completed!", null));
 };
 
 /* ---------------------------------------------------------------------------------------
@@ -659,7 +664,15 @@ GET COURSE PROGRESS CONTROLLER
 const getCourseProgressController = async (
   req: Request<MinimalCourse>,
   res: Response
-) => {
+): Promise<
+  Response<
+    ApiSuccessResponse<{
+      completedVideos: CourseVideoContract[];
+      progress: number;
+      totalLearningCredits: number;
+    }>
+  >
+> => {
   const { courseId } = req.params;
   const userId = req.user?._id;
 

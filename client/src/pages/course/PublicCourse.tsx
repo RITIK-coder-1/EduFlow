@@ -1,0 +1,137 @@
+/* ----------------------------------------------------------------------------------------------
+PublicCourse.tsx
+The page for displaying a course publicly 
+------------------------------------------------------------------------------------------------- */
+
+import { useParams } from "react-router-dom";
+import { useGetCourseQuery } from "@/api/index.api";
+import {
+  Tag,
+  EnrollCourse,
+  StudentAccordion,
+  SpinnerCustom,
+} from "@/components/index.components";
+import { useLastCourseVisitedMutation } from "@/api/users/userApi";
+import { useEffect } from "react";
+import useUserStatus from "@/hooks/useUserStatus";
+
+function PublicCourse() {
+  // the data
+  const { courseId } = useParams();
+  const { data, isLoading: isCourseLoading } = useGetCourseQuery({
+    courseId,
+  } as { courseId: string });
+  const course = data?.data; // course
+  const sections = course?.sections; // sections
+
+  // the instructor name
+  const instructorFirstName = course?.owner?.firstName;
+  const instructorLastName = course?.owner?.lastName;
+
+  // add this as the last course visited
+  const { isAuthenticated } = useUserStatus();
+  const [lastCourseVisited] = useLastCourseVisitedMutation();
+  if (isAuthenticated) {
+    // add this to last course visited only if the user is authenticated
+    useEffect(() => {
+      const courseFunc = async () => {
+        try {
+          await lastCourseVisited({ courseId } as {
+            courseId: string;
+          }).unwrap();
+        } catch (error) {}
+      };
+      courseFunc();
+    }, [isAuthenticated]);
+  }
+
+  return (
+    <>
+      {isCourseLoading ? (
+        <div className="w-full flex justify-center items-center p-5">
+          <SpinnerCustom className="size-6" />
+        </div>
+      ) : (
+        <div className="w-full h-full flex flex-col justify-start items-center gap-3 p-5 md:flex-row sm:items-start">
+          <div className="w-full rounded-sm overflow-hidden shadow-md shadow-black md:w-136 sm:ml-5 md:ml-0">
+            {/* Thumbnail */}
+            <img
+              src={course?.thumbnail || ""}
+              className="h-64 w-full object-cover"
+            />
+
+            <div className="w-full h-auto p-5 flex flex-col gap-3">
+              {/* Price */}
+              <span
+                className={`text-3xl font-black ${
+                  course?.price === 0 ? "text-green-500" : "text-white"
+                }`}
+              >
+                {course?.price === 0 ? "Free" : `₹ ${course?.price}`}
+              </span>
+
+              {/* Enroll now */}
+              <EnrollCourse courseId={courseId as string} />
+
+              {/* Course specifics */}
+              <span className="text-xl">What is in the course?</span>
+              <ul className="list-disc flex flex-col text-sm pl-6 text-white/70">
+                <li>Lifetime Access With Free Updates</li>
+                <li>Step by Step lessons</li>
+                <li>Industry Grades Concepts Explained Hands-on</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="w-full h-auto p-5 sm:pt-0 flex flex-col gap-2">
+            {/* The tags */}
+            <div className="flex justify-start items-center gap-2 mt-2">
+              {course?.tags.map((tag) => (
+                <Tag label={tag} key={crypto.randomUUID()} />
+              ))}
+            </div>
+
+            {/* Title */}
+            <h1 className="text-yellow-500 font-black text-3xl">
+              {course?.title}
+            </h1>
+
+            {/* Description */}
+            <p className="text-white/70 text-xs">{course?.description}</p>
+
+            {/* Instructor Info */}
+            <div className="flex items-center gap-3 p-2 rounded-xl bg-gray-900/50 w-fit">
+              <img
+                src={course?.owner?.profilePic}
+                alt="Instructor"
+                className="h-11 w-11 rounded-full object-cover border-2 border-purple-500/30 shadow-lg"
+              />
+
+              <div className="flex flex-col">
+                <span className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">
+                  Created by
+                </span>
+                <span className="text-base font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-500 leading-none">
+                  {instructorFirstName} {instructorLastName}
+                </span>
+              </div>
+            </div>
+
+            {/* The lessons */}
+            <div className="w-full border mt-5 border-white/10 p-5 flex flex-col justify-center items-center gap-3 ">
+              <span className="text-foreground text-2xl">Course Structure</span>
+
+              {/* The accordion */}
+              <StudentAccordion
+                sections={sections || []}
+                courseId={courseId as string}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default PublicCourse;

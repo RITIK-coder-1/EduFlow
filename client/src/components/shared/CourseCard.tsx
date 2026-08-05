@@ -1,0 +1,69 @@
+/* ----------------------------------------------------------------------------------------------
+CourseCard.tsx
+The common course display card
+------------------------------------------------------------------------------------------------- */
+
+import { Navlink } from "../index.components";
+
+interface CourseCardProps {
+  image: string;
+  title: string;
+  instructor?: string;
+  description: string;
+  price: number;
+  displayInstructorName?: boolean;
+  path: string;
+}
+
+function CourseCard({
+  image,
+  title,
+  instructor,
+  description,
+  price,
+  displayInstructorName = true,
+  path,
+}: CourseCardProps) {
+  return (
+    <Navlink to={path} className="w-full sm:w-64">
+      <div
+        className="border w-full h-88 border-white/10 rounded-lg shadow-2xl shadow-black hover:shadow-4xl flex flex-col cursor-pointer relative z-20 hover:border-white/50 overflow-hidden"
+        title="Visit the course"
+      >
+        <img
+          src={image}
+          alt="course thumbnail"
+          className="w-full h-44 object-cover"
+        />
+
+        <div className="w-full flex flex-col grow">
+          <h3 className="text-yellow-200 text-xl font-bold leading-tight h-7 line-clamp-1 pl-3 pt-1">
+            {title}
+          </h3>
+
+          <div className="w-full flex flex-col grow p-3">
+            <div className="w-full flex flex-col gap-1">
+              {displayInstructorName && instructor && (
+                <span className="text-md text-white/80">{instructor}</span>
+              )}
+
+              <span className="text-xs text-white/60 h-8 line-clamp-2">
+                {description}
+              </span>
+            </div>
+
+            <span
+              className={`font-black text-lg mt-auto ${
+                price === 0 ? "text-green-500" : "text-white/80"
+              }`}
+            >
+              {price === 0 ? "Free" : `₹ ${price}`}
+            </span>
+          </div>
+        </div>
+      </div>
+    </Navlink>
+  );
+}
+
+export default CourseCard;

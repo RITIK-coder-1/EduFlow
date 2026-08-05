@@ -19,8 +19,10 @@ import {
 } from "../models/index.model.ts";
 import type { Request, Response } from "express";
 import type {
+  CourseContract,
   CourseSectionContract,
   CourseVideoContract,
+  ApiSuccessResponse,
 } from "../types/index.types.ts";
 
 /* ---------------------------------------------------------------------------------------
@@ -41,7 +43,7 @@ interface MinimalCourse {
 const createCourseFunction = async (
   req: Request<{}, {}, MinimalCourse>,
   res: Response
-): Promise<Response> => {
+): Promise<Response<ApiSuccessResponse<CourseContract>>> => {
   // getting the course data
   const { title, description, price, category } = req.body;
   let { sections, tags } = req.body;
@@ -187,7 +189,10 @@ const createCourseFunction = async (
 GET ALL CREATED COURSES CONTROLLER (for instructor only)
 ------------------------------------------------------------------------------------------ */
 
-const getAllInstructorCoursesFunction = async (req: Request, res: Response) => {
+const getAllInstructorCoursesFunction = async (
+  req: Request,
+  res: Response
+): Promise<Response<ApiSuccessResponse<CourseContract[]>>> => {
   const userId = req.user?._id;
 
   if (!userId) {
@@ -219,7 +224,7 @@ GET COURSE CONTROLLER (for instructor only)
 const getCourseInstructorFunction = async (
   req: Request<MinimalCourse>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<CourseContract>>> => {
   const { courseId } = req.params;
   const user = req.user;
 
@@ -263,7 +268,7 @@ UPDATE COURSE CONTROLLER
 const updateCourseFunction = async (
   req: Request<MinimalCourse, {}, MinimalCourse>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<CourseContract>>> => {
   const { title, description, price, category } = req.body;
   const thumbnailLocalPath = req.file?.path;
   const courseId = req.params?.courseId;
@@ -393,7 +398,7 @@ PUBLISH COURSE CONTROLLER
 const publishCourseFunction = async (
   req: Request<MinimalCourse, {}, MinimalCourse>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<CourseContract>> | void > => {
   const { status } = req.body;
   const { courseId } = req.params;
 
@@ -424,14 +429,14 @@ DELETE COURSE CONTROLLER
 const deleteCourseFunction = async (
   req: Request<MinimalCourse>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   const courseId = req.params?.courseId;
   await deleteCourse(courseId as string);
   console.log("Course deleted by the instructor!");
 
   return res
     .status(204)
-    .json(new ApiResponse(204, "The course has been deleted!", {}));
+    .json(new ApiResponse(204, "The course has been deleted!", null));
 };
 
 /* ---------------------------------------------------------------------------------------
@@ -447,7 +452,7 @@ interface MinimalCourseVideoContract {
 const addCourseVideoFunction = async (
   req: Request<{}, {}, MinimalCourseVideoContract>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<CourseVideoContract>>> => {
   const { title, sectionId } = req.body; // the frontend will send the section id
   const videoLocalPath = req.file?.path;
 
@@ -524,7 +529,7 @@ UPDATE COURSE VIDEO CONTROLLER
 const updateCourseVideoFunction = async (
   req: Request<{}, {}, MinimalCourseVideoContract>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<CourseVideoContract>>> => {
   const { title, videoId } = req.body;
 
   if (!videoId) {
@@ -578,7 +583,7 @@ DELETE COURSE VIDEO CONTROLLER
 const deleteCourseVideoFunction = async (
   req: Request<MinimalCourseVideoContract>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   const { videoId, sectionId } = req.params;
   if (!videoId || !sectionId) {
     console.error("DELETE VIDEO ERROR: invalid video id or section id");
@@ -605,7 +610,7 @@ const deleteCourseVideoFunction = async (
 
   return res
     .status(204)
-    .json(new ApiResponse(204, "The video has been deleted!", {}));
+    .json(new ApiResponse(204, "The video has been deleted!", null));
 };
 
 /* ---------------------------------------------------------------------------------------
@@ -621,7 +626,7 @@ interface MinimalSectionContract {
 const addSectionFunction = async (
   req: Request<MinimalCourse, {}, MinimalSectionContract>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<CourseContract>>> => {
   const { title } = req.body;
   const courseId = req.params?.courseId;
 
@@ -692,7 +697,7 @@ DELETE COURSE SECTION CONTROLLER
 const deleteSectionFunction = async (
   req: Request<MinimalSectionContract>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   const { courseId, sectionId } = req.params;
 
   if (!courseId) {
@@ -751,7 +756,7 @@ const deleteSectionFunction = async (
 
   return res
     .status(204)
-    .json(new ApiResponse(204, "The section and its videos deleted!", {}));
+    .json(new ApiResponse(204, "The section and its videos deleted!", null));
 };
 
 /* ---------------------------------------------------------------------------------------
@@ -761,7 +766,7 @@ UPDATE COURSE SECTION CONTROLLER
 const updateSectionFunction = async (
   req: Request<MinimalSectionContract, {}, MinimalSectionContract>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<CourseSectionContract>>> => {
   const { title } = req.body;
   const sectionId = req.params?.sectionId;
 

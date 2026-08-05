@@ -1,0 +1,71 @@
+/* ----------------------------------------------------------------------------------------------
+DeleteDialogueBox.tsx
+Warning dialogue for deleting important data 
+------------------------------------------------------------------------------------------------- */
+
+import React from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  AlertDialogPortal,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+
+interface DeleteDialogueBoxProps {
+  label: string | React.ReactNode;
+  description: string;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  triggerClass?: string;
+}
+
+function DeleteDialogueBox({
+  label,
+  description,
+  onClick,
+  triggerClass,
+}: DeleteDialogueBoxProps) {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button
+          variant="outline"
+          className={`border-red-400 hover:bg-red-800 cursor-pointer w-full text-xs sm:w-24 md:text-sm md:w-30 ${
+            triggerClass ?? ""
+          }`}
+          title="Delete"
+        >
+          {label}
+        </Button>
+      </AlertDialogTrigger>
+
+      <AlertDialogPortal>
+        <AlertDialogContent className="border-red-600 bg-linear-to-br from-white/10 via-black/40 to-red-900/30 backdrop-blur-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>{description}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex flex-row justify-center items-center">
+            <AlertDialogCancel className="hover:bg-white/10 w-30">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-900 hover:bg-red-950 w-30"
+              onClick={onClick}
+            >
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialogPortal>
+    </AlertDialog>
+  );
+}
+
+export default DeleteDialogueBox;

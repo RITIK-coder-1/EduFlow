@@ -15,13 +15,19 @@ import type {
   CourseSectionContract,
   CourseVideoContract,
   UserContract,
+  ApiSuccessResponse,
+  CourseContract,
+  CourseCategoryContract,
 } from "../types/index.types.ts";
 
 /* ---------------------------------------------------------------------------------------
 GET ALL COURSES CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const getAllCoursesFunction = async (_req: Request, res: Response) => {
+const getAllCoursesFunction = async (
+  _req: Request,
+  res: Response
+): Promise<Response<ApiSuccessResponse<CourseContract[]>>> => {
   // only show the courses that are published by the instructors
   const courses = await Course.find({ status: "Published" })
     .select("-enrolledBy -status -__v")
@@ -52,13 +58,13 @@ GET COURSE CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
 interface MinimalCourse {
-  courseId?: string;
+  courseId: string;
 }
 
 const getCourseFunction = async (
   req: Request<MinimalCourse>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<CourseContract>>> => {
   const { courseId } = req.params;
 
   if (!courseId) {
@@ -106,7 +112,7 @@ ENROLL IN A COURSE CONTROLLER
 const enrollCourseFunction = async (
   req: Request<MinimalCourse>,
   res: Response
-) => {
+): Promise<Response<ApiSuccessResponse<null>>> => {
   const userId = req.user?._id;
   const { courseId } = req.params;
 
@@ -195,7 +201,7 @@ const enrollCourseFunction = async (
       new ApiResponse(
         200,
         "The student has successfully enrolled in the course",
-        {}
+        null
       )
     );
 };
@@ -204,7 +210,10 @@ const enrollCourseFunction = async (
 SHOW ALL CATEGORIES CONTROLLER
 ------------------------------------------------------------------------------------------ */
 
-const showAllCategoriesFunction = async (req: Request, res: Response) => {
+const showAllCategoriesFunction = async (
+  req: Request,
+  res: Response
+): Promise<Response<ApiSuccessResponse<CourseCategoryContract[]>>> => {
   try {
     const categories = await CourseCategory.find({})
       .select("-__v")

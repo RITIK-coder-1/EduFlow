@@ -3,9 +3,9 @@ useGetVideoData.ts
 The hook to provide the important data for course videos
 ------------------------------------------------------------------------------------------------- */
 
-import { useGetCourseQuery } from "../api/index.api.js";
-import { useEffect, useState } from "react";
-import { CourseSectionContract } from "../types/index.types.js";
+import { useGetCourseQuery } from "../api/index.api";
+import { useMemo } from "react";
+import type { CourseVideoContract } from "../types/index.types";
 
 /* ----------------------------------------------------------------------------------------------
 INTERFACE
@@ -22,44 +22,37 @@ interface VideoDataContract {
 FUNCTION
 ------------------------------------------------------------------------------------------------- */
 
-function useGetVideoData(courseId: string, videoId: string) {
+function useGetVideoData(
+  courseId: string,
+  videoId: string
+): VideoDataContract | null {
   // the course
-  const {
-    data: { course },
-  } = useGetCourseQuery({ courseId });
+  const { data } = useGetCourseQuery({ courseId });
+  const course = data?.data;
 
-  // the video details to send
-  const [videoData, setVideoData] = useState<VideoDataContract>({
-    courseTitle: course?.title,
-    sectionTitle: "",
-    videoTitle: "",
-    videoUrl: "",
-  });
+  // using useMemo to trigger a re-render only when the dependencies change
+  const videoData = useMemo(() => {
+    // Return early if the data hasn't loaded yet
+    if (!course?.sections) return null;
 
-  useEffect(() => {
-    if (!course || !videoId) return;
+    // the desired video
+    for (const section of course.sections) {
+      const video = section?.courseVideos?.find(
+        (v: CourseVideoContract) => v?._id === videoId
+      );
 
-    // returns an array of sections where one element has the video details if it matches the video the user wants to watch and the other elements are undefined
-    const sectionsArray = course?.sections?.flatMap((section: CourseSectionContract) => {
-      return section?.courseVideos?.flatMap((video) => {
-        if (video?._id === videoId) {
-          return {
-            courseTitle: course?.title,
-            sectionTitle: section?.title,
-            videoTitle: video?.title,
-            videoUrl: video?.videoUrl,
-          };
-        }
-      });
-    });
-
-    // remove the unwanted undefined elements
-    const videoDetailsArray = sectionsArray?.filter((ele) => ele !== undefined);
-
-    // update the video details with the array element
-    if (videoDetailsArray !== undefined) {
-      setVideoData(videoDetailsArray[0]);
+      if (video) {
+        return {
+          courseTitle: course.title,
+          sectionTitle: section.title,
+          videoTitle: video.title,
+          videoUrl: video.videoUrl,
+        };
+      }
     }
+
+    // Return null if the loop finishes without finding the video
+    return null;
   }, [course, videoId]);
 
   return videoData;

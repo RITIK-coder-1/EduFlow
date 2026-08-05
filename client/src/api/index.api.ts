@@ -1,0 +1,104 @@
+/* ----------------------------------------------------------------------------------------------
+index.api.ts
+Exporting every single API call 
+------------------------------------------------------------------------------------------------- */
+
+import {
+  useRegisterOtpMutation,
+  useRegisterMutation,
+  useLoginMutation,
+  useLogoutMutation,
+  useNewTokenMutation,
+} from "./auth/authApi.js";
+
+import {
+  useGetUserQuery,
+  useUpdateUserDetailsMutation,
+  useDeleteUserAccountMutation,
+  useDeleteUserProfilePicMutation,
+  useUpdateUserEmailMutation,
+  useUpdateUserEmailOtpMutation,
+  useUpdateUserPasswordMutation,
+  useGetCourseProgressQuery,
+  useCompleteCourseVideoMutation,
+  useGetEnrolledCoursesQuery,
+  useGetBulkCourseProgressQuery,
+} from "./users/userApi";
+
+import {
+  useGetAllTheCoursesQuery,
+  useGetCourseQuery,
+  useEnrollCourseMutation,
+  useGetAllCategoriesQuery,
+} from "./courses/courseApi";
+
+import {
+  useGetCourseInstructorQuery,
+  useUpdateCourseMutation,
+  useUpdateSectionMutation,
+  useUpdateVideoMutation,
+  useAddNewSectionMutation,
+  useAddNewVideoMutation,
+  useDeleteCourseInstructorMutation,
+  useDeleteSectionMutation,
+  useDeleteVideoMutation,
+  useCreateCourseMutation,
+  useGetInstructorDataQuery,
+} from "./users/instructorApi";
+
+import {
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
+  useGetAllUsersQuery,
+  useGetUserAdminQuery,
+  useDeleteUserAdminMutation,
+  useGetAllCoursesAdminQuery,
+  useGetCourseAdminQuery,
+  useDeleteCourseAdminMutation,
+  useGetSystemStatsQuery,
+} from "./users/adminApi";
+
+export {
+  useRegisterOtpMutation,
+  useRegisterMutation,
+  useLoginMutation,
+  useLogoutMutation,
+  useNewTokenMutation,
+  useGetUserQuery,
+  useUpdateUserDetailsMutation,
+  useDeleteUserAccountMutation,
+  useDeleteUserProfilePicMutation,
+  useUpdateUserEmailMutation,
+  useUpdateUserEmailOtpMutation,
+  useUpdateUserPasswordMutation,
+  useGetAllTheCoursesQuery,
+  useGetCourseQuery,
+  useEnrollCourseMutation,
+  useGetCourseInstructorQuery,
+  useUpdateCourseMutation,
+  useUpdateSectionMutation,
+  useUpdateVideoMutation,
+  useAddNewSectionMutation,
+  useAddNewVideoMutation,
+  useDeleteCourseInstructorMutation,
+  useDeleteSectionMutation,
+  useDeleteVideoMutation,
+  useCreateCourseMutation,
+  useGetAllCategoriesQuery,
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
+  useGetAllUsersQuery,
+  useGetUserAdminQuery,
+  useDeleteUserAdminMutation,
+  useGetAllCoursesAdminQuery,
+  useGetCourseAdminQuery,
+  useDeleteCourseAdminMutation,
+  useGetEnrolledCoursesQuery,
+  useGetSystemStatsQuery,
+  useGetCourseProgressQuery,
+  useGetBulkCourseProgressQuery,
+  useCompleteCourseVideoMutation,
+  useGetInstructorDataQuery,
+};
