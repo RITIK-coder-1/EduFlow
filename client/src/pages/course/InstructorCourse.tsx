@@ -549,7 +549,7 @@ function InstructorCourse() {
                           titleClass="w-full text-xs sm:w-24 md:w-30 md:text-sm"
                           onRemoval={clearVideoData}
                           open={videoOpen === section._id}
-                          setOpen={(isOpen) =>
+                          setOpen={(isOpen: boolean) =>
                             setVideoOpen(isOpen ? section._id : null)
                           }
                           isLoading={isAddVideoLoading}
@@ -587,7 +587,9 @@ function InstructorCourse() {
                   titleClass="w-full border-2 text-sm sm:w-56 sm:text-md"
                   onRemoval={clearNewSectionData}
                   open={!!sectionOpen}
-                  setOpen={() => setSectionOpen}
+                  setOpen={(isOpen: boolean) =>
+                    setSectionOpen(isOpen ? "open" : null)
+                  }
                   isLoading={isAddSectionLoading}
                 >
                   <FieldInput
