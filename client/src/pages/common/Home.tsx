@@ -78,6 +78,11 @@ function Home() {
       <span className="text-xl">EduFlow</span>
     </div>
   );
+  const BackgroundGlow = ({ top }: { top: string }) => (
+    <div
+      className={`absolute top-${top} left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-150 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none`}
+    ></div>
+  );
 
   // the brand partners
   const brands: Brand[] = [
@@ -167,14 +172,18 @@ function Home() {
 
       {/* The hero section */}
       <Section>
-        <h1 className="text-center text-4xl text-white font-bold md:text-5xl">
+        {/* Subtle background glow */}
+        <BackgroundGlow top="44"/>
+        <h1 className="text-center text-5xl text-white font-extrabold tracking-tight md:text-7xl leading-tight z-10">
           Empowering Education <br /> Through{" "}
-          <span className="text-blue-400">Seamless Technology.</span>
+          <span className="bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-cyan-300">
+            Seamless Technology.
+          </span>
         </h1>
-        <Span>
-          Experience a high-performance LMS <br /> featuring secure
-          authentication, RBAC, and intuitive course management. <br /> Built
-          for the modern learner.
+        <Span className="mt-4 z-10 text-lg">
+          Experience a high-performance LMS featuring secure authentication,
+          RBAC, and intuitive course management.{" "}
+          <br className="hidden md:block" /> Built for the modern learner.
         </Span>
         {/* The brand partners */}
         <div className="w-full flex flex-col justify-center items-center mt-16 gap-3">
@@ -197,6 +206,8 @@ function Home() {
 
       {/* The courses section */}
       <Section>
+        <BackgroundGlow top="[40%]"/>
+
         <SecondHeading className="text-white">
           {" "}
           Learn From The Best
