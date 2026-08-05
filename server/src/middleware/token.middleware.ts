@@ -18,7 +18,6 @@ const verifyJwtFunction = async (
     req.cookies?.accessToken ||
     req.header("Authorization")?.replace("Bearer ", ""); // replace "Bearer <token>" to "<token>"
 
-    console.log(req.cookies)
   if (!token) {
     console.error("Token Error: It is not verified.");
 
