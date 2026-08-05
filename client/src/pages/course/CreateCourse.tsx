@@ -161,6 +161,10 @@ function CreateCourse() {
       const newValue = e.target.value;
       if (newValue.trim() !== "") {
         arraySetterFunction((prevArray) => {
+          // remove the default array value once the user adds a real value 
+          if (prevArray[0]?.id === "") {
+            return [...prevArray.toSpliced(0, 1), { id: id, value: newValue }];
+          }
           // Check if the ID already exists in the current state
           const exists = prevArray.some((ele) => ele.id === id);
           if (exists) {
