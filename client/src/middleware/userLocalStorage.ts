@@ -25,6 +25,7 @@ userListener.startListening({
   actionCreator: disableUser,
   effect: () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
   },
 });
 
