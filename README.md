@@ -65,14 +65,14 @@ Experience the different roles within the ecosystem:
 
 ---
 
-## 🔐 Advanced Authentication & Security
+## 🔐 Architecture, Authentication & Security
 
 EduFlow prioritizes data integrity and user security through a rigorous onboarding flow:
 
 - **Dual-Factor Verification:** Integrated **OTP email verification** via Nodemailer for registration and data updates to eliminate bot accounts.
 - **Role-Specific Requirements:** Instructors are mandated to provide a professional profile picture and age verification during signup.
 - **JWT Architecture:** Implemented secure state management using Access and Refresh tokens to maintain session persistence without compromising security.
-- **Type-Safe Backend Architecture:** Refactored the Node.js/Express backend to strict TypeScript, Mongoose model interfaces, and strict controller typing to eliminate runtime crashes and enforce contract safety across API routes.
+- **Production-Scale TypeScript Migration:** Refactored the entire application from JavaScript to strict TypeScript, introducing end-to-end type safety across the React frontend, RTK Query API layer, Express backend, middleware, controllers, and Mongoose models to eliminate runtime errors, improve maintainability, and enable safer large-scale refactoring.
 
 ---
 
@@ -130,6 +130,11 @@ Building a seamless Accordion-based curriculum player was a UI/UX challenge. Lin
 
 5) Database Integrity & Cascading Updates
 With multiple linked collections (Users, Courses, Enrollments), I faced the challenge of "Data Drifting." Deleting a course meant I had to ensure students weren't left with broken enrollment links. I engineered Cascading Update/Delete logic at the database level. I learned to manage cross-collection dependencies to ensure that if a primary record is modified, all related data across the system remains consistent and valid.
+
+6) Large-Scale Migration to Strict TypeScript
+As EduFlow evolved, maintaining a growing JavaScript codebase became increasingly difficult due to implicit types and runtime-only error detection. Rather than introducing TypeScript incrementally, I refactored the entire MERN application to strict TypeScript.
+This migration required converting React components, custom hooks, RTK Query services, Express controllers, middleware, authentication flows, API contracts, and Mongoose models while resolving hundreds of type inconsistencies across the application. I also redesigned interfaces and reusable types to keep the codebase scalable and consistent.
+The result is a production-grade codebase with end-to-end compile-time type safety, safer refactoring, improved IDE tooling, stronger developer experience, and significantly reduced risk of runtime bugs.
 
 ---
 
