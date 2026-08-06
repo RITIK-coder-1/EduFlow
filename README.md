@@ -115,26 +115,26 @@ EduFlow prioritizes data integrity and user security through a rigorous onboardi
 
 Building EduFlow wasn't just about CRUD operations; it was about managing complex state, security, and data integrity at scale. Below are the core engineering hurdles I overcame to reach a production standard.
 
-1) Granular Role-Based Access Control (RBAC)
+1) Granular Role-Based Access Control (RBAC):
 Implementing a multi-tier security wrapper was a significant architectural challenge. I engineered a cohesive frontend guard system that dynamically permits or restricts access based on user roles (Admin, Instructor, Student). I successfully synchronized the backend JWT logic with a secure React-based routing wrapper to ensure zero unauthorized access to sensitive sections.
 
-2) Advanced Cache Management with RTK Query
-Transitioning from standard Redux to RTK Query introduced a steep learning curve regarding the global cache. I encountered a critical sync issue where different user roles were viewing "stale" cached data. I mastered the Tags & Invalidation system. By strategically implementing providesTags and invalidatesTags, I ensured the UI reflects real-time data updates without unnecessary API refetching, maintaining high performance and data accuracy.
-
-3) Dynamic Content Architecture (Multi-Section Course Creator)
-The "Course Builder" required a highly flexible UI where instructors could manually add an unlimited number of sections and lessons.
-I developed a sophisticated nested state logic that allows users to dynamically inject data points. This required balancing React's rendering performance with a complex, multi-layered data entry system.
-
-4) Nested UI Components, State-Driven UI & Promise Management
-Building a seamless Accordion-based curriculum player was a UI/UX challenge. Linking specific video files to their corresponding lesson IDs required precise mapping. For integrating Shadcn/UI dialogs and modals, I had to synchronize UI states with asynchronous backend promises. I implemented a robust feedback loop using Shadcn and Sonner. This ensures that the UI only closes or updates once the backend promise is resolved, preventing "UI flickering" and improving the overall Functional Stability.
-
-5) Database Integrity & Cascading Updates
-With multiple linked collections (Users, Courses, Enrollments), I faced the challenge of "Data Drifting." Deleting a course meant I had to ensure students weren't left with broken enrollment links. I engineered Cascading Update/Delete logic at the database level. I learned to manage cross-collection dependencies to ensure that if a primary record is modified, all related data across the system remains consistent and valid.
-
-6) Large-Scale Migration to Strict TypeScript
+2) Large-Scale Migration to Strict TypeScript:
 As EduFlow evolved, maintaining a growing JavaScript codebase became increasingly difficult due to implicit types and runtime-only error detection. Rather than introducing TypeScript incrementally, I refactored the entire MERN application to strict TypeScript.
 This migration required converting React components, custom hooks, RTK Query services, Express controllers, middleware, authentication flows, API contracts, and Mongoose models while resolving hundreds of type inconsistencies across the application. I also redesigned interfaces and reusable types to keep the codebase scalable and consistent.
 The result is a production-grade codebase with end-to-end compile-time type safety, safer refactoring, improved IDE tooling, stronger developer experience, and significantly reduced risk of runtime bugs.
+
+3) Advanced Cache Management with RTK Query:
+Transitioning from standard Redux to RTK Query introduced a steep learning curve regarding the global cache. I encountered a critical sync issue where different user roles were viewing "stale" cached data. I mastered the Tags & Invalidation system. By strategically implementing providesTags and invalidatesTags, I ensured the UI reflects real-time data updates without unnecessary API refetching, maintaining high performance and data accuracy.
+
+4) Dynamic Content Architecture (Multi-Section Course Creator):
+The "Course Builder" required a highly flexible UI where instructors could manually add an unlimited number of sections and lessons.
+I developed a sophisticated nested state logic that allows users to dynamically inject data points. This required balancing React's rendering performance with a complex, multi-layered data entry system.
+
+5) Nested UI Components, State-Driven UI & Promise Management:
+Building a seamless Accordion-based curriculum player was a UI/UX challenge. Linking specific video files to their corresponding lesson IDs required precise mapping. For integrating Shadcn/UI dialogs and modals, I had to synchronize UI states with asynchronous backend promises. I implemented a robust feedback loop using Shadcn and Sonner. This ensures that the UI only closes or updates once the backend promise is resolved, preventing "UI flickering" and improving the overall Functional Stability.
+
+6) Database Integrity & Cascading Updates:
+With multiple linked collections (Users, Courses, Enrollments), I faced the challenge of "Data Drifting." Deleting a course meant I had to ensure students weren't left with broken enrollment links. I engineered Cascading Update/Delete logic at the database level. I learned to manage cross-collection dependencies to ensure that if a primary record is modified, all related data across the system remains consistent and valid.
 
 ---
 
