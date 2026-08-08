@@ -19,6 +19,8 @@ const mailSender = async (
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
       },
+      port: 587,
+      secure: false,
     });
 
     // Send this email to the user
