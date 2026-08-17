@@ -173,7 +173,7 @@ function Home() {
       {/* The hero section */}
       <Section>
         {/* Subtle background glow */}
-        <BackgroundGlow className="top-70"/>
+        <BackgroundGlow className="top-70" />
         <h1 className="text-center text-5xl text-white font-extrabold tracking-tight md:text-7xl leading-tight z-10">
           Empowering Education <br /> Through{" "}
           <span className="bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-cyan-300">
@@ -206,7 +206,7 @@ function Home() {
 
       {/* The courses section */}
       <Section>
-        <BackgroundGlow className="top-[40%]"/>
+        <BackgroundGlow className="top-[40%]" />
 
         <SecondHeading className="text-white">
           {" "}
