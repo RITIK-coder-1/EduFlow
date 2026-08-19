@@ -6,16 +6,16 @@
     "outDir": "./dist",
     "rootDir": "./src",
 
-    "allowJs": true, 
-    "checkJs": false, 
+    "allowJs": true,
+    "checkJs": false,
 
     "strict": true,
-    "noImplicitAny": true, 
+    "noImplicitAny": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "allowImportingTsExtensions": true,
-    "noEmit": true,
+    "noEmit": true
   },
   "include": ["src/**/*"]
 }
