@@ -11,7 +11,7 @@ import connectDB from "./db/index.ts";
 All the variables of the file
 ------------------------------------------------------------------------------------------ */
 
-const port = process.env.PORT || 3001; // the port number for the server to listen to
+const port = Number(process.env.PORT) || 3001;
 
 /* ---------------------------------------------------------------------------------------
 Connecting to the database and listening as the server
@@ -19,10 +19,8 @@ Connecting to the database and listening as the server
 
 try {
   await connectDB();
-  app.listen(port, () => {
-    console.log(
-      `The server is successfully listening at http://localhost:${port}/api/v1`
-    );
+  app.listen(port, "0.0.0.0", () => {
+    console.log(`The server is successfully listening on port ${port}`);
   });
 } catch (error) {
   console.error(
