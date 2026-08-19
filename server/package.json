@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/server.ts",
-    "start": "node dist/server.ts",
+    "start": "node dist/server.js",
     "build": "tsc"
   },
   "dependencies": {
@@ -26,7 +26,9 @@
     "nodemailer": "^7.0.12",
     "otp-generator": "^4.0.1",
     "uuid": "^13.0.0",
-    "validator": "^13.15.26"
+    "validator": "^13.15.26",
+    "typescript": "^6.0.3",
+    "@types/node": "^25.9.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -35,13 +37,11 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.1.0",
-    "@types/node": "^25.9.1",
     "@types/nodemailer": "^8.0.0",
     "@types/otp-generator": "^4.0.2",
     "@types/uuid": "^10.0.0",
     "@types/validator": "^13.15.10",
     "nodemon": "^3.1.14",
-    "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "ts-node": "^10.9.2"
   }
 }
