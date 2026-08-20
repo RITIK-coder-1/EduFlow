@@ -8,10 +8,10 @@
 
 🔗 **Frontend:** [https://edu-flow-lime.vercel.app/]
 
-🔗 **Backend API:** [https://eduflow-o1gf.onrender.com/api/v1]
+🔗 **Backend API:** [eduflow-production-56ca.up.railway.app]
 
 > [!IMPORTANT]
-> Cold Start Notice: This project is hosted on a free-tier instance (Render). If the site hasn't been visited recently, the initial request may take up to 50 seconds to spin up the server. Please allow a moment for the courses and data to populate.
+> Cold Start Notice: This project is hosted on a free-tier instance (Railway). If the site hasn't been visited recently, the initial request may take up to 50 seconds to spin up the server. Please allow a moment for the courses and data to populate.
 
 > Note on OTPs: While the core functionality is fully implemented, the Render Free Tier may cause delays (up to 60s) during SMTP handshakes (Sign-up/Email updates). For the best experience, please use the provided credentials below.
 
