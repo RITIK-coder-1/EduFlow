@@ -8,7 +8,7 @@
 
 🔗 **Frontend:** [https://edu-flow-lime.vercel.app/]
 
-🔗 **Backend API:** [eduflow-production-56ca.up.railway.app]
+🔗 **Backend API:** [https://eduflow-q1qy.onrender.com/api/v1]
 
 > [!IMPORTANT]
 > Cold Start Notice: This project is hosted on a free-tier instance (Railway). If the site hasn't been visited recently, the initial request may take up to 50 seconds to spin up the server. Please allow a moment for the courses and data to populate.
